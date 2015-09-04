@@ -1,0 +1,874 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>FaultAlgorithms</name>
+    </assembly>
+    <members>
+        <member name="T:FaultAlgorithms.Conductor">
+            <summary>
+            Contains data for both the voltage
+            and current on a conductor.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.Conductor.V">
+            <summary>
+            One cycle of voltage data.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.Conductor.I">
+            <summary>
+            One cycle of current data.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.Conductor.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:FaultAlgorithms.Conductor"/> class.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.Conductor.#ctor(System.Int32,System.Int32,System.Double,FaultAlgorithms.MeasurementData,FaultAlgorithms.MeasurementData)">
+            <summary>
+            Creates a new instance of the <see cref="T:FaultAlgorithms.Conductor"/> class.
+            </summary>
+            <param name="cycleIndex">The index of the cycle to be calculated.</param>
+            <param name="sampleRateDivisor">The value to divide from the sample rate to determine the starting location of the cycle.</param>
+            <param name="frequency">The frequency of the sine wave during this cycle.</param>
+            <param name="voltageData">The voltage data points.</param>
+            <param name="currentData">The current data points.</param>
+        </member>
+        <member name="T:FaultAlgorithms.Cycle">
+            <summary>
+            Represents a cycle of single phase power frequency-domain data.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.Cycle.Frequency">
+            <summary>
+            The actual frequency of the cycle in hertz.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.Cycle.Complex">
+            <summary>
+            The complex number representation of the RMS phasor.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.Cycle.Peak">
+            <summary>
+            The most extreme data point in the cycle.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.Cycle.Error">
+            <summary>
+            The error between the sine fit and the given data values.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.Cycle.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:FaultAlgorithms.Cycle"/> class.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.Cycle.#ctor(System.Int32,System.Double,FaultAlgorithms.MeasurementData)">
+            <summary>
+            Creates a new instance of the <see cref="T:FaultAlgorithms.Cycle"/> class.
+            </summary>
+            <param name="startSample">The index of the start of the cycle.</param>
+            <param name="frequency">The frequency of the measured system, in Hz.</param>
+            <param name="waveFormData">The time-domain data to be used to calculate frequency-domain values.</param>
+        </member>
+        <member name="P:FaultAlgorithms.Cycle.RMS">
+            <summary>
+            Root-mean-square of the <see cref="F:FaultAlgorithms.MeasurementData.Measurements"/> in the cycle.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Cycle.Phase">
+            <summary>
+            Phase angle of the start of the cycle, relative to the reference angle.
+            </summary>
+        </member>
+        <member name="T:FaultAlgorithms.CycleData">
+            <summary>
+            Contains data for a single cycle over all three line-to-neutral conductors.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.CycleData.TwoPI">
+            <summary>
+            2 * pi
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.CycleData.AN">
+            <summary>
+            A-to-neutral conductor
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.CycleData.BN">
+            <summary>
+            B-to-neutral conductor
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.CycleData.CN">
+            <summary>
+            C-to-neutral conductor
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.CycleData.StartTime">
+            <summary>
+            Timestamp of the start of the cycle.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.CycleData.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:FaultAlgorithms.CycleData"/> class.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.CycleData.#ctor(System.Int32,System.Int32,System.Double,FaultAlgorithms.MeasurementDataSet,FaultAlgorithms.MeasurementDataSet)">
+            <summary>
+            Creates a new instance of the <see cref="T:FaultAlgorithms.CycleData"/> class.
+            </summary>
+            <param name="cycleIndex">The index of the cycle being created.</param>
+            <param name="sampleRateDivisor">The value to divide from the sample rate to determine the index of the sample at the start of the cycle.</param>
+            <param name="frequency">The frequency of the measured system, in Hz.</param>
+            <param name="voltageDataSet">The data set containing voltage measurements.</param>
+            <param name="currentDataSet">The data set containing current measurements.</param>
+        </member>
+        <member name="M:FaultAlgorithms.CycleData.CalculateSequenceComponents(FaultAlgorithms.Cycle,FaultAlgorithms.Cycle,FaultAlgorithms.Cycle)">
+            <summary>
+            Calculates the positive, negative, and zero sequence components
+            and returns them in an array with indexes 1, 2, and 0 respectively.
+            </summary>
+            <param name="anCycle">The cycle of A-to-neutral data to be used.</param>
+            <param name="bnCycle">The cycle of B-to-neutral data to be used.</param>
+            <param name="cnCycle">The cycle of C-to-neutral data to be used.</param>
+            <returns>An array of size 3 containing the zero sequence, positive sequence, and negative sequence components in that order.</returns>
+        </member>
+        <member name="T:FaultAlgorithms.CycleDataSet">
+            <summary>
+            Represents a collection of all the cycles extracted from a given data set.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.CycleDataSet.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:FaultAlgorithms.CycleDataSet"/> class.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.CycleDataSet.#ctor(System.Double,FaultAlgorithms.MeasurementDataSet,FaultAlgorithms.MeasurementDataSet)">
+            <summary>
+            Creates a new instance of the <see cref="T:FaultAlgorithms.CycleDataSet"/> class.
+            </summary>
+            <param name="frequency">The frequency of the measured system, in Hz.</param>
+            <param name="voltageDataSet">The data set containing voltage data points.</param>
+            <param name="currentDataSet">The data set containing current data points.</param>
+        </member>
+        <member name="M:FaultAlgorithms.CycleDataSet.Populate(System.Double,FaultAlgorithms.MeasurementDataSet,FaultAlgorithms.MeasurementDataSet)">
+            <summary>
+            Populates the cycle data set by calculating cycle
+            data based on the given measurement data sets.
+            </summary>
+            <param name="frequency">The frequency of the measured system, in Hz.</param>
+            <param name="voltageDataSet">Data set containing voltage waveform measurements.</param>
+            <param name="currentDataSet">Data set containing current waveform measurements.</param>
+        </member>
+        <member name="M:FaultAlgorithms.CycleDataSet.GetLargestCurrentIndex">
+            <summary>
+            Returns the index of the cycle with the largest total current.
+            </summary>
+            <returns>The index of the cycle with the largest total current.</returns>
+        </member>
+        <member name="M:FaultAlgorithms.CycleDataSet.Clear">
+            <summary>
+            Clears the cycle data set so that it can be repopulated.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.CycleDataSet.GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection of cycles.
+            </summary>
+            <returns>An <see cref="T:System.Collections.Generic.IEnumerator`1"/> object that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="M:FaultAlgorithms.CycleDataSet.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Returns an enumerator that iterates through the collection of cycles.
+            </summary>
+            <returns>An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.</returns>
+        </member>
+        <member name="M:FaultAlgorithms.CycleDataSet.ExportToCSV(System.String,FaultAlgorithms.CycleDataSet)">
+            <summary>
+            Exports the given <see cref="T:FaultAlgorithms.CycleDataSet"/> to a CSV file.
+            </summary>
+            <param name="fileName">The name of the CSV file.</param>
+            <param name="cycles">The cycle data set to be exported.</param>
+        </member>
+        <member name="P:FaultAlgorithms.CycleDataSet.Item(System.Int32)">
+            <summary>
+            Gets or sets the data structure containing a
+            full cycle of data at the given index.
+            </summary>
+            <param name="i">The index of the cycle.</param>
+            <returns>The cycle of data at the given index.</returns>
+        </member>
+        <member name="P:FaultAlgorithms.CycleDataSet.Count">
+            <summary>
+            Gets the size of the cycle data set.
+            </summary>
+        </member>
+        <member name="T:FaultAlgorithms.Device">
+            <summary>
+            Represents a device that produces event files.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.Device.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:FaultAlgorithms.Device"/> class.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Device.ID">
+            <summary>
+            Gets or sets the ID of the device as defined in the device definitions file.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Device.Make">
+            <summary>
+            Gets or sets the make of the device.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Device.Model">
+            <summary>
+            Gets or sets the model of the device.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Device.StationID">
+            <summary>
+            Gets or sets the ID of the station where the device is located.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Device.StationName">
+            <summary>
+            Gets or sets the name of the station where the device is located.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Device.Lines">
+            <summary>
+            Gets the lines that the device is monitoring.
+            </summary>
+        </member>
+        <member name="T:FaultAlgorithms.DisturbanceFile">
+            <summary>
+            Represents a disturbance file that was processed by the openFLE.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.DisturbanceFile.SourcePath">
+            <summary>
+            Gets or sets the path from where the file came.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.DisturbanceFile.DestinationPath">
+            <summary>
+            Gets or sets the path to where the file was dropped.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.DisturbanceFile.FileSize">
+            <summary>
+            Gets or sets the size of the file.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.DisturbanceFile.CreationTime">
+            <summary>
+            Gets or sets the time the file was created.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.DisturbanceFile.LastWriteTime">
+            <summary>
+            Gets or sets the time the file was last written to.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.DisturbanceFile.LastAccessTime">
+            <summary>
+            Gets or sets the time the file was last accessed.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.DisturbanceFile.FileWatcherTimeStarted">
+            <summary>
+            Gets or sets the time that the file watcher started processing the disturbance file.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.DisturbanceFile.FileWatcherTimeProcessed">
+            <summary>
+            Gets or sets the time that the file watcher
+            finished processing the disturbance file.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.DisturbanceFile.FLETimeStarted">
+            <summary>
+            Gets or sets the time that the fault location
+            engine started processing the disturbance file.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.DisturbanceFile.FLETimeProcessed">
+            <summary>
+            Gets or sets the time that the fault location
+            engine finished processing the disturbance file.
+            </summary>
+        </member>
+        <member name="T:FaultAlgorithms.FaultTriggerAlgorithm">
+            <summary>
+            Function signature for fault trigger algorithms.
+            </summary>
+            <param name="faultDataSet">Full collection of voltage, current, and cycle data.</param>
+            <param name="parameters">Custom parameters for algorithm.</param>
+            <returns><c>true</c> if fault was found in dataset; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="T:FaultAlgorithms.FaultTypeAlgorithm">
+            <summary>
+            Function signature for fault type algorithms.
+            </summary>
+            <param name="faultDataSet">Full collection of voltage, current, and cycle data.</param>
+            <param name="parameters">Custom parameters for algorithm.</param>
+            <returns>The type of the fault found in the fault data set.</returns>
+        </member>
+        <member name="T:FaultAlgorithms.FaultLocationAlgorithm">
+            <summary>
+            Function signature for fault location algorithms.
+            </summary>
+            <param name="faultDataSet">Full collection of voltage, current, and cycle data.</param>
+            <param name="parameters">Custom parameters for algorithm.</param>
+            <returns>Result of distance calculations for each cycle.</returns>
+        </member>
+        <member name="T:FaultAlgorithms.FaultTriggerAlgorithmAttribute">
+            <summary>
+            Attribute used to annotate fault trigger algorithms.
+            </summary>
+        </member>
+        <member name="T:FaultAlgorithms.FaultTypeAlgorithmAttribute">
+            <summary>
+            Attribute used to annotate fault type algorithms.
+            </summary>
+        </member>
+        <member name="T:FaultAlgorithms.FaultLocationAlgorithmAttribute">
+            <summary>
+            Attribute used to annotate fault location algorithms.
+            </summary>
+        </member>
+        <member name="T:FaultAlgorithms.FaultAlgorithmsSet">
+            <summary>
+            Collection of fault algorithms and their parameters.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultAlgorithmsSet.FaultTriggerAlgorithm">
+            <summary>
+            The fault trigger algorithm.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultAlgorithmsSet.FaultTypeAlgorithm">
+            <summary>
+            The fault type algorithm.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultAlgorithmsSet.FaultLocationAlgorithms">
+            <summary>
+            The fault location algorithm.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultAlgorithmsSet.FaultTriggerParameters">
+            <summary>
+            The fault trigger parameters.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultAlgorithmsSet.FaultTypeParameters">
+            <summary>
+            The fault type parameters.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultAlgorithmsSet.FaultLocationParameters">
+            <summary>
+            The fault location parameters.
+            </summary>
+        </member>
+        <member name="T:FaultAlgorithms.FaultLocationAlgorithms">
+            <summary>
+            Class containing algorithms for determining fault location based on fault data.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.FaultLocationAlgorithms.Simple(FaultAlgorithms.FaultLocationDataSet,System.String)">
+            <summary>
+            Simple algorithm to calculate the distance to a fault that was found in the <see cref="T:FaultAlgorithms.FaultLocationDataSet"/>.
+            </summary>
+            <param name="faultDataSet">The data set to be used to find the distance to fault.</param>
+            <param name="parameters">Extra parameters to the algorithm.</param>
+            <returns>Set of distance calculations, one for each cycle of data.</returns>
+        </member>
+        <member name="M:FaultAlgorithms.FaultLocationAlgorithms.Reactance(FaultAlgorithms.FaultLocationDataSet,System.String)">
+            <summary>
+            Reactance algorithm to calculate the distance to a fault that was found in the <see cref="T:FaultAlgorithms.FaultLocationDataSet"/>.
+            </summary>
+            <param name="faultDataSet">The data set to be used to find the distance to fault.</param>
+            <param name="parameters">Extra parameters to the algorithm.</param>
+            <returns>Set of distance calculations, one for each cycle of data.</returns>
+        </member>
+        <member name="M:FaultAlgorithms.FaultLocationAlgorithms.Takagi(FaultAlgorithms.FaultLocationDataSet,System.String)">
+            <summary>
+            Takagi algorithm for calculating the distance to a fault that was found in the <see cref="T:FaultAlgorithms.FaultLocationDataSet"/>.
+            </summary>
+            <param name="faultDataSet">The data set to be used to find the distance to fault.</param>
+            <param name="parameters">Extra parameters to the algorithm.</param>
+            <returns>Set of distance calculations, one for each cycle of data.</returns>
+        </member>
+        <member name="M:FaultAlgorithms.FaultLocationAlgorithms.ModifiedTakagi(FaultAlgorithms.FaultLocationDataSet,System.String)">
+            <summary>
+            Takagi algorithm, substituting zero sequence current for superposition current, for
+            calculating the distance to a fault that was found in the <see cref="T:FaultAlgorithms.FaultLocationDataSet"/>.
+            </summary>
+            <param name="faultDataSet">The data set to be used to find the distance to fault.</param>
+            <param name="parameters">Extra parameters to the algorithm.</param>
+            <returns>Set of distance calculations, one for each cycle of data.</returns>
+        </member>
+        <member name="M:FaultAlgorithms.FaultLocationAlgorithms.Novosel(FaultAlgorithms.FaultLocationDataSet,System.String)">
+            <summary>
+            Novosel et al. algorithm for calculating the distance to a fault that was found in the <see cref="T:FaultAlgorithms.FaultLocationDataSet"/>.
+            </summary>
+            <param name="faultDataSet">The data set to be used to find the distance to fault.</param>
+            <param name="parameters">Extra parameters to the algorithm.</param>
+            <returns>Set of distance calculations, one for each cycle of data.</returns>
+        </member>
+        <member name="M:FaultAlgorithms.FaultLocationAlgorithms.Eriksson(FaultAlgorithms.FaultLocationDataSet,System.String)">
+            <summary>
+            Eriksson algorithm for calculating the distance to a fault that was found in the <see cref="T:FaultAlgorithms.FaultLocationDataSet"/>.
+            </summary>
+            <param name="faultDataSet">The data set to be used to find the distance to fault.</param>
+            <param name="parameters">Extra parameters to the algorithm.</param>
+            <returns>Set of distance calculations, one for each cycle of data.</returns>
+        </member>
+        <member name="M:FaultAlgorithms.FaultLocationAlgorithms.DoubleEnded(FaultAlgorithms.FaultLocationDataSet,FaultAlgorithms.CycleData,System.String)">
+            <summary>
+            Double-ended algorithm for calculating the distance to a fault that was found in the <see cref="T:FaultAlgorithms.FaultLocationDataSet"/>.
+            </summary>
+            <param name="localFaultDataSet">The data set used to find the distance to the fault.</param>
+            <param name="remoteFaultCycle">The cycle of data from the remote station used in the double-ended distance algorithm.</param>
+            <param name="parameters">Extra parameters to the algorithm.</param>
+            <returns>A set of distance calculations, one for each cycle of data in <paramref name="localFaultDataSet"/>.</returns>
+        </member>
+        <member name="T:FaultAlgorithms.FaultType">
+            <summary>
+            Represents possible types of a fault.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultType.AN">
+            <summary>
+            A-phase to neutral fault type.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultType.BN">
+            <summary>
+            B-phase to neutral fault type.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultType.CN">
+            <summary>
+            C-phase to neutral fault type.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultType.AB">
+            <summary>
+            A-phase to B-phase fault type.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultType.BC">
+            <summary>
+            B-phase to C-phase fault type.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultType.CA">
+            <summary>
+            C-phase to A-phase fault type.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultType.ABG">
+            <summary>
+            A-phase to B-phase to ground fault type.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultType.BCG">
+            <summary>
+            B-phase to C-phase to ground fault type.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultType.CAG">
+            <summary>
+            C-phase to A-phase to ground fault type.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultType.ABC">
+            <summary>
+            Three-phase fault type.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.FaultType.None">
+            <summary>
+            No fault.
+            </summary>
+        </member>
+        <member name="T:FaultAlgorithms.FaultLocationDataSet">
+            <summary>
+            Represents a data set containing data about an event and the
+            fault conditions that were detected when analyzing the data set.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.FaultLocationDataSet.#ctor">
+            <summary>
+            Creates a new instance of the <see cref="T:FaultAlgorithms.FaultLocationDataSet"/> class.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.FaultLocationDataSet.CalculateSampleRates">
+            <summary>
+            Uses system frequency to calculate the sample rate for each set of
+            <see cref="T:FaultAlgorithms.MeasurementData"/> in the voltage and current data sets.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.FaultLocationDataSet.SetSampleRates(System.Int32)">
+            <summary>
+            Sets the sample rate of the voltage and current data sets.
+            </summary>
+            <param name="sampleRate"></param>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.Voltages">
+            <summary>
+            Gets the set of voltages used to initialize this <see cref="T:FaultAlgorithms.FaultLocationDataSet"/>.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.Currents">
+            <summary>
+            Gets the set of currents used to initialize this <see cref="T:FaultAlgorithms.FaultLocationDataSet"/>.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.Cycles">
+            <summary>
+            Gets the set of cycles used to initialize this <see cref="T:FaultAlgorithms.FaultLocationDataSet"/>.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.PrefaultCycle">
+            <summary>
+            Gets or sets the cycle of prefault data to be used in fault location calculations.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.Frequency">
+            <summary>
+            Gets or sets the frequency of the measured system, in Hz.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.PositiveImpedance">
+            <summary>
+            Gets or sets the positive sequence impedance.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.ZeroImpedance">
+            <summary>
+            Gets or sets the zero sequence impedance.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.LoopImpedance">
+            <summary>
+            Gets the loop impedance <c>[(Z0 + 2*Z1) / 3]</c>.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.LocalSourceImpedance">
+            <summary>
+            Gets or sets the impedance of the local voltage source.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.RemoteSourceImpedance">
+            <summary>
+            Gets or sets the impedance of the remote voltage source.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.Z1">
+            <summary>
+            Gets or sets the positive sequence impedance.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.Z0">
+            <summary>
+            Gets or sets the zero sequence impedance.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.Zs">
+            <summary>
+            Gets the loop impedance <c>[(Z0 + 2*Z1) / 3]</c>.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.ZSrc">
+            <summary>
+            Gets or sets the impedance of the local voltage source.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.ZRem">
+            <summary>
+            Gets or sets the impedance of the remote voltage source.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.RatedCurrent">
+            <summary>
+            Gets or sets the maximum rated current on the line at 50 degrees fahrenheit.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.FaultType">
+            <summary>
+            Gets or sets the fault type.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.FaultedCycles">
+            <summary>
+            Gets or sets the list of indexes into the collection of
+            <see cref="P:FaultAlgorithms.FaultLocationDataSet.Cycles"/> where fault conditions were detected.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.FaultCycleCount">
+            <summary>
+            Gets or sets the number of cycles where fault conditions were detected.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.FaultCalculationCycle">
+            <summary>
+            Gets or sets the index of the cycle used to calculate fault location.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.LineDistance">
+            <summary>
+            Gets or sets the total distance across the line.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.FaultDistances">
+            <summary>
+            Gets or sets the collection of fault distances,
+            one distance per fault location algorithm.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.FaultDistance">
+            <summary>
+            Gets or sets the total amount of distance from the power
+            quality device to the fault along the faulted line.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.FaultLocationDataSet.Item(System.String)">
+            <summary>
+            Gets or sets the value of the parameter with the given name.
+            </summary>
+            <param name="name">The name of the parameter.</param>
+            <returns>The value of the parameter.</returns>
+        </member>
+        <member name="T:FaultAlgorithms.FaultResultsWriterBase">
+            <summary>
+            Base class for writing the results of the fault analysis to an output source.
+            </summary>
+        </member>
+        <member name="T:FaultAlgorithms.IFaultResultsWriter">
+            <summary>
+            Interface for writing the results of the fault analysis to an output source.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.IFaultResultsWriter.WriteConfiguration(System.Collections.Generic.ICollection{FaultAlgorithms.Device})">
+            <summary>
+            Writes configuration information to the output source.
+            </summary>
+            <param name="deviceConfigurations">Configuration information to be written to the output source.</param>
+        </member>
+        <member name="M:FaultAlgorithms.IFaultResultsWriter.WriteResults(FaultAlgorithms.Device,System.Collections.Generic.ICollection{FaultAlgorithms.DisturbanceFile},System.Collections.Generic.ICollection{System.Tuple{FaultAlgorithms.Line,FaultAlgorithms.FaultLocationDataSet}})">
+            <summary>
+            Writes the results to the output source.
+            </summary>
+            <param name="disturbanceRecorder">The device that collected the disturbance data.</param>
+            <param name="disturbanceFiles">Information about the data files collected during the disturbance.</param>
+            <param name="lineDataSets">The data sets used for analysis to determine fault location.</param>
+        </member>
+        <member name="M:FaultAlgorithms.FaultResultsWriterBase.WriteConfiguration(System.Collections.Generic.ICollection{FaultAlgorithms.Device})">
+            <summary>
+            Writes configuration information to the output source.
+            </summary>
+            <param name="deviceConfigurations">Configuration information to be written to the output source.</param>
+        </member>
+        <member name="M:FaultAlgorithms.FaultResultsWriterBase.WriteResults(FaultAlgorithms.Device,System.Collections.Generic.ICollection{FaultAlgorithms.DisturbanceFile},System.Collections.Generic.ICollection{System.Tuple{FaultAlgorithms.Line,FaultAlgorithms.FaultLocationDataSet}})">
+            <summary>
+            Writes the results to the output source.
+            </summary>
+            <param name="disturbanceRecorder">The device that collected the disturbance data.</param>
+            <param name="disturbanceFiles">Information about the data files collected during the disturbance.</param>
+            <param name="lineDataSets">The data sets used for analysis to determine fault location.</param>
+        </member>
+        <member name="M:FaultAlgorithms.FaultResultsWriterBase.LoadSettings">
+            <summary>
+            Loads saved <see cref="T:FaultAlgorithms.FaultResultsWriterBase"/> settings from the config file if the <see cref="P:GSF.Adapters.Adapter.PersistSettings"/> property is set to true.
+            </summary>
+            <exception cref="T:System.Configuration.ConfigurationErrorsException"><see cref="P:GSF.Adapters.Adapter.SettingsCategory"/> has a value of null or empty string.</exception>
+        </member>
+        <member name="M:FaultAlgorithms.FaultResultsWriterBase.SaveSettings">
+            <summary>
+            Saves <see cref="T:FaultAlgorithms.FaultResultsWriterBase"/> settings to the config file if the <see cref="P:GSF.Adapters.Adapter.PersistSettings"/> property is set to true.
+            </summary>
+            <exception cref="T:System.Configuration.ConfigurationErrorsException"><see cref="P:GSF.Adapters.Adapter.SettingsCategory"/> has a value of null or empty string.</exception>
+        </member>
+        <member name="M:FaultAlgorithms.FaultTypeAlgorithms.Simple(FaultAlgorithms.FaultLocationDataSet,System.String)">
+            <summary>
+            Simple algorithm that checks for faults in a <see cref="T:FaultAlgorithms.FaultLocationDataSet"/>.
+            </summary>
+            <param name="faultDataSet">The data set to check for faults.</param>
+            <param name="parameters">Extra parameters to the algorithm.</param>
+            <returns>The type of the fault found in the fault data set.</returns>
+        </member>
+        <member name="T:FaultAlgorithms.Line">
+            <summary>
+            Represents a power line between two substations.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Line.ID">
+            <summary>
+            Gets or sets the ID as defined in the device definitions file.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Line.Name">
+            <summary>
+            Gets or sets the name of the line.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Line.Voltage">
+            <summary>
+            Gets or sets the voltage of the line.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Line.Rating50F">
+            <summary>
+            Gets or sets the maximum rated current at 50 degrees fahrenheit.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Line.Length">
+            <summary>
+            Gets or sets the length of the line.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Line.EndStationID">
+            <summary>
+            Gets or sets the ID of the station that the line ends at.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Line.EndStationName">
+            <summary>
+            Gets or sets the name of the station that the line ends at.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Line.R1">
+            <summary>
+            Gets or sets the real component for the positive sequence impedance.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Line.X1">
+            <summary>
+            Gets or sets the imaginary component for the positive sequence impedance.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Line.R0">
+            <summary>
+            Gets or sets the real component for the zero sequence impedance.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Line.X0">
+            <summary>
+            Gets or sets the imaginary component for the zero sequence impedance.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Line.FaultAlgorithmsSet">
+            <summary>
+            Gets or sets the fault algorithms used for detecting
+            faults and calculating fault distance on the line.
+            </summary>
+        </member>
+        <member name="P:FaultAlgorithms.Line.ChannelsElement">
+            <summary>
+            XML element that contains channel mappings for the ComtradeLoader.
+            </summary>
+        </member>
+        <member name="T:FaultAlgorithms.MeasurementData">
+            <summary>
+            Represents a set of single phase power time-domain data.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.MeasurementData.Times">
+            <summary>
+            Array of times in ticks (100 nanosecond intervals).
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.MeasurementData.Measurements">
+            <summary>
+            Array of measured values.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.MeasurementData.SampleRate">
+            <summary>
+            The number of measured samples per cycle of data.
+            </summary>
+        </member>
+        <member name="T:FaultAlgorithms.MeasurementDataSet">
+            <summary>
+            Represents a set of 3-phase line-to-neutral and line-to-line time-domain power data.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.MeasurementDataSet.AN">
+            <summary>
+            Line-to-neutral A-phase data.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.MeasurementDataSet.BN">
+            <summary>
+            Line-to-neutral B-phase data.
+            </summary>
+        </member>
+        <member name="F:FaultAlgorithms.MeasurementDataSet.CN">
+            <summary>
+            Line-to-neutral C-phase data.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.MeasurementDataSet.#ctor">
+            <summary>
+            Creates a new <see cref="T:FaultAlgorithms.MeasurementDataSet"/>.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.MeasurementDataSet.CalculateSampleRates(System.Double)">
+            <summary>
+            Uses system frequency to calculate the sample rate for each set
+            of <see cref="T:FaultAlgorithms.MeasurementData"/> in this measurement data set.
+            </summary>
+            <param name="frequency">The frequency of the measured system, in Hz.</param>
+        </member>
+        <member name="M:FaultAlgorithms.MeasurementDataSet.SetSampleRate(System.Int32)">
+            <summary>
+            Explicitly sets the sample rate for each set of
+            <see cref="T:FaultAlgorithms.MeasurementData"/> in this measurement data set.
+            </summary>
+            <param name="sampleRate">The sample rate.</param>
+        </member>
+        <member name="M:FaultAlgorithms.MeasurementDataSet.ExportVoltageDataToCSV(System.String)">
+            <summary>
+            Writes all measurement data to a CSV file. 
+            </summary>
+            <param name="fileName">Export file name.</param>
+        </member>
+        <member name="T:FaultAlgorithms.XmlFaultResultsWriter">
+            <summary>
+            Writes the results of fault analysis to an XML file.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.XmlFaultResultsWriter.WriteResults(FaultAlgorithms.Device,System.Collections.Generic.ICollection{FaultAlgorithms.DisturbanceFile},System.Collections.Generic.ICollection{System.Tuple{FaultAlgorithms.Line,FaultAlgorithms.FaultLocationDataSet}})">
+            <summary>
+            Writes the results to the output source.
+            </summary>
+            <param name="disturbanceRecorder">The device that collected the disturbance data.</param>
+            <param name="disturbanceFiles">Information about the data files collected during the disturbance.</param>
+            <param name="lineDataSets">The data sets used for analysis to determine fault location.</param>
+        </member>
+        <member name="M:FaultAlgorithms.XmlFaultResultsWriter.LoadSettings">
+            <summary>
+            Loads saved <see cref="T:FaultAlgorithms.FaultResultsWriterBase"/> settings from the config file if the <see cref="P:GSF.Adapters.Adapter.PersistSettings"/> property is set to true.
+            </summary>
+            <exception cref="T:System.Configuration.ConfigurationErrorsException"><see cref="P:GSF.Adapters.Adapter.SettingsCategory"/> has a value of null or empty string.</exception>
+        </member>
+        <member name="M:FaultAlgorithms.XmlFaultResultsWriter.SaveSettings">
+            <summary>
+            Saves <see cref="T:FaultAlgorithms.FaultResultsWriterBase"/> settings to the config file if the <see cref="P:GSF.Adapters.Adapter.PersistSettings"/> property is set to true.
+            </summary>
+            <exception cref="T:System.Configuration.ConfigurationErrorsException"><see cref="P:GSF.Adapters.Adapter.SettingsCategory"/> has a value of null or empty string.</exception>
+        </member>
+    </members>
+</doc>
