@@ -44,8 +44,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WiX", "WiX", "{598B0FE9-B4E
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{B554F6A4-C3DF-4D8B-B3EF-7819B44BCE09}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "openXDA_SdBx", "openXDA_SdBx", "{DE52CF89-A2CD-41E7-AB2C-4D0E8DE2772A}"
+	ProjectSection(SolutionItems) = preProject
+		Data\SandBox.sql = Data\SandBox.sql
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "openHistorian", "openHistorian", "{947C5857-A97F-499E-BC07-4509132EAF52}"
 	ProjectSection(SolutionItems) = preProject
@@ -65,16 +66,42 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "openXDA", "openXDA", "{B400
 		Dependencies\openXDA\FaultData.dll = Dependencies\openXDA\FaultData.dll
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openXDA_SdBx", "Applications\openXDA_SdBx\openXDA_SdBx.csproj", "{063153E2-576A-46AA-A38F-8FE4A36D9198}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openXDA_SdBxConsole", "Applications\openXDA_SdBxConsole\openXDA_SdBxConsole.csproj", "{FF01205F-16D8-4BA9-AD86-F5ECEC6FF4A5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandBox", "Libraries\SandBox\SandBox.csproj", "{3AAA4C0B-D3F7-4D1D-ACFF-8BDCD898E292}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{063153E2-576A-46AA-A38F-8FE4A36D9198}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{063153E2-576A-46AA-A38F-8FE4A36D9198}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{063153E2-576A-46AA-A38F-8FE4A36D9198}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{063153E2-576A-46AA-A38F-8FE4A36D9198}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF01205F-16D8-4BA9-AD86-F5ECEC6FF4A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF01205F-16D8-4BA9-AD86-F5ECEC6FF4A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF01205F-16D8-4BA9-AD86-F5ECEC6FF4A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF01205F-16D8-4BA9-AD86-F5ECEC6FF4A5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AAA4C0B-D3F7-4D1D-ACFF-8BDCD898E292}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AAA4C0B-D3F7-4D1D-ACFF-8BDCD898E292}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AAA4C0B-D3F7-4D1D-ACFF-8BDCD898E292}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AAA4C0B-D3F7-4D1D-ACFF-8BDCD898E292}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{DE52CF89-A2CD-41E7-AB2C-4D0E8DE2772A} = {B3493118-9437-497D-A716-24232CE0D4F2}
+		{063153E2-576A-46AA-A38F-8FE4A36D9198} = {B3493118-9437-497D-A716-24232CE0D4F2}
+		{FF01205F-16D8-4BA9-AD86-F5ECEC6FF4A5} = {B3493118-9437-497D-A716-24232CE0D4F2}
 		{847B0BE1-54CD-4A68-B0DB-6EA2CD8F672F} = {6AA858DD-E319-459F-A5A5-FBDB89D63214}
 		{F5BD3958-FFBE-415F-BC25-25C30DD7C26F} = {6AA858DD-E319-459F-A5A5-FBDB89D63214}
 		{598B0FE9-B4EA-4797-982D-BF243F3C5BEC} = {6AA858DD-E319-459F-A5A5-FBDB89D63214}
 		{947C5857-A97F-499E-BC07-4509132EAF52} = {6AA858DD-E319-459F-A5A5-FBDB89D63214}
 		{B4001656-046C-4411-8C27-46060C86D819} = {6AA858DD-E319-459F-A5A5-FBDB89D63214}
+		{3AAA4C0B-D3F7-4D1D-ACFF-8BDCD898E292} = {0F4F3F4C-55D3-4D76-99AC-1ABD3F69CFBE}
 	EndGlobalSection
 EndGlobal
