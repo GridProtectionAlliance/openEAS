@@ -69,8 +69,6 @@ namespace openXDA_SdBx
         public bool ProcessFileGroup(int fileGroupID)
         {
             SystemSettings systemSettings;
-            TimeZoneInfo defaultMeterTimeZone;
-            TimeZoneInfo xdaTimeZone;
 
             FileInfoDataContext fileInfo;
             FileGroup fileGroup;
@@ -85,8 +83,6 @@ namespace openXDA_SdBx
                 using (DbAdapterContainer dbAdapterContainer = new DbAdapterContainer(systemSettings.DbConnectionString, systemSettings.DbTimeout))
                 {
                     fileInfo = dbAdapterContainer.GetAdapter<FileInfoDataContext>();
-                    defaultMeterTimeZone = systemSettings.DefaultMeterTimeZoneInfo;
-                    xdaTimeZone = systemSettings.XDATimeZoneInfo;
 
                     // Create a file group for this file in the database
                     fileGroup = LoadFileGroup(fileInfo, fileGroupID);
@@ -108,7 +104,6 @@ namespace openXDA_SdBx
                         meterDataSet.ConnectionString = systemSettings.DbConnectionString;
                         meterDataSet.FilePath = dataFile.FilePath;
                         meterDataSet.FileGroup = fileGroup;
-                        ShiftTime(meterDataSet, defaultMeterTimeZone, xdaTimeZone);
                     }
 
                     // Process meter data sets
@@ -274,26 +269,6 @@ namespace openXDA_SdBx
         private FileGroup LoadFileGroup(FileInfoDataContext dataContext, int fileGroupID)
         {
             return dataContext.FileGroups.FirstOrDefault(fileGroup => fileGroup.ID == fileGroupID);
-        }
-
-        // Adjusts the timestamps in the given data sets to the time zone of XDA.
-        private void ShiftTime(MeterDataSet meterDataSet, TimeZoneInfo defaultMeterTimeZone, TimeZoneInfo xdaTimeZone)
-        {
-            TimeZoneInfo meterTimeZone;
-
-            if (!string.IsNullOrEmpty(meterDataSet.Meter.TimeZone))
-                meterTimeZone = TimeZoneInfo.FindSystemTimeZoneById(meterDataSet.Meter.TimeZone);
-            else
-                meterTimeZone = defaultMeterTimeZone;
-
-            foreach (DataSeries dataSeries in meterDataSet.DataSeries)
-            {
-                foreach (DataPoint dataPoint in dataSeries.DataPoints)
-                {
-                    dataPoint.Time = TimeZoneInfo.ConvertTimeToUtc(dataPoint.Time, meterTimeZone);
-                    dataPoint.Time = TimeZoneInfo.ConvertTimeFromUtc(dataPoint.Time, xdaTimeZone);
-                }
-            }
         }
 
         private void TryDispose(IDisposable obj)
