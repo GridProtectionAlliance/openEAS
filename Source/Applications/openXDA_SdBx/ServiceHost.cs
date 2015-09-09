@@ -119,6 +119,7 @@ namespace openXDA_SdBx
         {
             ServiceHelperAppender serviceHelperAppender;
             RollingFileAppender fileAppender;
+            ServiceProcess process;
 
             // Set current working directory to fix relative paths
             Directory.SetCurrentDirectory(FilePath.GetAbsolutePath(""));
@@ -166,6 +167,12 @@ namespace openXDA_SdBx
 
             // Set up the analysis engine
             m_extensibleDisturbanceAnalysisEngine = new SandBoxEngine();
+
+            // Process latest data at startup
+            process = m_serviceHelper.FindProcess("ProcessLatestData");
+
+            if ((object)process != null)
+                process.Start();
         }
 
         private void ProcessLatestData(string arg1, object[] arg2)
