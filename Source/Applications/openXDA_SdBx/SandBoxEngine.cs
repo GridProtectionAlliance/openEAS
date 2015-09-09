@@ -55,6 +55,12 @@ namespace openXDA_SdBx
             FileInfoDataContext fileInfo;
             List<int> newFileGroups;
 
+            if ((object)m_systemSettings == null)
+                ReloadSystemSettings();
+
+            if ((object)m_systemSettings == null)
+                throw new InvalidOperationException("Failed to load system settings.");
+
             using (FileBackedDictionary<string, int> dictionary = new FileBackedDictionary<string, int>(latestDataFile))
             using (DbAdapterContainer dbAdapterContainer = new DbAdapterContainer(m_systemSettings.DbConnectionString, m_systemSettings.DbTimeout))
             {
