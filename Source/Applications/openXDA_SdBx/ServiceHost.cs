@@ -72,7 +72,6 @@ using System.IO;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
-using System.Threading;
 using GSF;
 using GSF.Console;
 using GSF.IO;
@@ -91,8 +90,6 @@ namespace openXDA_SdBx
         // Fields
         private ServiceMonitors m_serviceMonitors;
         private SandBoxEngine m_extensibleDisturbanceAnalysisEngine;
-        private Thread m_startEngineThread;
-        private bool m_serviceStopping;
 
         #endregion
 
@@ -120,10 +117,6 @@ namespace openXDA_SdBx
 
         private void ServiceHelper_ServiceStarted(object sender, EventArgs e)
         {
-            const int RetryDelay = 1000;
-            const int SleepTime = 200;
-            const int LoopCount = RetryDelay / SleepTime;
-
             ServiceHelperAppender serviceHelperAppender;
             RollingFileAppender fileAppender;
 
@@ -159,7 +152,7 @@ namespace openXDA_SdBx
             BasicConfigurator.Configure(serviceHelperAppender, fileAppender);
 
             // Set up heartbeat and client request handlers
-            m_serviceHelper.AddScheduledProcess(ProcessLatestData, "ProcessLatestData", "* 0 * * *");
+            m_serviceHelper.AddScheduledProcess(ProcessLatestData, "ProcessLatestData", "* * * * *");
             m_serviceHelper.AddScheduledProcess(ServiceHeartbeatHandler, "ServiceHeartbeat", "* * * * *");
             m_serviceHelper.ClientRequestHandlers.Add(new ClientRequestHandler("ReloadSystemSettings", "Reloads system settings from the database", ReloadSystemSettingsRequestHandler));
             m_serviceHelper.ClientRequestHandlers.Add(new ClientRequestHandler("MsgServiceMonitors", "Sends a message to all service monitors", MsgServiceMonitorsRequestHandler));
@@ -173,8 +166,6 @@ namespace openXDA_SdBx
 
             // Set up the analysis engine
             m_extensibleDisturbanceAnalysisEngine = new SandBoxEngine();
-
-            m_startEngineThread.Start();
         }
 
         private void ProcessLatestData(string arg1, object[] arg2)
@@ -184,11 +175,6 @@ namespace openXDA_SdBx
 
         private void ServiceHelper_ServiceStopping(object sender, EventArgs e)
         {
-            // If the start engine thread is still
-            // running, wait for it to stop
-            m_serviceStopping = true;
-            m_startEngineThread.Join();
-
             // Dispose of adapter loader for service monitors
             m_serviceMonitors.AdapterLoaded -= ServiceMonitors_AdapterLoaded;
             m_serviceMonitors.AdapterUnloaded -= ServiceMonitors_AdapterUnloaded;
