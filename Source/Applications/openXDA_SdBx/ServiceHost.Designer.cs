@@ -153,7 +153,7 @@ namespace openXDA_SdBx
             // 
             // 
             // 
-            this.m_serviceHelper.ErrorLogger.ErrorLog.FileName = "openXDA.ErrorLog.txt";
+            this.m_serviceHelper.ErrorLogger.ErrorLog.FileName = "openXDA_SdBx.ErrorLog.txt";
             this.m_serviceHelper.ErrorLogger.ErrorLog.PersistSettings = true;
             this.m_serviceHelper.ErrorLogger.ErrorLog.SettingsCategory = "ErrorLog";
             this.m_serviceHelper.ErrorLogger.PersistSettings = true;
@@ -168,7 +168,7 @@ namespace openXDA_SdBx
             // 
             // 
             // 
-            this.m_serviceHelper.StatusLog.FileName = "openXDA.StatusLog.txt";
+            this.m_serviceHelper.StatusLog.FileName = "openXDA_SdBx.StatusLog.txt";
             this.m_serviceHelper.StatusLog.PersistSettings = true;
             this.m_serviceHelper.StatusLog.SettingsCategory = "StatusLog";
             // 
@@ -182,7 +182,7 @@ namespace openXDA_SdBx
             // 
             // ServiceHost
             // 
-            this.ServiceName = "openXDA";
+            this.ServiceName = "openXDA_SdBx";
             ((System.ComponentModel.ISupportInitialize)(this.m_serviceHelper.ErrorLogger.ErrorLog)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_serviceHelper.ErrorLogger)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_serviceHelper.ProcessScheduler)).EndInit();

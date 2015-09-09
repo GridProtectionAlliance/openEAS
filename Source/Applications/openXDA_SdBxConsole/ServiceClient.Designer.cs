@@ -125,7 +125,7 @@ namespace openXDA_SdBxConsole
             // 
             // 
             // 
-            this.m_errorLogger.ErrorLog.FileName = "openXDAConsole.ErrorLog.txt";
+            this.m_errorLogger.ErrorLog.FileName = "openXDA_SdBxConsole.ErrorLog.txt";
             this.m_errorLogger.LogToUI = true;
             ((System.ComponentModel.ISupportInitialize)(this.m_clientHelper)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_remotingClient)).EndInit();

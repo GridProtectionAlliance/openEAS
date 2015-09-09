@@ -140,11 +140,11 @@ namespace openXDA_SdBx
                 if (!Directory.Exists("Debug"))
                     Directory.CreateDirectory("Debug");
 
-                fileAppender.File = @"Debug\openXDA.log";
+                fileAppender.File = @"Debug\openXDA_SdBx.log";
             }
             catch (Exception ex)
             {
-                fileAppender.File = "openXDA.log";
+                fileAppender.File = "openXDA_SdBx.log";
                 m_serviceHelper.ErrorLogger.Log(ex);
             }
 
