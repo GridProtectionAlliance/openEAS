@@ -74,7 +74,7 @@ using GSF.Console;
 using GSF.Reflection;
 using GSF.ServiceProcess;
 
-namespace openXDA_SdBxConsole
+namespace openESAConsole
 {
     public partial class ServiceClient : Component
     {

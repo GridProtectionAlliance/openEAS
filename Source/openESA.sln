@@ -66,9 +66,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "openXDA", "openXDA", "{B400
 		Dependencies\openXDA\FaultData.dll = Dependencies\openXDA\FaultData.dll
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openXDA_SdBx", "Applications\openXDA_SdBx\openXDA_SdBx.csproj", "{063153E2-576A-46AA-A38F-8FE4A36D9198}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openESA", "Applications\openESA\openESA.csproj", "{063153E2-576A-46AA-A38F-8FE4A36D9198}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openXDA_SdBxConsole", "Applications\openXDA_SdBxConsole\openXDA_SdBxConsole.csproj", "{FF01205F-16D8-4BA9-AD86-F5ECEC6FF4A5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openESAConsole", "Applications\openESAConsole\openESAConsole.csproj", "{FF01205F-16D8-4BA9-AD86-F5ECEC6FF4A5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandBox", "Libraries\SandBox\SandBox.csproj", "{3AAA4C0B-D3F7-4D1D-ACFF-8BDCD898E292}"
 EndProject

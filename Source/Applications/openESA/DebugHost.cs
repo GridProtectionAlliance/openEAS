@@ -1,5 +1,5 @@
 ﻿//*********************************************************************************************************************
-// Logger.cs
+// DebugHost.cs
 // Version 1.1 and subsequent releases
 //
 //  Copyright © 2013, Grid Protection Alliance.  All Rights Reserved.
@@ -61,86 +61,90 @@
 //
 //  Code Modification History:
 //  -------------------------------------------------------------------------------------------------------------------
-//  07/18/2012 - Stephen C. Wills, Grid Protection Alliance
+//  09/10/2012 - Stephen C. Wills, Grid Protection Alliance
 //       Generated original version of source code.
 //
 //*********************************************************************************************************************
 
 using System;
-using System.IO;
-using System.Text;
+using System.Windows.Forms;
+using GSF.Reflection;
 
-namespace openXDA_SdBx.Logging
+namespace openESA
 {
-    public class SimpleLogger : IDisposable
+    public partial class DebugHost : Form
     {
-        private const string DateTimeFormat = "HH:mm:ss";
+        #region [ Members ]
 
-        private string m_logFile;
-        private TextWriter m_fileWriter;
-        private int m_recordCount;
+        // Fields
+        private string m_productName;
 
-        private SimpleLogger(string logFile)
+        #endregion
+
+        #region [ Constructors ]
+
+        public DebugHost()
         {
-            m_logFile = logFile;
-            m_fileWriter = new StreamWriter(File.Create(logFile));
+            InitializeComponent();
         }
 
-        public void WriteLine(string line)
-        {
-            if ((object)line == null)
-                return;
+        #endregion
 
-            m_fileWriter.WriteLine("[{0}] {1} - {2}", m_recordCount, DateTime.Now.ToString(DateTimeFormat), line);
-            m_recordCount++;
+        #region [ Methods ]
+
+        private void DebugHost_Load(object sender, EventArgs e)
+        {
+            // Initialize text.
+            m_productName = AssemblyInfo.EntryAssembly.Title;
+            this.Text = string.Format(this.Text, m_productName);
+            m_notifyIcon.Text = string.Format(m_notifyIcon.Text, m_productName);
+            LabelNotice.Text = string.Format(LabelNotice.Text, m_productName);
+            m_exitToolStripMenuItem.Text = string.Format(m_exitToolStripMenuItem.Text, m_productName);
+
+            // Minimize the window.
+            this.WindowState = FormWindowState.Minimized;
+
+            // Start the windows service.
+            m_serviceHost.StartDebugging(Environment.CommandLine.Split(' '));
         }
 
-        public void WriteException(Exception ex)
+        private void DebugHost_FormClosing(object sender, FormClosingEventArgs e)
         {
-            StringBuilder stackTrace;
-            Exception inner;
-
-            if ((object)ex == null)
-                return;
-
-            stackTrace = new StringBuilder(ex.StackTrace);
-            inner = ex.InnerException;
-
-            while ((object)inner != null)
+            if (MessageBox.Show(string.Format("Are you sure you want to stop {0} windows service? ",
+                m_productName), "Stop Service", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                stackTrace.AppendLine();
-                stackTrace.AppendLine("(Inner Exception)");
-                stackTrace.AppendLine(inner.StackTrace);
-                inner = inner.InnerException;
+                // Stop the windows service.
+                m_serviceHost.StopDebugging();
             }
-
-            WriteLine(string.Empty);
-            WriteLine(string.Format("ERROR: {0}", ex.Message));
-            WriteLine(stackTrace.ToString());
-            WriteLine(string.Empty);
-        }
-
-        public void Close()
-        {
-            m_fileWriter.Close();
-        }
-
-        public void Dispose()
-        {
-            Close();
-        }
-
-        public static SimpleLogger Open(string logFile)
-        {
-            return new SimpleLogger(logFile);
-        }
-
-        public string LogFile
-        {
-            get
+            else
             {
-                return m_logFile;
+                // Stop the application from exiting.
+                e.Cancel = true;
             }
         }
+
+        private void DebugHost_Resize(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                // Don't show the window in taskbar when minimized.
+                this.ShowInTaskbar = false;
+            }
+        }
+
+        private void ShowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Show the window in taskbar the in normal mode (visible).
+            this.ShowInTaskbar = true;
+            this.WindowState = FormWindowState.Normal;
+        }
+
+        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // Close this window which will cause the application to exit.
+            this.Close();
+        }
+
+        #endregion
     }
 }

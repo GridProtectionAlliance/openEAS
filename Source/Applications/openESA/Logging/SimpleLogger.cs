@@ -1,5 +1,5 @@
 ﻿//*********************************************************************************************************************
-// Program.cs
+// Logger.cs
 // Version 1.1 and subsequent releases
 //
 //  Copyright © 2013, Grid Protection Alliance.  All Rights Reserved.
@@ -61,33 +61,86 @@
 //
 //  Code Modification History:
 //  -------------------------------------------------------------------------------------------------------------------
-//  09/10/2012 - Stephen C. Wills, Grid Protection Alliance
+//  07/18/2012 - Stephen C. Wills, Grid Protection Alliance
 //       Generated original version of source code.
 //
 //*********************************************************************************************************************
 
-namespace openXDA_SdBxConsole
+using System;
+using System.IO;
+using System.Text;
+
+namespace openESA.Logging
 {
-    class Program
+    public class SimpleLogger : IDisposable
     {
-        static ServiceClient m_serviceClient;
+        private const string DateTimeFormat = "HH:mm:ss";
 
-        static void Main(string[] args)
+        private string m_logFile;
+        private TextWriter m_fileWriter;
+        private int m_recordCount;
+
+        private SimpleLogger(string logFile)
         {
-            // Enable console events.
-            GSF.Console.Events.ConsoleClosing += OnConsoleClosing;
-            GSF.Console.Events.EnableRaisingEvents();
-
-            // Start the client component.
-            m_serviceClient = new ServiceClient();
-            m_serviceClient.Start(args);
-            m_serviceClient.Dispose();
+            m_logFile = logFile;
+            m_fileWriter = new StreamWriter(File.Create(logFile));
         }
 
-        static void OnConsoleClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        public void WriteLine(string line)
         {
-            // Dispose the client component.
-            m_serviceClient.Dispose();
+            if ((object)line == null)
+                return;
+
+            m_fileWriter.WriteLine("[{0}] {1} - {2}", m_recordCount, DateTime.Now.ToString(DateTimeFormat), line);
+            m_recordCount++;
+        }
+
+        public void WriteException(Exception ex)
+        {
+            StringBuilder stackTrace;
+            Exception inner;
+
+            if ((object)ex == null)
+                return;
+
+            stackTrace = new StringBuilder(ex.StackTrace);
+            inner = ex.InnerException;
+
+            while ((object)inner != null)
+            {
+                stackTrace.AppendLine();
+                stackTrace.AppendLine("(Inner Exception)");
+                stackTrace.AppendLine(inner.StackTrace);
+                inner = inner.InnerException;
+            }
+
+            WriteLine(string.Empty);
+            WriteLine(string.Format("ERROR: {0}", ex.Message));
+            WriteLine(stackTrace.ToString());
+            WriteLine(string.Empty);
+        }
+
+        public void Close()
+        {
+            m_fileWriter.Close();
+        }
+
+        public void Dispose()
+        {
+            Close();
+        }
+
+        public static SimpleLogger Open(string logFile)
+        {
+            return new SimpleLogger(logFile);
+        }
+
+        public string LogFile
+        {
+            get
+            {
+                return m_logFile;
+            }
         }
     }
 }

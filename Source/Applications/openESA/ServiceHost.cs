@@ -79,9 +79,9 @@ using GSF.ServiceProcess;
 using log4net.Appender;
 using log4net.Config;
 using log4net.Layout;
-using openXDA_SdBx.Logging;
+using openESA.Logging;
 
-namespace openXDA_SdBx
+namespace openESA
 {
     public partial class ServiceHost : ServiceBase
     {
@@ -141,11 +141,11 @@ namespace openXDA_SdBx
                 if (!Directory.Exists("Debug"))
                     Directory.CreateDirectory("Debug");
 
-                fileAppender.File = @"Debug\openXDA_SdBx.log";
+                fileAppender.File = @"Debug\openESA.log";
             }
             catch (Exception ex)
             {
-                fileAppender.File = "openXDA_SdBx.log";
+                fileAppender.File = "openESA.log";
                 m_serviceHelper.ErrorLogger.Log(ex);
             }
 

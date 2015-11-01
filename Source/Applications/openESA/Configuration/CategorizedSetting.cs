@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace openXDA_SdBx.Configuration
+namespace openESA.Configuration
 {
     public class CategorizedSetting
     {

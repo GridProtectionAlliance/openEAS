@@ -29,9 +29,9 @@ using GSF.Collections;
 using GSF.Configuration;
 using GSF.IO;
 using GSF.Threading;
-using openXDA_SdBx.Configuration;
+using openESA.Configuration;
 
-namespace openXDA_SdBx
+namespace openESA
 {
     public class SandBoxEngine
     {

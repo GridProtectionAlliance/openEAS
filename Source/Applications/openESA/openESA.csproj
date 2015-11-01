@@ -7,8 +7,8 @@
     <ProjectGuid>{063153E2-576A-46AA-A38F-8FE4A36D9198}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>openXDA_SdBx</RootNamespace>
-    <AssemblyName>openXDA_SdBx</AssemblyName>
+    <RootNamespace>openESA</RootNamespace>
+    <AssemblyName>openESA</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\Build\Output\Debug\Applications\openXDA_SdBx\</OutputPath>
+    <OutputPath>..\..\..\Build\Output\Debug\Applications\openESA\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -27,7 +27,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\Build\Output\Release\Applications\openXDA_SdBx\</OutputPath>
+    <OutputPath>..\..\..\Build\Output\Release\Applications\openESA\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
