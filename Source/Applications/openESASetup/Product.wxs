@@ -48,6 +48,8 @@
 
     <!-- Add/Remove Programs Icon -->
     <Property Id="ARPPRODUCTICON" Value="openESA.ico.exe" />
+    <Property Id="ARPNOREPAIR" Value="yes" Secure="yes" />
+    <Property Id="ARPNOMODIFY" Value="yes" Secure="yes" />
 
     <!-- Custom Actions -->
     <Binary Id="InstallerActions" SourceFile="$(var.SolutionDir)\Dependencies\GSF\GSF.InstallerActions.CA.dll" />
