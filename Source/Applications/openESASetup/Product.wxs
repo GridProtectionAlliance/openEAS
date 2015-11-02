@@ -288,7 +288,7 @@
           <Publish Property="ALTERDBQUERY" Value="ALTER DATABASE [\[][DATABASENAME][\]] SET TRUSTWORTHY ON">1</Publish>
           <Publish Property="CREATEDBLOGINQUERY" Value="IF NOT EXISTS (SELECT * FROM master.dbo.syslogins WHERE loginname = '[ESASERVICELOGIN]') CREATE LOGIN [\[][ESASERVICELOGIN][\]] WITH PASSWORD = '[ESASERVICEPASSWORD]', CHECK_EXPIRATION = OFF, CHECK_POLICY = OFF">1</Publish>
           <Publish Property="ALTERDBLOGINQUERY" Value="ALTER LOGIN [\[][ESASERVICELOGIN][\]] WITH PASSWORD = '[ESASERVICEPASSWORD]'">1</Publish>
-          <Publish Property="CREATEDBUSERQUERY" Value="CREATE USER [\[][ESASERVICELOGIN][\]] FOR LOGIN [\[][ESASERVICELOGIN][\]]">1</Publish>
+          <Publish Property="CREATEDBUSERQUERY" Value="IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = '[ESASERVICELOGIN]') CREATE USER [\[][ESASERVICELOGIN][\]] FOR LOGIN [\[][ESASERVICELOGIN][\]]">1</Publish>
           <Publish Property="DBPERMISSIONSQUERY" Value="EXEC sp_addrolemember N'db_owner', N'[ESASERVICELOGIN]'">1</Publish>
 
           <!-- Set up the authentication part of the connection string based on user input. -->
