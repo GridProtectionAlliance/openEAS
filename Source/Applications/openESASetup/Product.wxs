@@ -125,6 +125,9 @@
         <File Id="SandBox.sql" Name="SandBox.sql" Source="$(var.SolutionDir)\Data\SandBox.sql" />
       </Component>
 
+      <!-- ESA Libraries -->
+      <ComponentRef Id="SandBox" />
+
       <!-- XDA Libraries -->
       <ComponentRef Id="FaultAlgorithms" />
       <ComponentRef Id="FaultData" />
@@ -177,6 +180,11 @@
     </ComponentGroup>
 
     <ComponentGroup Id="LibraryComponents" Directory="INSTALLFOLDER">
+      <!-- ESA Libraries -->
+      <Component Id="SandBox">
+        <File Id="SandBox.dll" Name="$(var.SandBox.TargetFileName)" Source="$(var.SandBox.TargetPath)" />
+      </Component>
+      
       <!-- XDA Libraries -->
       <Component Id="FaultAlgorithms">
         <File Id="FaultAlgorithms.dll" Name="FaultAlgorithms.dll" Source="$(var.SolutionDir)\Dependencies\openXDA\FaultAlgorithms.dll" />
