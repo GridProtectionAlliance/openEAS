@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-  <Product Id="{2BB5FBD2-C073-4717-BF65-B0E0A6BAA71A}" Name="openESA" Language="1033" Version="1.0.0.0" Manufacturer="Grid Protection Alliance" UpgradeCode="{8d57f5c6-bd4a-4e9c-955d-2fe8fc32cd14}">
+  <Product Id="*" Name="openESA" Language="1033" Version="1.0.0.0" Manufacturer="Grid Protection Alliance">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
-    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
     <MediaTemplate EmbedCab="yes" />
 
     <PropertyRef Id="NETFRAMEWORK45"/>
@@ -93,17 +92,17 @@
       <?if $(var.Platform) = x64 ?>
       <Directory Id="ProgramFiles64Folder">
         <!-- C:\Program Files\openESA -->
-        <Directory Id="INSTALLFOLDER" Name="[SERVICENAME]" />
+        <Directory Id="INSTALLFOLDER" Name="openESA" />
       </Directory>
       <?else ?>
       <Directory Id="ProgramFilesFolder">
         <!-- C:\Program Files (x86)\openESA -->
-        <Directory Id="INSTALLFOLDER" Name="[SERVICENAME]" />
+        <Directory Id="INSTALLFOLDER" Name="openESA" />
       </Directory>
       <?endif ?>
 
       <Directory Id="ProgramMenuFolder">
-        <Directory Id="ApplicationProgramsFolder" Name="[SERVICENAME]" />
+        <Directory Id="ApplicationProgramsFolder" Name="openESA" />
       </Directory>
     </Directory>
   </Fragment>
