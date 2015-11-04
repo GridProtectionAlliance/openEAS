@@ -29,6 +29,7 @@ using GSF.Collections;
 using GSF.Configuration;
 using GSF.IO;
 using GSF.Threading;
+using log4net;
 using openESA.Configuration;
 
 namespace openESA
@@ -40,6 +41,19 @@ namespace openESA
         // Fields
         private string m_dbConnectionString;
         private SystemSettings m_systemSettings;
+        private LongSynchronizedOperation m_processLatestDataOperation;
+
+        #endregion
+
+        #region [ Constructors ]
+
+        /// <summary>
+        /// Creates a new instance of the <see cref="SandBoxEngine"/> class.
+        /// </summary>
+        public SandBoxEngine()
+        {
+            m_processLatestDataOperation = new LongSynchronizedOperation(ProcessLatestDataOperation, ex => Log.Error(ex.Message, ex));
+        }
 
         #endregion
 
@@ -51,6 +65,15 @@ namespace openESA
         /// </summary>
         public void ProcessLatestData()
         {
+            m_processLatestDataOperation.TryRun();
+        }
+
+        /// <summary>
+        /// Processes data not yet processed
+        /// by this SandBox instance.
+        /// </summary>
+        private void ProcessLatestDataOperation()
+        {
             string latestDataFile = FilePath.GetAbsolutePath(@"LatestData.bin");
             int latestFileGroupID;
             FileInfoDataContext fileInfo;
@@ -58,9 +81,6 @@ namespace openESA
 
             if ((object)m_systemSettings == null)
                 ReloadSystemSettings();
-
-            if ((object)m_systemSettings == null)
-                throw new InvalidOperationException("Failed to load system settings.");
 
             using (FileBackedDictionary<string, int> dictionary = new FileBackedDictionary<string, int>(latestDataFile))
             using (DbAdapterContainer dbAdapterContainer = new DbAdapterContainer(m_systemSettings.DbConnectionString, m_systemSettings.DbTimeout))
@@ -135,6 +155,13 @@ namespace openESA
             // Convert dictionary to a connection string and return it
             return SystemSettings.ToConnectionString(settings);
         }
+
+        #endregion
+
+        #region [ Static ]
+
+        // Static Fields
+        private static readonly ILog Log = LogManager.GetLogger(typeof(SandBoxEngine));
 
         #endregion
     }
