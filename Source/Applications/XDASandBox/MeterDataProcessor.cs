@@ -36,10 +36,10 @@ using FaultData.DataWriters;
 using GSF.Annotations;
 using GSF.Configuration;
 using log4net;
-using openESA.Configuration;
+using XDASandBox.Configuration;
 using SandBox;
 
-namespace openESA
+namespace XDASandBox
 {
     public class MeterDataProcessor
     {

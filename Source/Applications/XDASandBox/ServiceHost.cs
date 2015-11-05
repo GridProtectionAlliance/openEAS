@@ -79,9 +79,9 @@ using GSF.ServiceProcess;
 using log4net.Appender;
 using log4net.Config;
 using log4net.Layout;
-using openESA.Logging;
+using XDASandBox.Logging;
 
-namespace openESA
+namespace XDASandBox
 {
     public partial class ServiceHost : ServiceBase
     {
@@ -141,11 +141,11 @@ namespace openESA
                 if (!Directory.Exists("Debug"))
                     Directory.CreateDirectory("Debug");
 
-                fileAppender.File = @"Debug\openESA.log";
+                fileAppender.File = @"Debug\XDASandBox.log";
             }
             catch (Exception ex)
             {
-                fileAppender.File = "openESA.log";
+                fileAppender.File = "XDASandBox.log";
                 m_serviceHelper.ErrorLogger.Log(ex);
             }
 

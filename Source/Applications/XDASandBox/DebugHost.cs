@@ -70,7 +70,7 @@ using System;
 using System.Windows.Forms;
 using GSF.Reflection;
 
-namespace openESA
+namespace XDASandBox
 {
     public partial class DebugHost : Form
     {

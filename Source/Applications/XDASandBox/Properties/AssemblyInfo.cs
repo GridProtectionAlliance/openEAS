@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("openESAConsole")]
+[assembly: AssemblyTitle("XDASandBox")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("openESAConsole")]
+[assembly: AssemblyProduct("XDASandBox")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("9ce81281-cf63-44e6-b80a-1173340c9a0c")]
+[assembly: Guid("cf8bf4e0-e9fb-48ea-b925-61c7cb81210e")]
 
 // Version information for an assembly consists of the following four values:
 //

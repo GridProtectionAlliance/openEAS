@@ -1,5 +1,5 @@
 ﻿//*********************************************************************************************************************
-// Program.cs
+// Logger.cs
 // Version 1.1 and subsequent releases
 //
 //  Copyright © 2013, Grid Protection Alliance.  All Rights Reserved.
@@ -61,39 +61,86 @@
 //
 //  Code Modification History:
 //  -------------------------------------------------------------------------------------------------------------------
-//  09/10/2012 - Stephen C. Wills, Grid Protection Alliance
+//  07/18/2012 - Stephen C. Wills, Grid Protection Alliance
 //       Generated original version of source code.
 //
 //*********************************************************************************************************************
 
-#if DEBUG
-    #define RunAsApp
-#endif
+using System;
+using System.IO;
+using System.Text;
 
-#if RunAsApp
-    using System.Windows.Forms;
-#else
-    using System.ServiceProcess;
-#endif
-
-namespace openESA
+namespace XDASandBox.Logging
 {
-    static class Program
+    public class SimpleLogger : IDisposable
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        static void Main()
+        private const string DateTimeFormat = "HH:mm:ss";
+
+        private string m_logFile;
+        private TextWriter m_fileWriter;
+        private int m_recordCount;
+
+        private SimpleLogger(string logFile)
         {
-#if RunAsApp
-            // Run as Windows Application.
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new DebugHost());
-#else
-            // Run as Windows Service.
-            ServiceBase.Run(new ServiceHost());
-#endif
+            m_logFile = logFile;
+            m_fileWriter = new StreamWriter(File.Create(logFile));
+        }
+
+        public void WriteLine(string line)
+        {
+            if ((object)line == null)
+                return;
+
+            m_fileWriter.WriteLine("[{0}] {1} - {2}", m_recordCount, DateTime.Now.ToString(DateTimeFormat), line);
+            m_recordCount++;
+        }
+
+        public void WriteException(Exception ex)
+        {
+            StringBuilder stackTrace;
+            Exception inner;
+
+            if ((object)ex == null)
+                return;
+
+            stackTrace = new StringBuilder(ex.StackTrace);
+            inner = ex.InnerException;
+
+            while ((object)inner != null)
+            {
+                stackTrace.AppendLine();
+                stackTrace.AppendLine("(Inner Exception)");
+                stackTrace.AppendLine(inner.StackTrace);
+                inner = inner.InnerException;
+            }
+
+            WriteLine(string.Empty);
+            WriteLine(string.Format("ERROR: {0}", ex.Message));
+            WriteLine(stackTrace.ToString());
+            WriteLine(string.Empty);
+        }
+
+        public void Close()
+        {
+            m_fileWriter.Close();
+        }
+
+        public void Dispose()
+        {
+            Close();
+        }
+
+        public static SimpleLogger Open(string logFile)
+        {
+            return new SimpleLogger(logFile);
+        }
+
+        public string LogFile
+        {
+            get
+            {
+                return m_logFile;
+            }
         }
     }
 }

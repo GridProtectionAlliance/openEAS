@@ -66,7 +66,7 @@
 //
 //*********************************************************************************************************************
 
-namespace openESA
+namespace XDASandBox
 {
     partial class ServiceHost
     {
@@ -153,7 +153,7 @@ namespace openESA
             // 
             // 
             // 
-            this.m_serviceHelper.ErrorLogger.ErrorLog.FileName = "openESA.ErrorLog.txt";
+            this.m_serviceHelper.ErrorLogger.ErrorLog.FileName = "XDASandBox.ErrorLog.txt";
             this.m_serviceHelper.ErrorLogger.ErrorLog.PersistSettings = true;
             this.m_serviceHelper.ErrorLogger.ErrorLog.SettingsCategory = "ErrorLog";
             this.m_serviceHelper.ErrorLogger.PersistSettings = true;
@@ -168,7 +168,7 @@ namespace openESA
             // 
             // 
             // 
-            this.m_serviceHelper.StatusLog.FileName = "openESA.StatusLog.txt";
+            this.m_serviceHelper.StatusLog.FileName = "XDASandBox.StatusLog.txt";
             this.m_serviceHelper.StatusLog.PersistSettings = true;
             this.m_serviceHelper.StatusLog.SettingsCategory = "StatusLog";
             // 
@@ -182,7 +182,7 @@ namespace openESA
             // 
             // ServiceHost
             // 
-            this.ServiceName = "openESA";
+            this.ServiceName = "XDASandBox";
             ((System.ComponentModel.ISupportInitialize)(this.m_serviceHelper.ErrorLogger.ErrorLog)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_serviceHelper.ErrorLogger)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_serviceHelper.ProcessScheduler)).EndInit();

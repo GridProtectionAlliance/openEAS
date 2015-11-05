@@ -30,9 +30,9 @@ using GSF.Configuration;
 using GSF.IO;
 using GSF.Threading;
 using log4net;
-using openESA.Configuration;
+using XDASandBox.Configuration;
 
-namespace openESA
+namespace XDASandBox
 {
     public class SandBoxEngine
     {

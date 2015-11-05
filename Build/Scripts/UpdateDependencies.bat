@@ -26,7 +26,7 @@
 SETLOCAL
 
 SET pwd="%CD%"
-SET gwd="%LOCALAPPDATA%\Temp\openESA"
+SET gwd="%LOCALAPPDATA%\Temp\XDASandBox"
 SET git="%PROGRAMFILES(X86)%\Git\cmd\git.exe"
 SET remote="git@github.com:GridProtectionAlliance/openXDA.git"
 SET branch="sdbx"

@@ -7,8 +7,8 @@
     <ProjectGuid>{FF01205F-16D8-4BA9-AD86-F5ECEC6FF4A5}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>openESAConsole</RootNamespace>
-    <AssemblyName>openESAConsole</AssemblyName>
+    <RootNamespace>XDASandBoxConsole</RootNamespace>
+    <AssemblyName>XDASandBoxConsole</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -17,7 +17,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\Build\Output\Debug\Applications\openESA\</OutputPath>
+    <OutputPath>..\..\..\Build\Output\Debug\Applications\XDASandBox\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -27,7 +27,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\Build\Output\Release\Applications\openESA\</OutputPath>
+    <OutputPath>..\..\..\Build\Output\Release\Applications\XDASandBox\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-  <Product Id="*" Name="openESA" Language="1033" Version="1.0.0.0" Manufacturer="Grid Protection Alliance">
+  <Product Id="*" Name="XDASandBox" Language="1033" Version="1.0.0.0" Manufacturer="Grid Protection Alliance">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <MediaTemplate EmbedCab="yes" />
@@ -10,14 +10,14 @@
       <![CDATA[Installed OR NETFRAMEWORK45]]>
     </Condition>
 
-    <Feature Id="AllProducts" Title="All Products" Level="1" Display="expand" ConfigurableDirectory="INSTALLFOLDER" Description="All components of the openESA installation.">
-      <!-- openESA Service -->
-      <Feature Id="ServiceFeature" Title="openESA" Description="Installs the openESA Windows service to process data from openXDA to find incipient cable faults.">
+    <Feature Id="AllProducts" Title="All Products" Level="1" Display="expand" ConfigurableDirectory="INSTALLFOLDER" Description="All components of the XDASandBox installation.">
+      <!-- XDASandBox Service -->
+      <Feature Id="ServiceFeature" Title="XDASandBox" Description="Installs the XDASandBox Windows service to process data from openXDA to find incipient cable faults.">
         <ComponentGroupRef Id="ServiceComponents" />
       </Feature>
 
-      <!-- openESA Console -->
-      <Feature Id="ConsoleFeature" Title="openESA Remote Console" Description="Installs the openESA remote console used to monitor and interact with the openESA service.">
+      <!-- XDASandBox Console -->
+      <Feature Id="ConsoleFeature" Title="XDASandBox Remote Console" Description="Installs the XDASandBox remote console used to monitor and interact with the XDASandBox service.">
         <ComponentGroupRef Id="ConsoleComponents" />
       </Feature>
     </Feature>
@@ -33,20 +33,20 @@
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg">(NOT Installed OR WixUI_InstallMode = "Change") AND <![CDATA[NOT(&ServiceFeature=3)]]></Publish>
     </UI>
 
-    <Icon Id="openESA.ico.exe" SourceFile="$(var.openESA.TargetPath)" />
-    <Icon Id="openESAConsole.ico.exe" SourceFile="$(var.openESAConsole.TargetPath)" />
+    <Icon Id="XDASandBox.ico.exe" SourceFile="$(var.XDASandBox.TargetPath)" />
+    <Icon Id="XDASandBoxConsole.ico.exe" SourceFile="$(var.XDASandBoxConsole.TargetPath)" />
 
-    <Property Id="SERVICENAME" Value="$(var.openESA.TargetName)" />
+    <Property Id="SERVICENAME" Value="$(var.XDASandBox.TargetName)" />
     <Property Id="SERVERNAME" Value="localhost" />
     <Property Id="DATABASENAME" Value="openXDA" />
     <Property Id="WINDOWSAUTH" Value="1" />
     <Property Id="DATAPROVIDERSTRING" Value="AssemblyName={System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089};; ConnectionType=System.Data.SqlClient.SqlConnection;; AdapterType=System.Data.SqlClient.SqlDataAdapter" />
-    <!--<WixVariable Id="WixUIBannerBmp" Value="$(var.ProjectDir)\openESASetupBanner.bmp" />
-    <WixVariable Id="WixUIDialogBmp" Value="$(var.ProjectDir)\openESASetupDialog.bmp" />-->
+    <!--<WixVariable Id="WixUIBannerBmp" Value="$(var.ProjectDir)\XDASandBoxSetupBanner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.ProjectDir)\XDASandBoxSetupDialog.bmp" />-->
     <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\INSTALL_LICENSE.rtf" />
 
     <!-- Add/Remove Programs Icon -->
-    <Property Id="ARPPRODUCTICON" Value="openESA.ico.exe" />
+    <Property Id="ARPPRODUCTICON" Value="XDASandBox.ico.exe" />
     <Property Id="ARPNOREPAIR" Value="yes" Secure="yes" />
     <Property Id="ARPNOMODIFY" Value="yes" Secure="yes" />
 
@@ -91,18 +91,18 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <?if $(var.Platform) = x64 ?>
       <Directory Id="ProgramFiles64Folder">
-        <!-- C:\Program Files\openESA -->
-        <Directory Id="INSTALLFOLDER" Name="openESA" />
+        <!-- C:\Program Files\XDASandBox -->
+        <Directory Id="INSTALLFOLDER" Name="XDASandBox" />
       </Directory>
       <?else ?>
       <Directory Id="ProgramFilesFolder">
-        <!-- C:\Program Files (x86)\openESA -->
-        <Directory Id="INSTALLFOLDER" Name="openESA" />
+        <!-- C:\Program Files (x86)\XDASandBox -->
+        <Directory Id="INSTALLFOLDER" Name="XDASandBox" />
       </Directory>
       <?endif ?>
 
       <Directory Id="ProgramMenuFolder">
-        <Directory Id="ApplicationProgramsFolder" Name="openESA" />
+        <Directory Id="ApplicationProgramsFolder" Name="XDASandBox" />
       </Directory>
     </Directory>
   </Fragment>
@@ -110,14 +110,14 @@
   <Fragment>
     <ComponentGroup Id="ServiceComponents" Directory="INSTALLFOLDER">
       <!-- Service Applications -->
-      <Component Id="openESA">
-        <File Id="openESA.exe" Name="$(var.openESA.TargetFileName)" Source="$(var.openESA.TargetPath)" />
-        <ServiceInstall Id="openESAInstall" Name="openESA" Type="ownProcess" Start="auto" ErrorControl="normal" Description="Engine for analyzing power quality data to find incipient cable faults." />
-        <ServiceControl Id="openESAControl" Name="openESA" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
+      <Component Id="XDASandBox">
+        <File Id="XDASandBox.exe" Name="$(var.XDASandBox.TargetFileName)" Source="$(var.XDASandBox.TargetPath)" />
+        <ServiceInstall Id="XDASandBoxInstall" Name="XDASandBox" Type="ownProcess" Start="auto" ErrorControl="normal" Description="Engine for analyzing power quality data to find incipient cable faults." />
+        <ServiceControl Id="XDASandBoxControl" Name="XDASandBox" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
       </Component>
-      <Component Id="openESAConfig">
-        <File Id="openESA.exe.config" Name="$(var.openESA.TargetFileName).config" Source="$(var.openESA.TargetPath).config" />
-        <util:XmlFile Id="SetDBConnectionString" Action="setValue" ElementPath="/configuration/categorizedSettings/systemSettings/add[\[]@name='ConnectionString'[\]]/@value" Value="[DBCONNECTIONSTRING]" File="[#openESA.exe.config]" SelectionLanguage="XPath" Sequence="1" />
+      <Component Id="XDASandBoxConfig">
+        <File Id="XDASandBox.exe.config" Name="$(var.XDASandBox.TargetFileName).config" Source="$(var.XDASandBox.TargetPath).config" />
+        <util:XmlFile Id="SetDBConnectionString" Action="setValue" ElementPath="/configuration/categorizedSettings/systemSettings/add[\[]@name='ConnectionString'[\]]/@value" Value="[DBCONNECTIONSTRING]" File="[#XDASandBox.exe.config]" SelectionLanguage="XPath" Sequence="1" />
       </Component>
 
       <!-- Database Scripts -->
@@ -170,12 +170,12 @@
       <ComponentRef Id="GSF.ServiceProcess" />
 
       <!-- Remote Console Applications -->
-      <Component Id="openESAConsole">
-        <File Id="openESAConsole.exe" Name="$(var.openESAConsole.TargetFileName)" Source="$(var.openESAConsole.TargetPath)" />
-        <Shortcut Id="openESAConsoleStartMenuShortcut" Name="openESA Console" Icon="openESAConsole.ico.exe" Description="Console application to monitor the openESA service." WorkingDirectory="INSTALLFOLDER" Directory="ApplicationProgramsFolder" Advertise="yes" />
+      <Component Id="XDASandBoxConsole">
+        <File Id="XDASandBoxConsole.exe" Name="$(var.XDASandBoxConsole.TargetFileName)" Source="$(var.XDASandBoxConsole.TargetPath)" />
+        <Shortcut Id="XDASandBoxConsoleStartMenuShortcut" Name="XDASandBox Console" Icon="XDASandBoxConsole.ico.exe" Description="Console application to monitor the XDASandBox service." WorkingDirectory="INSTALLFOLDER" Directory="ApplicationProgramsFolder" Advertise="yes" />
       </Component>
-      <Component Id="openESAConsoleConfig">
-        <File Id="openESAConsole.exe.config" Name="$(var.openESAConsole.TargetFileName).config" Source="$(var.openESAConsole.TargetPath).config" />
+      <Component Id="XDASandBoxConsoleConfig">
+        <File Id="XDASandBoxConsole.exe.config" Name="$(var.XDASandBoxConsole.TargetFileName).config" Source="$(var.XDASandBoxConsole.TargetPath).config" />
       </Component>
     </ComponentGroup>
 
@@ -290,7 +290,7 @@
           <!-- Set up the queries to create the database. -->
           <Publish Property="GENPASSWORDLENGTH" Value="20">1</Publish>
           <Publish Event="DoAction" Value="PasswordGenerationAction">NOT ESASERVICEPASSWORD</Publish>
-          <Publish Property="ESASERVICELOGIN" Value="openESAService">1</Publish>
+          <Publish Property="ESASERVICELOGIN" Value="XDASandBoxService">1</Publish>
           <Publish Property="ESASERVICEPASSWORD" Value="[GENERATEDPASSWORD]">NOT ESASERVICEPASSWORD</Publish>
           <Publish Property="CREATEDBQUERY" Value="CREATE DATABASE [\[][DATABASENAME][\]]">1</Publish>
           <Publish Property="ALTERDBQUERY" Value="ALTER DATABASE [\[][DATABASENAME][\]] SET TRUSTWORTHY ON">1</Publish>

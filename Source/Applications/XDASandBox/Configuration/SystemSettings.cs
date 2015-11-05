@@ -30,7 +30,7 @@ using System.Linq;
 using GSF;
 using GSF.Configuration;
 
-namespace openESA.Configuration
+namespace XDASandBox.Configuration
 {
     /// <summary>
     /// Represents the system settings for openXDA.

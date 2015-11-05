@@ -6,7 +6,7 @@
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>da484374-b61e-4126-b9cc-7dccf0bc77c9</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
-    <OutputName>openESASetup</OutputName>
+    <OutputName>XDASandBoxSetup</OutputName>
     <OutputType>Package</OutputType>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' AND '$(MSBuildExtensionsPath32)' != '' ">$(MSBuildExtensionsPath32)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
     <WixTargetsPath Condition=" '$(WixTargetsPath)' == '' ">$(MSBuildExtensionsPath)\Microsoft\WiX\v3.x\Wix.targets</WixTargetsPath>
@@ -41,16 +41,16 @@
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\openESAConsole\openESAConsole.csproj">
-      <Name>openESAConsole</Name>
+    <ProjectReference Include="..\XDASandBoxConsole\XDASandBoxConsole.csproj">
+      <Name>XDASandBoxConsole</Name>
       <Project>{ff01205f-16d8-4ba9-ad86-f5ecec6ff4a5}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
       <RefProjectOutputGroups>Binaries;Content;Satellites</RefProjectOutputGroups>
       <RefTargetDir>INSTALLFOLDER</RefTargetDir>
     </ProjectReference>
-    <ProjectReference Include="..\openESA\openESA.csproj">
-      <Name>openESA</Name>
+    <ProjectReference Include="..\XDASandBox\XDASandBox.csproj">
+      <Name>XDASandBox</Name>
       <Project>{063153e2-576a-46aa-a38f-8fe4a36d9198}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>
@@ -65,11 +65,11 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' ">
     <DefineConstants>Debug</DefineConstants>
-    <OutputPath>..\..\..\Build\Output\$(Configuration)\Applications\openESA</OutputPath>
+    <OutputPath>..\..\..\Build\Output\$(Configuration)\Applications\XDASandBox</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' ">
-    <OutputPath>..\..\..\Build\Output\$(Configuration)\Applications\openESA</OutputPath>
+    <OutputPath>..\..\..\Build\Output\$(Configuration)\Applications\XDASandBox</OutputPath>
     <IntermediateOutputPath>obj\$(Platform)\$(Configuration)\</IntermediateOutputPath>
   </PropertyGroup>
   <Import Project="$(WixTargetsPath)" Condition="Exists($(WixTargetsPath))" />

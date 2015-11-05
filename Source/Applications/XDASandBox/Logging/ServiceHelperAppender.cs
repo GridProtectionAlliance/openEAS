@@ -28,7 +28,7 @@ using log4net;
 using log4net.Appender;
 using log4net.Core;
 
-namespace openESA.Logging
+namespace XDASandBox.Logging
 {
     public class ServiceHelperAppender : IAppender
     {

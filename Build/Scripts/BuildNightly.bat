@@ -18,4 +18,4 @@
 ::*******************************************************************************************************
 
 @ECHO OFF
-C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\msbuild.exe openESA.buildproj /p:SkipHelpFiles=true /l:FileLogger,Microsoft.Build.Engine;logfile=openESA.output
+C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\msbuild.exe XDASandBox.buildproj /p:SkipHelpFiles=true /l:FileLogger,Microsoft.Build.Engine;logfile=XDASandBox.output

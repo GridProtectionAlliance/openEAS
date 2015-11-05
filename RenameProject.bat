@@ -1,14 +1,14 @@
 @ECHO OFF
 SET target=%1
 SET source=%2
-IF /I "%source%"=="" SET source=openESA
+IF /I "%source%"=="" SET source=XDASandBox
 IF /I "%target%"=="" SET /p target="Enter project name: "
 IF /I "%target%"=="" (
     ECHO ERROR: Please enter project name.
     EXIT
 )
 ECHO.
-ECHO *** openESA Rename Script ***
+ECHO *** XDASandBox Rename Script ***
 ECHO.
 ECHO About to rename "%source%" to "%target%", press Ctrl+C to cancel, or
 PAUSE
