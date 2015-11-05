@@ -101,7 +101,7 @@ namespace openESA
                     // Set properties on each of the meter data sets
                     foreach (MeterDataSet meterDataSet in meterDataSets)
                     {
-                        meterDataSet.ConnectionString = systemSettings.DbConnectionString;
+                        meterDataSet.ConnectionString = m_connectionString;
                         meterDataSet.FilePath = dataFile.FilePath;
                         meterDataSet.FileGroup = fileGroup;
                     }
