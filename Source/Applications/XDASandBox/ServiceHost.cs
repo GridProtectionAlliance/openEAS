@@ -177,7 +177,14 @@ namespace XDASandBox
 
         private void ProcessLatestData(string arg1, object[] arg2)
         {
-            m_extensibleDisturbanceAnalysisEngine.ProcessLatestData();
+            try
+            {
+                m_extensibleDisturbanceAnalysisEngine.ProcessLatestData();
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+            }
         }
 
         private void ServiceHelper_ServiceStopping(object sender, EventArgs e)

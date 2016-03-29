@@ -117,7 +117,7 @@
       </Component>
       <Component Id="XDASandBoxConfig">
         <File Id="XDASandBox.exe.config" Name="$(var.XDASandBox.TargetFileName).config" Source="$(var.XDASandBox.TargetPath).config" />
-        <util:XmlFile Id="SetDBConnectionString" Action="setValue" ElementPath="/configuration/categorizedSettings/systemSettings/add[\[]@name='ConnectionString'[\]]/@value" Value="[DBCONNECTIONSTRING]" File="[#XDASandBox.exe.config]" SelectionLanguage="XPath" Sequence="1" />
+        <util:XmlFile Id="SetDBConnectionString" Action="setValue" ElementPath="/configuration/categorizedSettings/systemSettings/add[\[]@name='ConnectionString'[\]]/@value" Value="[EASCONNECTIONSTRING]" File="[#XDASandBox.exe.config]" SelectionLanguage="XPath" Sequence="1" />
       </Component>
 
       <!-- Database Scripts -->
@@ -289,24 +289,25 @@
         <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="&amp;Next">
           <!-- Set up the queries to create the database. -->
           <Publish Property="GENPASSWORDLENGTH" Value="20">1</Publish>
-          <Publish Event="DoAction" Value="PasswordGenerationAction">NOT ESASERVICEPASSWORD</Publish>
-          <Publish Property="ESASERVICELOGIN" Value="XDASandBoxService">1</Publish>
-          <Publish Property="ESASERVICEPASSWORD" Value="[GENERATEDPASSWORD]">NOT ESASERVICEPASSWORD</Publish>
+          <Publish Event="DoAction" Value="PasswordGenerationAction">NOT EASSERVICEPASSWORD</Publish>
+          <Publish Property="EASSERVICELOGIN" Value="XDASandBoxService">1</Publish>
+          <Publish Property="EASSERVICEPASSWORD" Value="[GENERATEDPASSWORD]">NOT EASSERVICEPASSWORD</Publish>
           <Publish Property="CREATEDBQUERY" Value="CREATE DATABASE [\[][DATABASENAME][\]]">1</Publish>
           <Publish Property="ALTERDBQUERY" Value="ALTER DATABASE [\[][DATABASENAME][\]] SET TRUSTWORTHY ON">1</Publish>
-          <Publish Property="CREATEDBLOGINQUERY" Value="IF NOT EXISTS (SELECT * FROM master.dbo.syslogins WHERE loginname = '[ESASERVICELOGIN]') CREATE LOGIN [\[][ESASERVICELOGIN][\]] WITH PASSWORD = '[ESASERVICEPASSWORD]', CHECK_EXPIRATION = OFF, CHECK_POLICY = OFF">1</Publish>
-          <Publish Property="ALTERDBLOGINQUERY" Value="ALTER LOGIN [\[][ESASERVICELOGIN][\]] WITH PASSWORD = '[ESASERVICEPASSWORD]'">1</Publish>
-          <Publish Property="CREATEDBUSERQUERY" Value="IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = '[ESASERVICELOGIN]') CREATE USER [\[][ESASERVICELOGIN][\]] FOR LOGIN [\[][ESASERVICELOGIN][\]]">1</Publish>
-          <Publish Property="DBPERMISSIONSQUERY" Value="EXEC sp_addrolemember N'db_owner', N'[ESASERVICELOGIN]'">1</Publish>
+          <Publish Property="CREATEDBLOGINQUERY" Value="IF NOT EXISTS (SELECT * FROM master.dbo.syslogins WHERE loginname = '[EASSERVICELOGIN]') CREATE LOGIN [\[][EASSERVICELOGIN][\]] WITH PASSWORD = '[EASSERVICEPASSWORD]', CHECK_EXPIRATION = OFF, CHECK_POLICY = OFF">1</Publish>
+          <Publish Property="ALTERDBLOGINQUERY" Value="ALTER LOGIN [\[][EASSERVICELOGIN][\]] WITH PASSWORD = '[EASSERVICEPASSWORD]'">1</Publish>
+          <Publish Property="CREATEDBUSERQUERY" Value="IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = '[EASSERVICELOGIN]') CREATE USER [\[][EASSERVICELOGIN][\]] FOR LOGIN [\[][EASSERVICELOGIN][\]]">1</Publish>
+          <Publish Property="DBPERMISSIONSQUERY" Value="EXEC sp_addrolemember N'db_owner', N'[EASSERVICELOGIN]'">1</Publish>
 
           <!-- Set up the authentication part of the connection string based on user input. -->
           <Publish Property="AUTHSTRING" Value="Integrated Security=SSPI">WINDOWSAUTH</Publish>
           <Publish Property="AUTHSTRING" Value="User Id=[DBUSERNAME];;Password=[DBPASSWORD]">NOT WINDOWSAUTH</Publish>
+          <Publish Property="EASAUTHSTRING" Value="User Id=[EASSERVICELOGIN];Password=[EASSERVICEPASSWORD]">1</Publish>
 
           <!-- Set up connection strings for connecting to server and database. -->
           <Publish Property="SERVERCONNECTIONSTRING" Value="Data Source=[SERVERNAME];;[AUTHSTRING]">1</Publish>
           <Publish Property="DBCONNECTIONSTRING" Value="Data Source=[SERVERNAME];;Initial Catalog=[DATABASENAME];;[AUTHSTRING]">1</Publish>
-          <Publish Property="ESACONNECTIONSTRING" Value="Data Source=[SERVERNAME];Initial Catalog=[DATABASENAME];User Id=[ESASERVICELOGIN];Password=[ESASERVICEPASSWORD]">1</Publish>
+          <Publish Property="EASCONNECTIONSTRING" Value="Data Source=[SERVERNAME];Initial Catalog=[DATABASENAME];[EASAUTHSTRING]">1</Publish>
 
           <!-- Determine whether we can connect to the database server. -->
           <Publish Property="CONNECTIONSTRING" Value="[SERVERCONNECTIONSTRING]">1</Publish>
