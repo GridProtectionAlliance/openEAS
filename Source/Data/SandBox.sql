@@ -16,6 +16,11 @@ GO
 -- For PQ Dashboard integration,
 -- uncomment and modify the following lines
 
+--IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME = 'HasSdbxResult')
+--BEGIN
+--	DROP FUNCTION HasSdbxResult
+--END
+--
 --CREATE FUNCTION HasSdbxResult
 --(
 --    @eventID INT
