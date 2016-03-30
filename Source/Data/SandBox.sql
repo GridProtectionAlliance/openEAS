@@ -12,3 +12,25 @@ BEGIN
 	)
 END
 GO
+
+-- For PQ Dashboard integration,
+-- uncomment and modify the following lines
+
+--CREATE FUNCTION HasSdbxResult
+--(
+--    @eventID INT
+--)
+--RETURNS INT
+--AS BEGIN
+--    DECLARE @hasResult INT
+--
+--    SELECT @hasResult = COUNT(*)
+--    FROM SandBoxResult
+--    WHERE EventID = @eventID
+--
+--    RETURN @hasResult
+--END
+--GO
+--
+--INSERT INTO EASExtension VALUES('XDASandBox', 'HasSdbxResult')
+--GO
