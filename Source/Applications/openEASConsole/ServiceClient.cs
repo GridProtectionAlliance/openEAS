@@ -74,7 +74,7 @@ using GSF.Console;
 using GSF.Reflection;
 using GSF.ServiceProcess;
 
-namespace XDASandBoxConsole
+namespace openEASConsole
 {
     public partial class ServiceClient : Component
     {

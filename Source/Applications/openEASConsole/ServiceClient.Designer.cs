@@ -1,5 +1,5 @@
 ﻿//*********************************************************************************************************************
-// DebugHost.cs
+// ServiceClient.Designer.cs
 // Version 1.1 and subsequent releases
 //
 //  Copyright © 2013, Grid Protection Alliance.  All Rights Reserved.
@@ -66,85 +66,80 @@
 //
 //*********************************************************************************************************************
 
-using System;
-using System.Windows.Forms;
-using GSF.Reflection;
-
-namespace XDASandBox
+namespace openEASConsole
 {
-    public partial class DebugHost : Form
+    partial class ServiceClient
     {
-        #region [ Members ]
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
 
-        // Fields
-        private string m_productName;
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                m_clientHelper.Disconnect();
+                if (components != null)
+                    components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.components = new System.ComponentModel.Container();
+            this.m_clientHelper = new GSF.ServiceProcess.ClientHelper(this.components);
+            this.m_remotingClient = new GSF.Communication.TcpClient(this.components);
+            this.m_errorLogger = new GSF.ErrorManagement.ErrorLogger(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.m_clientHelper)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_remotingClient)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_errorLogger)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_errorLogger.ErrorLog)).BeginInit();
+            // 
+            // m_clientHelper
+            // 
+            this.m_clientHelper.PersistSettings = true;
+            this.m_clientHelper.RemotingClient = this.m_remotingClient;
+            // 
+            // m_remotingClient
+            // 
+            this.m_remotingClient.ConnectionString = "Server=localhost:8888";
+            this.m_remotingClient.IntegratedSecurity = true;
+            this.m_remotingClient.PayloadAware = true;
+            this.m_remotingClient.PersistSettings = true;
+            this.m_remotingClient.SettingsCategory = "RemotingClient";
+            // 
+            // m_errorLogger
+            // 
+            // 
+            // 
+            // 
+            this.m_errorLogger.ErrorLog.FileName = "openEASConsole.ErrorLog.txt";
+            this.m_errorLogger.LogToUI = true;
+            ((System.ComponentModel.ISupportInitialize)(this.m_clientHelper)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_remotingClient)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_errorLogger.ErrorLog)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_errorLogger)).EndInit();
+
+        }
 
         #endregion
 
-        #region [ Constructors ]
+        private GSF.ServiceProcess.ClientHelper m_clientHelper;
+        private GSF.Communication.TcpClient m_remotingClient;
+        private GSF.ErrorManagement.ErrorLogger m_errorLogger;
 
-        public DebugHost()
-        {
-            InitializeComponent();
-        }
 
-        #endregion
-
-        #region [ Methods ]
-
-        private void DebugHost_Load(object sender, EventArgs e)
-        {
-            // Initialize text.
-            m_productName = AssemblyInfo.EntryAssembly.Title;
-            this.Text = string.Format(this.Text, m_productName);
-            m_notifyIcon.Text = string.Format(m_notifyIcon.Text, m_productName);
-            LabelNotice.Text = string.Format(LabelNotice.Text, m_productName);
-            m_exitToolStripMenuItem.Text = string.Format(m_exitToolStripMenuItem.Text, m_productName);
-
-            // Minimize the window.
-            this.WindowState = FormWindowState.Minimized;
-
-            // Start the windows service.
-            m_serviceHost.StartDebugging(Environment.CommandLine.Split(' '));
-        }
-
-        private void DebugHost_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            if (MessageBox.Show(string.Format("Are you sure you want to stop {0} windows service? ",
-                m_productName), "Stop Service", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-            {
-                // Stop the windows service.
-                m_serviceHost.StopDebugging();
-            }
-            else
-            {
-                // Stop the application from exiting.
-                e.Cancel = true;
-            }
-        }
-
-        private void DebugHost_Resize(object sender, EventArgs e)
-        {
-            if (this.WindowState == FormWindowState.Minimized)
-            {
-                // Don't show the window in taskbar when minimized.
-                this.ShowInTaskbar = false;
-            }
-        }
-
-        private void ShowToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // Show the window in taskbar the in normal mode (visible).
-            this.ShowInTaskbar = true;
-            this.WindowState = FormWindowState.Normal;
-        }
-
-        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            // Close this window which will cause the application to exit.
-            this.Close();
-        }
-
-        #endregion
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-  <Product Id="*" Name="XDASandBox" Language="1033" Version="1.0.0.0" Manufacturer="Grid Protection Alliance">
+  <Product Id="*" Name="openEAS" Language="1033" Version="1.0.0.0" Manufacturer="Grid Protection Alliance">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
 
     <MediaTemplate EmbedCab="yes" />
@@ -10,14 +10,14 @@
       <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_46_OR_LATER_INSTALLED]]>
     </Condition>
 
-    <Feature Id="AllProducts" Title="All Products" Level="1" Display="expand" ConfigurableDirectory="INSTALLFOLDER" Description="All components of the XDASandBox installation.">
-      <!-- XDASandBox Service -->
-      <Feature Id="ServiceFeature" Title="XDASandBox" Description="Installs the XDASandBox Windows service to process data from openXDA to find incipient cable faults.">
+    <Feature Id="AllProducts" Title="All Products" Level="1" Display="expand" ConfigurableDirectory="INSTALLFOLDER" Description="All components of the openEAS installation.">
+      <!-- openEAS Service -->
+      <Feature Id="ServiceFeature" Title="openEAS" Description="Installs the openEAS Windows service to process data from openXDA to find incipient cable faults.">
         <ComponentGroupRef Id="ServiceComponents" />
       </Feature>
 
-      <!-- XDASandBox Console -->
-      <Feature Id="ConsoleFeature" Title="XDASandBox Remote Console" Description="Installs the XDASandBox remote console used to monitor and interact with the XDASandBox service.">
+      <!-- openEAS Console -->
+      <Feature Id="ConsoleFeature" Title="openEAS Remote Console" Description="Installs the openEAS remote console used to monitor and interact with the openEAS service.">
         <ComponentGroupRef Id="ConsoleComponents" />
       </Feature>
     </Feature>
@@ -33,20 +33,20 @@
       <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg">(NOT Installed OR WixUI_InstallMode = "Change") AND <![CDATA[NOT(&ServiceFeature=3)]]></Publish>
     </UI>
 
-    <Icon Id="XDASandBox.ico.exe" SourceFile="$(var.XDASandBox.TargetPath)" />
-    <Icon Id="XDASandBoxConsole.ico.exe" SourceFile="$(var.XDASandBoxConsole.TargetPath)" />
+    <Icon Id="openEAS.ico.exe" SourceFile="$(var.openEAS.TargetPath)" />
+    <Icon Id="openEASConsole.ico.exe" SourceFile="$(var.openEASConsole.TargetPath)" />
 
-    <Property Id="SERVICENAME" Value="$(var.XDASandBox.TargetName)" />
+    <Property Id="SERVICENAME" Value="$(var.openEAS.TargetName)" />
     <Property Id="SERVERNAME" Value="localhost" />
     <Property Id="DATABASENAME" Value="openXDA" />
     <Property Id="WINDOWSAUTH" Value="1" />
     <Property Id="DATAPROVIDERSTRING" Value="AssemblyName={System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089};; ConnectionType=System.Data.SqlClient.SqlConnection;; AdapterType=System.Data.SqlClient.SqlDataAdapter" />
-    <!--<WixVariable Id="WixUIBannerBmp" Value="$(var.ProjectDir)\XDASandBoxSetupBanner.bmp" />
-    <WixVariable Id="WixUIDialogBmp" Value="$(var.ProjectDir)\XDASandBoxSetupDialog.bmp" />-->
+    <!--<WixVariable Id="WixUIBannerBmp" Value="$(var.ProjectDir)\openEASSetupBanner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.ProjectDir)\openEASSetupDialog.bmp" />-->
     <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\INSTALL_LICENSE.rtf" />
 
     <!-- Add/Remove Programs Icon -->
-    <Property Id="ARPPRODUCTICON" Value="XDASandBox.ico.exe" />
+    <Property Id="ARPPRODUCTICON" Value="openEAS.ico.exe" />
     <Property Id="ARPNOREPAIR" Value="yes" Secure="yes" />
     <Property Id="ARPNOMODIFY" Value="yes" Secure="yes" />
 
@@ -91,18 +91,18 @@
     <Directory Id="TARGETDIR" Name="SourceDir">
       <?if $(var.Platform) = x64 ?>
       <Directory Id="ProgramFiles64Folder">
-        <!-- C:\Program Files\XDASandBox -->
-        <Directory Id="INSTALLFOLDER" Name="XDASandBox" />
+        <!-- C:\Program Files\openEAS -->
+        <Directory Id="INSTALLFOLDER" Name="openEAS" />
       </Directory>
       <?else ?>
       <Directory Id="ProgramFilesFolder">
-        <!-- C:\Program Files (x86)\XDASandBox -->
-        <Directory Id="INSTALLFOLDER" Name="XDASandBox" />
+        <!-- C:\Program Files (x86)\openEAS -->
+        <Directory Id="INSTALLFOLDER" Name="openEAS" />
       </Directory>
       <?endif ?>
 
       <Directory Id="ProgramMenuFolder">
-        <Directory Id="ApplicationProgramsFolder" Name="XDASandBox" />
+        <Directory Id="ApplicationProgramsFolder" Name="openEAS" />
       </Directory>
     </Directory>
   </Fragment>
@@ -110,14 +110,14 @@
   <Fragment>
     <ComponentGroup Id="ServiceComponents" Directory="INSTALLFOLDER">
       <!-- Service Applications -->
-      <Component Id="XDASandBox">
-        <File Id="XDASandBox.exe" Name="$(var.XDASandBox.TargetFileName)" Source="$(var.XDASandBox.TargetPath)" />
-        <ServiceInstall Id="XDASandBoxInstall" Name="XDASandBox" Type="ownProcess" Start="auto" ErrorControl="normal" Description="Engine for analyzing power quality data to find incipient cable faults." />
-        <ServiceControl Id="XDASandBoxControl" Name="XDASandBox" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
+      <Component Id="openEAS">
+        <File Id="openEAS.exe" Name="$(var.openEAS.TargetFileName)" Source="$(var.openEAS.TargetPath)" />
+        <ServiceInstall Id="openEASInstall" Name="openEAS" Type="ownProcess" Start="auto" ErrorControl="normal" Description="Engine for analyzing power quality data to find incipient cable faults." />
+        <ServiceControl Id="openEASControl" Name="openEAS" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
       </Component>
-      <Component Id="XDASandBoxConfig">
-        <File Id="XDASandBox.exe.config" Name="$(var.XDASandBox.TargetFileName).config" Source="$(var.XDASandBox.TargetPath).config" />
-        <util:XmlFile Id="SetDBConnectionString" Action="setValue" ElementPath="/configuration/categorizedSettings/systemSettings/add[\[]@name='ConnectionString'[\]]/@value" Value="[EASCONNECTIONSTRING]" File="[#XDASandBox.exe.config]" SelectionLanguage="XPath" Sequence="1" />
+      <Component Id="openEASConfig">
+        <File Id="openEAS.exe.config" Name="$(var.openEAS.TargetFileName).config" Source="$(var.openEAS.TargetPath).config" />
+        <util:XmlFile Id="SetDBConnectionString" Action="setValue" ElementPath="/configuration/categorizedSettings/systemSettings/add[\[]@name='ConnectionString'[\]]/@value" Value="[EASCONNECTIONSTRING]" File="[#openEAS.exe.config]" SelectionLanguage="XPath" Sequence="1" />
       </Component>
 
       <!-- Database Scripts -->
@@ -170,12 +170,12 @@
       <ComponentRef Id="GSF.ServiceProcess" />
 
       <!-- Remote Console Applications -->
-      <Component Id="XDASandBoxConsole">
-        <File Id="XDASandBoxConsole.exe" Name="$(var.XDASandBoxConsole.TargetFileName)" Source="$(var.XDASandBoxConsole.TargetPath)" />
-        <Shortcut Id="XDASandBoxConsoleStartMenuShortcut" Name="XDASandBox Console" Icon="XDASandBoxConsole.ico.exe" Description="Console application to monitor the XDASandBox service." WorkingDirectory="INSTALLFOLDER" Directory="ApplicationProgramsFolder" Advertise="yes" />
+      <Component Id="openEASConsole">
+        <File Id="openEASConsole.exe" Name="$(var.openEASConsole.TargetFileName)" Source="$(var.openEASConsole.TargetPath)" />
+        <Shortcut Id="openEASConsoleStartMenuShortcut" Name="openEAS Console" Icon="openEASConsole.ico.exe" Description="Console application to monitor the openEAS service." WorkingDirectory="INSTALLFOLDER" Directory="ApplicationProgramsFolder" Advertise="yes" />
       </Component>
-      <Component Id="XDASandBoxConsoleConfig">
-        <File Id="XDASandBoxConsole.exe.config" Name="$(var.XDASandBoxConsole.TargetFileName).config" Source="$(var.XDASandBoxConsole.TargetPath).config" />
+      <Component Id="openEASConsoleConfig">
+        <File Id="openEASConsole.exe.config" Name="$(var.openEASConsole.TargetFileName).config" Source="$(var.openEASConsole.TargetPath).config" />
       </Component>
     </ComponentGroup>
 
@@ -290,7 +290,7 @@
           <!-- Set up the queries to create the database. -->
           <Publish Property="GENPASSWORDLENGTH" Value="20">1</Publish>
           <Publish Event="DoAction" Value="PasswordGenerationAction">NOT EASSERVICEPASSWORD</Publish>
-          <Publish Property="EASSERVICELOGIN" Value="XDASandBoxService">1</Publish>
+          <Publish Property="EASSERVICELOGIN" Value="openEASService">1</Publish>
           <Publish Property="EASSERVICEPASSWORD" Value="[GENERATEDPASSWORD]">NOT EASSERVICEPASSWORD</Publish>
           <Publish Property="CREATEDBQUERY" Value="CREATE DATABASE [\[][DATABASENAME][\]]">1</Publish>
           <Publish Property="ALTERDBQUERY" Value="ALTER DATABASE [\[][DATABASENAME][\]] SET TRUSTWORTHY ON">1</Publish>

@@ -66,34 +66,28 @@
 //
 //*********************************************************************************************************************
 
-#if DEBUG
-    #define RunAsApp
-#endif
-
-#if RunAsApp
-    using System.Windows.Forms;
-#else
-    using System.ServiceProcess;
-#endif
-
-namespace XDASandBox
+namespace openEASConsole
 {
-    static class Program
+    class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
-        static void Main()
+        static ServiceClient m_serviceClient;
+
+        static void Main(string[] args)
         {
-#if RunAsApp
-            // Run as Windows Application.
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new DebugHost());
-#else
-            // Run as Windows Service.
-            ServiceBase.Run(new ServiceHost());
-#endif
+            // Enable console events.
+            GSF.Console.Events.ConsoleClosing += OnConsoleClosing;
+            GSF.Console.Events.EnableRaisingEvents();
+
+            // Start the client component.
+            m_serviceClient = new ServiceClient();
+            m_serviceClient.Start(args);
+            m_serviceClient.Dispose();
+        }
+
+        static void OnConsoleClosing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            // Dispose the client component.
+            m_serviceClient.Dispose();
         }
     }
 }

@@ -37,5 +37,5 @@ GO
 --END
 --GO
 --
---INSERT INTO EASExtension VALUES('XDASandBox', 'HasSdbxResult')
+--INSERT INTO EASExtension VALUES('openEAS', 'HasSdbxResult')
 --GO

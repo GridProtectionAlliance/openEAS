@@ -66,7 +66,7 @@
 //
 //*********************************************************************************************************************
 
-namespace XDASandBox
+namespace openEAS
 {
     partial class ServiceHost
     {
@@ -153,7 +153,7 @@ namespace XDASandBox
             // 
             // 
             // 
-            this.m_serviceHelper.ErrorLogger.ErrorLog.FileName = "XDASandBox.ErrorLog.txt";
+            this.m_serviceHelper.ErrorLogger.ErrorLog.FileName = "openEAS.ErrorLog.txt";
             this.m_serviceHelper.ErrorLogger.ErrorLog.PersistSettings = true;
             this.m_serviceHelper.ErrorLogger.ErrorLog.SettingsCategory = "ErrorLog";
             this.m_serviceHelper.ErrorLogger.PersistSettings = true;
@@ -168,7 +168,7 @@ namespace XDASandBox
             // 
             // 
             // 
-            this.m_serviceHelper.StatusLog.FileName = "XDASandBox.StatusLog.txt";
+            this.m_serviceHelper.StatusLog.FileName = "openEAS.StatusLog.txt";
             this.m_serviceHelper.StatusLog.PersistSettings = true;
             this.m_serviceHelper.StatusLog.SettingsCategory = "StatusLog";
             // 
@@ -182,7 +182,7 @@ namespace XDASandBox
             // 
             // ServiceHost
             // 
-            this.ServiceName = "XDASandBox";
+            this.ServiceName = "openEAS";
             ((System.ComponentModel.ISupportInitialize)(this.m_serviceHelper.ErrorLogger.ErrorLog)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_serviceHelper.ErrorLogger)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_serviceHelper.ProcessScheduler)).EndInit();

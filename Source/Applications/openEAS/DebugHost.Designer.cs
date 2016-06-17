@@ -66,7 +66,7 @@
 //
 //*********************************************************************************************************************
 
-namespace XDASandBox
+namespace openEAS
 {
     partial class DebugHost
     {
@@ -99,7 +99,7 @@ namespace XDASandBox
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DebugHost));
             this.LabelNotice = new System.Windows.Forms.Label();
-            this.m_serviceHost = new XDASandBox.ServiceHost(this.components);
+            this.m_serviceHost = new openEAS.ServiceHost(this.components);
             this.m_notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.m_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.m_showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
