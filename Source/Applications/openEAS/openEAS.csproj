@@ -128,9 +128,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\SandBox\SandBox.csproj">
+    <ProjectReference Include="..\..\Libraries\openEASSandBox\openEASSandBox.csproj">
       <Project>{3AAA4C0B-D3F7-4D1D-ACFF-8BDCD898E292}</Project>
-      <Name>SandBox</Name>
+      <Name>openEASSandBox</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

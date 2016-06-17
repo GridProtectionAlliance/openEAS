@@ -33,8 +33,8 @@
     </WixExtension>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Libraries\SandBox\SandBox.csproj">
-      <Name>SandBox</Name>
+    <ProjectReference Include="..\..\Libraries\openEASSandBox\openEASSandBox.csproj">
+      <Name>openEASSandBox</Name>
       <Project>{3aaa4c0b-d3f7-4d1d-acff-8bdcd898e292}</Project>
       <Private>True</Private>
       <DoNotHarvest>True</DoNotHarvest>

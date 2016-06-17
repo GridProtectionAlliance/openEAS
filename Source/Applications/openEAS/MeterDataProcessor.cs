@@ -37,7 +37,7 @@ using GSF.Annotations;
 using GSF.Configuration;
 using log4net;
 using openEAS.Configuration;
-using SandBox;
+using openEASSandBox;
 
 namespace openEAS
 {
@@ -215,7 +215,7 @@ namespace openEAS
             try
             {
                 // Create the data operation
-                dataOperation = new SandBoxOperation();
+                dataOperation = new openEASSandBoxOperation();
 
                 // Provide system settings to the data operation
                 ConnectionStringParser.ParseConnectionString(meterDataSet.ConnectionString, dataOperation);
@@ -248,7 +248,7 @@ namespace openEAS
             try
             {
                 // Create the data writer
-                dataWriter = new SandBoxWriter();
+                dataWriter = new openEASSandBoxWriter();
 
                 // Provide system settings to the data operation
                 ConnectionStringParser.ParseConnectionString(meterDataSet.ConnectionString, dataWriter);

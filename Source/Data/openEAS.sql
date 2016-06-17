@@ -2,26 +2,26 @@
 -- for analysis results here
 
 -- Example:
-IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'SandBoxResult')
+IF NOT EXISTS (SELECT * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = 'openEASResult')
 BEGIN
-	CREATE TABLE SandBoxResult
-	(
-		ID INT IDENTITY(1, 1) NOT NULL PRIMARY KEY,
+    CREATE TABLE openEASResult
+    (
+        ID INT IDENTITY(1, 1) NOT NULL PRIMARY KEY,
         EventID INT NOT NULL REFERENCES Event(ID),
         MyResult FLOAT NOT NULL
-	)
+    )
 END
 GO
 
 -- For PQ Dashboard integration,
 -- uncomment and modify the following lines
 
---IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME = 'HasSdbxResult')
+--IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME = 'HasopenEASResult')
 --BEGIN
---	DROP FUNCTION HasSdbxResult
+--  DROP FUNCTION HasopenEASResult
 --END
 --
---CREATE FUNCTION HasSdbxResult
+--CREATE FUNCTION HasopenEASResult
 --(
 --    @eventID INT
 --)
@@ -30,12 +30,12 @@ GO
 --    DECLARE @hasResult INT
 --
 --    SELECT @hasResult = COUNT(*)
---    FROM SandBoxResult
+--    FROM openEASResult
 --    WHERE EventID = @eventID
 --
 --    RETURN @hasResult
 --END
 --GO
 --
---INSERT INTO EASExtension VALUES('openEAS', 'HasSdbxResult')
+--INSERT INTO EASExtension VALUES('openEAS', 'HasopenEASResult')
 --GO

@@ -1,5 +1,5 @@
 ﻿//******************************************************************************************************
-//  SandBoxOperation.cs - Gbtc
+//  openEASSandBoxOperation.cs - Gbtc
 //
 //  Copyright © 2015, Grid Protection Alliance.  All Rights Reserved.
 //
@@ -26,9 +26,9 @@ using FaultData.DataOperations;
 using FaultData.DataSets;
 using log4net;
 
-namespace SandBox
+namespace openEASSandBox
 {
-    public class SandBoxOperation : DataOperationBase<MeterDataSet>
+    public class openEASSandBoxOperation : DataOperationBase<MeterDataSet>
     {
         public override void Prepare(DbAdapterContainer dbAdapterContainer)
         {
@@ -52,6 +52,6 @@ namespace SandBox
         }
 
         // Used for logging messages
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SandBoxOperation));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(openEASSandBoxOperation));
     }
 }

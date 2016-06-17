@@ -66,8 +66,8 @@
     <CustomAction Id="GrantDBPermissions.SetProperty" Property="GrantDBPermissions" Value="SERVICENAME=[SERVICENAME];CONNECTIONSTRING=[DBCONNECTIONSTRING];DATAPROVIDERSTRING=[DATAPROVIDERSTRING];DBQUERY=[DBPERMISSIONSQUERY]" />
     <CustomAction Id="GrantDBPermissions" BinaryKey="InstallerActions" DllEntry="DatabaseQueryAction" Execute="deferred" Impersonate="yes" />
     
-    <CustomAction Id="SandBox.sql.SetProperty" Property="SandBox.sql" Value="SERVICENAME=[SERVICENAME];CONNECTIONSTRING=[DBCONNECTIONSTRING];DATAPROVIDERSTRING=[DATAPROVIDERSTRING];SCRIPTPATH=[#SandBox.sql]" />
-    <CustomAction Id="SandBox.sql" BinaryKey="InstallerActions" DllEntry="DatabaseScriptAction" Execute="deferred" Impersonate="yes" />
+    <CustomAction Id="openEAS.sql.SetProperty" Property="openEAS.sql" Value="SERVICENAME=[SERVICENAME];CONNECTIONSTRING=[DBCONNECTIONSTRING];DATAPROVIDERSTRING=[DATAPROVIDERSTRING];SCRIPTPATH=[#openEAS.sql]" />
+    <CustomAction Id="openEAS.sql" BinaryKey="InstallerActions" DllEntry="DatabaseScriptAction" Execute="deferred" Impersonate="yes" />
 
     <InstallExecuteSequence>
       <Custom Action="ConfigureServiceAction.SetProperty" After="InstallServices">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
@@ -82,8 +82,8 @@
       <Custom Action="GrantDBPermissions.SetProperty" After="CreateDBUser">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
       <Custom Action="GrantDBPermissions" After="GrantDBPermissions.SetProperty">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
       
-      <Custom Action="SandBox.sql.SetProperty" After="GrantDBPermissions">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
-      <Custom Action="SandBox.sql" After="SandBox.sql.SetProperty">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="openEAS.sql.SetProperty" After="GrantDBPermissions">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="openEAS.sql" After="openEAS.sql.SetProperty">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
     </InstallExecuteSequence>
   </Product>
 
@@ -122,11 +122,11 @@
 
       <!-- Database Scripts -->
       <Component Id="DBScript">
-        <File Id="SandBox.sql" Name="SandBox.sql" Source="$(var.SolutionDir)\Data\SandBox.sql" />
+        <File Id="openEAS.sql" Name="openEAS.sql" Source="$(var.SolutionDir)\Data\openEAS.sql" />
       </Component>
 
       <!-- ESA Libraries -->
-      <ComponentRef Id="SandBox" />
+      <ComponentRef Id="openEASSandBox" />
 
       <!-- XDA Libraries -->
       <ComponentRef Id="FaultAlgorithms" />
@@ -181,8 +181,8 @@
 
     <ComponentGroup Id="LibraryComponents" Directory="INSTALLFOLDER">
       <!-- ESA Libraries -->
-      <Component Id="SandBox">
-        <File Id="SandBox.dll" Name="$(var.SandBox.TargetFileName)" Source="$(var.SandBox.TargetPath)" />
+      <Component Id="openEASSandBox">
+        <File Id="openEASSandBox.dll" Name="$(var.openEASSandBox.TargetFileName)" Source="$(var.openEASSandBox.TargetPath)" />
       </Component>
       
       <!-- XDA Libraries -->

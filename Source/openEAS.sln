@@ -47,7 +47,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GSF", "GSF", "{F5BD3958-FFB
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{B554F6A4-C3DF-4D8B-B3EF-7819B44BCE09}"
 	ProjectSection(SolutionItems) = preProject
-		Data\SandBox.sql = Data\SandBox.sql
+		Data\openEAS.sql = Data\openEAS.sql
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "openHistorian", "openHistorian", "{947C5857-A97F-499E-BC07-4509132EAF52}"
@@ -68,7 +68,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openEAS", "Applications\ope
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openEASConsole", "Applications\openEASConsole\openEASConsole.csproj", "{FF01205F-16D8-4BA9-AD86-F5ECEC6FF4A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SandBox", "Libraries\SandBox\SandBox.csproj", "{3AAA4C0B-D3F7-4D1D-ACFF-8BDCD898E292}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openEASSandBox", "Libraries\openEASSandBox\openEASSandBox.csproj", "{3AAA4C0B-D3F7-4D1D-ACFF-8BDCD898E292}"
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "openEASSetup", "Applications\openEASSetup\openEASSetup.wixproj", "{DA484374-B61E-4126-B9CC-7DCCF0BC77C9}"
 EndProject

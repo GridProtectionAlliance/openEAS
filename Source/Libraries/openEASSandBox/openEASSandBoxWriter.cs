@@ -1,5 +1,5 @@
 ﻿//******************************************************************************************************
-//  SandBoxWriter.cs - Gbtc
+//  openEASSandBoxWriter.cs - Gbtc
 //
 //  Copyright © 2015, Grid Protection Alliance.  All Rights Reserved.
 //
@@ -26,9 +26,9 @@ using FaultData.DataSets;
 using FaultData.DataWriters;
 using log4net;
 
-namespace SandBox
+namespace openEASSandBox
 {
-    public class SandBoxWriter : IDataWriter
+    public class openEASSandBoxWriter : IDataWriter
     {
         public void WriteResults(DbAdapterContainer dbAdapterContainer, MeterDataSet meterDataSet)
         {
@@ -38,6 +38,6 @@ namespace SandBox
         }
 
         // Used for logging messages
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SandBoxOperation));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(openEASSandBoxOperation));
     }
 }
