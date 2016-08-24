@@ -9,4 +9,4 @@ to openXDA for display in other tools -- such as EPRI Open PQ Dashboard. See the
 **Where openECA Fits Into to GPA Suite of Disturbance Analysis Tools:**
 ![Where-It-Fits-In](http://www.gridprotectionalliance.org/images/products/PQ%20Tool%20Suite.png)
 
-openEAS has been developed largely with funding from the [Electric Power Research Institute](http://www.epri.com/Pages/Default.aspx) (EPRI).
+openEAS has been developed by the [Grid Proection Alliance](https://www.gridprotectionalliance.org/) (GPA) largely with funding from the [Electric Power Research Institute](http://www.epri.com/Pages/Default.aspx) (EPRI).
