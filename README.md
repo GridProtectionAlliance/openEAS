@@ -6,7 +6,7 @@ openEAS is a Visual Studio development template for a Windows Service that embed
 (such as one from MatLab) within a platform that can obtain input data from openXDA and store analytic results
 to openXDA for display in other tools -- such as EPRI Open PQ Dashboard. See the [openEAS Installation Guide](https://github.com/GridProtectionAlliance/openEAS/wiki) for details.
 
-**Where openECS Fits Into to GPA Suite of Disturbance Analysis Tools:**
+**Where openECA Fits Into to GPA Suite of Disturbance Analysis Tools:**
 ![Where-It-Fits-In](http://www.gridprotectionalliance.org/images/products/PQ%20Tool%20Suite.png)
 
 
