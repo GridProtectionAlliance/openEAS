@@ -4,6 +4,9 @@ Extended Analytic Services (EAS) for [openXDA](https://github.com/GridProtection
 
 openEAS is a Visual Studio development template for a Windows Service that embeds an externally developed DLL
 (such as one from MatLab) within a platform that can obtain input data from openXDA and store analytic results
-to openXDA for display in other tools -- such as EPRI Open PQ Dashboard.
+to openXDA for display in other tools -- such as EPRI Open PQ Dashboard. See the [openEAS Installation Guide](https://github.com/GridProtectionAlliance/openEAS/wiki) for details.
 
-See the [openEAS Installation Guide](https://github.com/GridProtectionAlliance/openEAS/wiki) for details.
+**Where openECS Fits Into to GPA Suite of Disturbance Analysis Tools:**
+![Where-It-Fits-In](http://www.gridprotectionalliance.org/images/products/PQ%20Tool%20Suite.png)
+
+
