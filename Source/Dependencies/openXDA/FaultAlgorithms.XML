@@ -156,6 +156,19 @@
             <param name="voltageDataSet">The data set containing voltage data points.</param>
             <param name="currentDataSet">The data set containing current data points.</param>
         </member>
+        <member name="P:FaultAlgorithms.CycleDataSet.Item(System.Int32)">
+            <summary>
+            Gets or sets the data structure containing a
+            full cycle of data at the given index.
+            </summary>
+            <param name="i">The index of the cycle.</param>
+            <returns>The cycle of data at the given index.</returns>
+        </member>
+        <member name="P:FaultAlgorithms.CycleDataSet.Count">
+            <summary>
+            Gets the size of the cycle data set.
+            </summary>
+        </member>
         <member name="M:FaultAlgorithms.CycleDataSet.Populate(System.Double,FaultAlgorithms.MeasurementDataSet,FaultAlgorithms.MeasurementDataSet)">
             <summary>
             Populates the cycle data set by calculating cycle
@@ -194,19 +207,6 @@
             </summary>
             <param name="fileName">The name of the CSV file.</param>
             <param name="cycles">The cycle data set to be exported.</param>
-        </member>
-        <member name="P:FaultAlgorithms.CycleDataSet.Item(System.Int32)">
-            <summary>
-            Gets or sets the data structure containing a
-            full cycle of data at the given index.
-            </summary>
-            <param name="i">The index of the cycle.</param>
-            <returns>The cycle of data at the given index.</returns>
-        </member>
-        <member name="P:FaultAlgorithms.CycleDataSet.Count">
-            <summary>
-            Gets the size of the cycle data set.
-            </summary>
         </member>
         <member name="T:FaultAlgorithms.Device">
             <summary>
@@ -514,18 +514,6 @@
             Creates a new instance of the <see cref="T:FaultAlgorithms.FaultLocationDataSet"/> class.
             </summary>
         </member>
-        <member name="M:FaultAlgorithms.FaultLocationDataSet.CalculateSampleRates">
-            <summary>
-            Uses system frequency to calculate the sample rate for each set of
-            <see cref="T:FaultAlgorithms.MeasurementData"/> in the voltage and current data sets.
-            </summary>
-        </member>
-        <member name="M:FaultAlgorithms.FaultLocationDataSet.SetSampleRates(System.Int32)">
-            <summary>
-            Sets the sample rate of the voltage and current data sets.
-            </summary>
-            <param name="sampleRate"></param>
-        </member>
         <member name="P:FaultAlgorithms.FaultLocationDataSet.Voltages">
             <summary>
             Gets the set of voltages used to initialize this <see cref="T:FaultAlgorithms.FaultLocationDataSet"/>.
@@ -651,29 +639,22 @@
             <param name="name">The name of the parameter.</param>
             <returns>The value of the parameter.</returns>
         </member>
+        <member name="M:FaultAlgorithms.FaultLocationDataSet.CalculateSampleRates">
+            <summary>
+            Uses system frequency to calculate the sample rate for each set of
+            <see cref="T:FaultAlgorithms.MeasurementData"/> in the voltage and current data sets.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.FaultLocationDataSet.SetSampleRates(System.Int32)">
+            <summary>
+            Sets the sample rate of the voltage and current data sets.
+            </summary>
+            <param name="sampleRate"></param>
+        </member>
         <member name="T:FaultAlgorithms.FaultResultsWriterBase">
             <summary>
             Base class for writing the results of the fault analysis to an output source.
             </summary>
-        </member>
-        <member name="T:FaultAlgorithms.IFaultResultsWriter">
-            <summary>
-            Interface for writing the results of the fault analysis to an output source.
-            </summary>
-        </member>
-        <member name="M:FaultAlgorithms.IFaultResultsWriter.WriteConfiguration(System.Collections.Generic.ICollection{FaultAlgorithms.Device})">
-            <summary>
-            Writes configuration information to the output source.
-            </summary>
-            <param name="deviceConfigurations">Configuration information to be written to the output source.</param>
-        </member>
-        <member name="M:FaultAlgorithms.IFaultResultsWriter.WriteResults(FaultAlgorithms.Device,System.Collections.Generic.ICollection{FaultAlgorithms.DisturbanceFile},System.Collections.Generic.ICollection{System.Tuple{FaultAlgorithms.Line,FaultAlgorithms.FaultLocationDataSet}})">
-            <summary>
-            Writes the results to the output source.
-            </summary>
-            <param name="disturbanceRecorder">The device that collected the disturbance data.</param>
-            <param name="disturbanceFiles">Information about the data files collected during the disturbance.</param>
-            <param name="lineDataSets">The data sets used for analysis to determine fault location.</param>
         </member>
         <member name="M:FaultAlgorithms.FaultResultsWriterBase.WriteConfiguration(System.Collections.Generic.ICollection{FaultAlgorithms.Device})">
             <summary>
@@ -708,6 +689,25 @@
             <param name="faultDataSet">The data set to check for faults.</param>
             <param name="parameters">Extra parameters to the algorithm.</param>
             <returns>The type of the fault found in the fault data set.</returns>
+        </member>
+        <member name="T:FaultAlgorithms.IFaultResultsWriter">
+            <summary>
+            Interface for writing the results of the fault analysis to an output source.
+            </summary>
+        </member>
+        <member name="M:FaultAlgorithms.IFaultResultsWriter.WriteConfiguration(System.Collections.Generic.ICollection{FaultAlgorithms.Device})">
+            <summary>
+            Writes configuration information to the output source.
+            </summary>
+            <param name="deviceConfigurations">Configuration information to be written to the output source.</param>
+        </member>
+        <member name="M:FaultAlgorithms.IFaultResultsWriter.WriteResults(FaultAlgorithms.Device,System.Collections.Generic.ICollection{FaultAlgorithms.DisturbanceFile},System.Collections.Generic.ICollection{System.Tuple{FaultAlgorithms.Line,FaultAlgorithms.FaultLocationDataSet}})">
+            <summary>
+            Writes the results to the output source.
+            </summary>
+            <param name="disturbanceRecorder">The device that collected the disturbance data.</param>
+            <param name="disturbanceFiles">Information about the data files collected during the disturbance.</param>
+            <param name="lineDataSets">The data sets used for analysis to determine fault location.</param>
         </member>
         <member name="T:FaultAlgorithms.Line">
             <summary>

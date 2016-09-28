@@ -5708,6 +5708,11 @@
             Gets the <see cref="T:GSF.Units.EE.PhasorType"/> of this <see cref="T:GSF.PhasorProtocols.IPhasorValue"/>.
             </summary>
         </member>
+        <member name="P:GSF.PhasorProtocols.IPhasorValue.Phasor">
+            <summary>
+            Gets <see cref="T:GSF.Units.EE.Phasor"/> value from this <see cref="T:GSF.PhasorProtocols.IPhasorValue"/>.
+            </summary>
+        </member>
         <member name="P:GSF.PhasorProtocols.IPhasorValue.Angle">
             <summary>
             Gets or sets the <see cref="T:GSF.Units.Angle"/> value (a.k.a., the argument) of this <see cref="T:GSF.PhasorProtocols.IPhasorValue"/>, in radians.
@@ -6172,6 +6177,11 @@
             Gets or sets the flag that determines whether the UDP client
             should attempt to receive packet info when receiving data
             from the socket.
+            </summary>
+        </member>
+        <member name="P:GSF.PhasorProtocols.MultiProtocolFrameParser.SharedUdpClientReference.Statistics">
+            <summary>
+            Gets the <see cref="T:GSF.Communication.TransportStatistics"/> for the client connection.
             </summary>
         </member>
         <member name="P:GSF.PhasorProtocols.MultiProtocolFrameParser.SharedUdpClientReference.Status">
@@ -6997,6 +7007,11 @@
         <member name="P:GSF.PhasorProtocols.PhasorValueBase.Type">
             <summary>
             Gets the <see cref="T:GSF.Units.EE.PhasorType"/> of this <see cref="T:GSF.PhasorProtocols.PhasorValueBase"/>.
+            </summary>
+        </member>
+        <member name="P:GSF.PhasorProtocols.PhasorValueBase.Phasor">
+            <summary>
+            Gets <see cref="T:GSF.Units.EE.Phasor"/> value from this <see cref="T:GSF.PhasorProtocols.IPhasorValue"/>.
             </summary>
         </member>
         <member name="P:GSF.PhasorProtocols.PhasorValueBase.Angle">
@@ -11947,11 +11962,10 @@
             <param name="typeID">The IEEE 1344 specific frame type of this frame.</param>
             <param name="timestamp">The timestamp of this frame.</param>
         </member>
-        <member name="M:GSF.PhasorProtocols.IEEE1344.CommonFrameHeader.#ctor(GSF.PhasorProtocols.IEEE1344.ConfigurationFrame,System.Byte[],System.Int32)">
+        <member name="M:GSF.PhasorProtocols.IEEE1344.CommonFrameHeader.#ctor(System.Byte[],System.Int32)">
             <summary>
             Creates a new <see cref="T:GSF.PhasorProtocols.IEEE1344.CommonFrameHeader"/> from given <paramref name="buffer"/>.
             </summary>
-            <param name="configurationFrame">IEEE 1344 <see cref="T:GSF.PhasorProtocols.IEEE1344.ConfigurationFrame"/> if already parsed.</param>
             <param name="buffer">Buffer that contains data to parse.</param>
             <param name="startIndex">Start index into buffer where valid data begins.</param>
         </member>
@@ -12822,6 +12836,12 @@
             Raises the <see cref="E:GSF.PhasorProtocols.FrameParserBase`1.ReceivedHeaderFrame"/> event.
             </summary>
             <param name="frame"><see cref="T:GSF.PhasorProtocols.IHeaderFrame"/> to send to <see cref="E:GSF.PhasorProtocols.FrameParserBase`1.ReceivedHeaderFrame"/> event.</param>
+        </member>
+        <member name="M:GSF.PhasorProtocols.IEEE1344.FrameParser.OnReceivedDataFrame(GSF.PhasorProtocols.IDataFrame)">
+            <summary>
+            Raises the <see cref="E:GSF.PhasorProtocols.FrameParserBase`1.ReceivedDataFrame"/> event.
+            </summary>
+            <param name="frame"><see cref="T:GSF.PhasorProtocols.IDataFrame"/> to send to <see cref="E:GSF.PhasorProtocols.FrameParserBase`1.ReceivedDataFrame"/> event.</param>
         </member>
         <member name="M:GSF.PhasorProtocols.IEEE1344.FrameParser.OnReceivedChannelFrame(GSF.PhasorProtocols.IChannelFrame)">
             <summary>

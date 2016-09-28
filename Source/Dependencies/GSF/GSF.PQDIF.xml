@@ -4,6 +4,39 @@
         <name>GSF.PQDIF</name>
     </assembly>
     <members>
+        <member name="T:GSF.PQDIF.Identifier">
+            <summary>
+            Represents an identifier as defined by the PQDIF standard.
+            </summary>
+        </member>
+        <member name="P:GSF.PQDIF.Identifier.Name">
+            <summary>
+            Gets the name of the identifier as defined by the GSF.PQDIF library.
+            </summary>
+        </member>
+        <member name="P:GSF.PQDIF.Identifier.StandardName">
+            <summary>
+            Gets the name of the identifier as defined by the standard.
+            </summary>
+        </member>
+        <member name="P:GSF.PQDIF.Identifier.Value">
+            <summary>
+            Gets a string representation of the value of this identifier.
+            </summary>
+        </member>
+        <member name="P:GSF.PQDIF.Identifier.Description">
+            <summary>
+            Gets a description of the identifier.
+            </summary>
+        </member>
+        <member name="M:GSF.PQDIF.Identifier.GenerateIdentifiers(System.Xml.Linq.XDocument,GSF.PQDIF.Tag)">
+            <summary>
+            Generates a list of identifiers valid for the given tag from the given XML document.
+            </summary>
+            <param name="doc">The XML document containing tag definitions.</param>
+            <param name="tag">The tag for which valid identifier values are to be generated.</param>
+            <returns>The list of identifiers valid for the given tag.</returns>
+        </member>
         <member name="T:GSF.PQDIF.Logical.Phase">
             <summary>
             Phase types.
@@ -1140,6 +1173,13 @@
             The ID of the ELCOM BK 550 device.
             </summary>
         </member>
+        <member name="M:GSF.PQDIF.Logical.Equipment.GetInfo(System.Guid)">
+            <summary>
+            Gets information about the equipment identified by the given ID.
+            </summary>
+            <param name="equipmentID">The identifier for the equipment.</param>
+            <returns>Information about the equipment.</returns>
+        </member>
         <member name="M:GSF.PQDIF.Logical.Equipment.ToString(System.Guid)">
             <summary>
             Converts the given equpiment ID to a string containing the name of the equipment.
@@ -1827,18 +1867,26 @@
             Status data.
             </summary>
         </member>
+        <member name="M:GSF.PQDIF.Logical.QuantityCharacteristic.GetInfo(System.Guid)">
+            <summary>
+            Gets information about the quantity
+            characteristic identified by the given ID.
+            </summary>
+            <param name="quantityCharacteristicID">The identifier for the quantity characteristic.</param>
+            <returns>Inforamtion about the quantity characteristic.</returns>
+        </member>
         <member name="M:GSF.PQDIF.Logical.QuantityCharacteristic.ToName(System.Guid)">
             <summary>
             Returns the name of the given quantity characteristic.
             </summary>
-            <param name="quantityCharacteristic">The GUID tag which identifies the quantity characteristic.</param>
+            <param name="quantityCharacteristicID">The GUID tag which identifies the quantity characteristic.</param>
             <returns>The name of the given quantity characteristic.</returns>
         </member>
         <member name="M:GSF.PQDIF.Logical.QuantityCharacteristic.ToString(System.Guid)">
             <summary>
             Returns a string representation of the given quantity characteristic.
             </summary>
-            <param name="quantityCharacteristic">The GUID tag which identifies the quantity characteristic.</param>
+            <param name="quantityCharacteristicID">The GUID tag which identifies the quantity characteristic.</param>
             <returns>The name of the given quantity characteristic.</returns>
         </member>
         <member name="T:GSF.PQDIF.Logical.SeriesValueType">
@@ -2026,11 +2074,18 @@
             Frequency.
             </summary>
         </member>
+        <member name="M:GSF.PQDIF.Logical.SeriesValueType.GetInfo(System.Guid)">
+            <summary>
+            Gets information about the series value type identified by the given ID.
+            </summary>
+            <param name="seriesValueTypeID">The identifier for the series value type.</param>
+            <returns>Information about the series value type.</returns>
+        </member>
         <member name="M:GSF.PQDIF.Logical.SeriesValueType.ToString(System.Guid)">
             <summary>
             Returns the name of the given series value type.
             </summary>
-            <param name="seriesValueType">The GUID tag which identifies the series value type.</param>
+            <param name="seriesValueTypeID">The GUID tag which identifies the series value type.</param>
             <returns>The name of the given series value type.</returns>
         </member>
         <member name="T:GSF.PQDIF.Logical.Vendor">
@@ -2197,6 +2252,13 @@
             <summary>
             The ID for vendor ELCOM.
             </summary>
+        </member>
+        <member name="M:GSF.PQDIF.Logical.Vendor.GetInfo(System.Guid)">
+            <summary>
+            Gets information about the vendor identified by the given ID.
+            </summary>
+            <param name="vendorID">Globally unique identifier for the vendor.</param>
+            <returns>The information about the vendor.</returns>
         </member>
         <member name="M:GSF.PQDIF.Logical.Vendor.ToString(System.Guid)">
             <summary>
@@ -2756,6 +2818,14 @@
             Time, magnitude, duration, and count.
             </summary>
         </member>
+        <member name="M:GSF.PQDIF.Logical.QuantityType.GetInfo(System.Guid)">
+            <summary>
+            Gets the information about the quantity
+            type identified by the given ID.
+            </summary>
+            <param name="quantityTypeID">The quantity type ID.</param>
+            <returns>Information about the quantity type.</returns>
+        </member>
         <member name="M:GSF.PQDIF.Logical.QuantityType.ToString(System.Guid)">
             <summary>
             Gets the name of the quantity type with the given ID.
@@ -3263,6 +3333,14 @@
             Gets or sets the number of elements in the collection.
             </summary>
         </member>
+        <member name="P:GSF.PQDIF.Physical.CollectionElement.ReadSize">
+            <summary>
+            Gets or sets the size that the file says the collection is.
+            This may differ from the actual size if, upon parsing the 
+            file the end of file is reached before the collection becomes
+            as large as the read size.
+            </summary>
+        </member>
         <member name="P:GSF.PQDIF.Physical.CollectionElement.TypeOfElement">
             <summary>
             Gets the type of the element.
@@ -3386,6 +3464,36 @@
             or <see cref="F:GSF.PQDIF.Physical.ElementType.Vector"/>.
             </remarks>
         </member>
+        <member name="T:GSF.PQDIF.Physical.ErrorElement">
+            <summary>
+            Represents an <see cref="T:GSF.PQDIF.Physical.Element"/> that the parser
+            ran into an exception while trying to parse.
+            </summary>
+        </member>
+        <member name="M:GSF.PQDIF.Physical.ErrorElement.#ctor(System.Exception)">
+            <summary>
+            Creates a new instance of the <see cref="T:GSF.PQDIF.Physical.ErrorElement" /> class.
+            </summary>
+            <param name="exception">The exception that occurred when parsing an element.</param>
+        </member>
+        <member name="M:GSF.PQDIF.Physical.ErrorElement.#ctor(GSF.PQDIF.Physical.ElementType,System.Exception)">
+            <summary>
+            Creates a new instance of the <see cref="T:GSF.PQDIF.Physical.ErrorElement" /> class.
+            </summary>
+            <param name="typeOfElement">The type of the element being parsed when the error occurred.</param>
+            <param name="exception">The exception that occurred when parsing an element.</param>
+        </member>
+        <member name="P:GSF.PQDIF.Physical.ErrorElement.TypeOfElement">
+            <summary>
+            Gets the type of <see cref="T:GSF.PQDIF.Physical.Element"/> it is.
+            </summary>
+        </member>
+        <member name="P:GSF.PQDIF.Physical.ErrorElement.Exception">
+            <summary>
+            Gets the exception that the <see cref="T:GSF.PQDIF.Physical.PhysicalParser"/> ran into
+            while trying to parse the <see cref="T:GSF.PQDIF.Physical.Element"/>
+            </summary>
+        </member>
         <member name="T:GSF.PQDIF.Physical.CompressionStyle">
             <summary>
             Enumeration which defines the types of compression used in PQDIF files.
@@ -3447,6 +3555,11 @@
             Gets or sets the file name of the PQDIF file to be parsed.
             </summary>
         </member>
+        <member name="P:GSF.PQDIF.Physical.PhysicalParser.ExceptionList">
+            <summary>
+            Gets all the exceptions encountered while parsing.
+            </summary>
+        </member>
         <member name="P:GSF.PQDIF.Physical.PhysicalParser.CompressionStyle">
             <summary>
             Gets or sets the compression style used by the PQDIF file.
@@ -3455,6 +3568,18 @@
         <member name="P:GSF.PQDIF.Physical.PhysicalParser.CompressionAlgorithm">
             <summary>
             Gets or sets the compression algorithm used by the PQDIF file.
+            </summary>
+        </member>
+        <member name="P:GSF.PQDIF.Physical.PhysicalParser.MaximumExceptionsAllowed">
+            <summary>
+            Gets or sets the maximum number of exceptions
+            in the exception list before parser will quit.
+            </summary>
+            <remarks>Enter a negative value to disable this safeguard.</remarks>
+        </member>
+        <member name="P:GSF.PQDIF.Physical.PhysicalParser.MaximumExceptionsReached">
+            <summary>
+            Gets a value that indicates whether the maximum number of exceptions has been reached.
             </summary>
         </member>
         <member name="M:GSF.PQDIF.Physical.PhysicalParser.Open">
@@ -3473,6 +3598,12 @@
             Reads the next record from the PQDIF file.
             </summary>
             <returns>The next record to be parsed from the PQDIF file.</returns>
+        </member>
+        <member name="M:GSF.PQDIF.Physical.PhysicalParser.Seek(GSF.PQDIF.Physical.RecordHeader)">
+            <summary>
+            Jumps in the file to the location of the record with the given header.
+            </summary>
+            <param name="header">The header to seek to.</param>
         </member>
         <member name="M:GSF.PQDIF.Physical.PhysicalParser.Reset">
             <summary>
@@ -3665,6 +3796,11 @@
             the next record.
             </summary>
         </member>
+        <member name="P:GSF.PQDIF.Physical.RecordHeader.Position">
+            <summary>
+            Gets or sets the position of this record.
+            </summary>
+        </member>
         <member name="P:GSF.PQDIF.Physical.RecordHeader.RecordSignature">
             <summary>
             Gets or sets the record's globally unique identifier.
@@ -3743,6 +3879,11 @@
             Used to capture an event, measurements etc.
             </summary>
         </member>
+        <member name="F:GSF.PQDIF.Physical.RecordType.Blank">
+            <summary>
+            Represents a record-level tag which identifies a blank record.
+            </summary>
+        </member>
         <member name="F:GSF.PQDIF.Physical.RecordType.Unknown">
             <summary>
             Represents a record-level tag which is unknown to this library.
@@ -3805,6 +3946,11 @@
             of the hierarchy. This can be used to traverse the hierarchy.
             </summary>
         </member>
+        <member name="P:GSF.PQDIF.Physical.RecordBody.Checksum">
+            <summary>
+            Gets or sets the CRC32 checksum of the record body.
+            </summary>
+        </member>
         <member name="M:GSF.PQDIF.Physical.RecordBody.ToString">
             <summary>
             Returns a string representation of the record body.
@@ -3838,11 +3984,10 @@
             </summary>
             <returns>The value of the scalar.</returns>
         </member>
-        <member name="M:GSF.PQDIF.Physical.ScalarElement.Set(System.Int32,System.Object)">
+        <member name="M:GSF.PQDIF.Physical.ScalarElement.Set(System.Object)">
             <summary>                
             Sets the value at the given index as the physical type defined by <see cref="P:GSF.PQDIF.Physical.Element.TypeOfValue"/>.
             </summary>
-            <param name="index">The index of the value.</param>
             <param name="value">The new value to be stored.</param>
         </member>
         <member name="M:GSF.PQDIF.Physical.ScalarElement.GetUInt1">
@@ -4225,6 +4370,81 @@
             Returns a string representation of this vector.
             </summary>
             <returns>A string representation of this vector.</returns>
+        </member>
+        <member name="T:GSF.PQDIF.Tag">
+            <summary>
+            Represents a tag as defined by the PQDIF standard.
+            </summary>
+        </member>
+        <member name="P:GSF.PQDIF.Tag.ID">
+            <summary>
+            Gets the globally unique identifier for the tag.
+            </summary>
+        </member>
+        <member name="P:GSF.PQDIF.Tag.Name">
+            <summary>
+            Gets the name of the tag as defined by the GSF.PQDIF library.
+            </summary>
+        </member>
+        <member name="P:GSF.PQDIF.Tag.StandardName">
+            <summary>
+            Gets the name of the tag as defined by the standard.
+            </summary>
+        </member>
+        <member name="P:GSF.PQDIF.Tag.Description">
+            <summary>
+            Gets a description of the tag.
+            </summary>
+        </member>
+        <member name="P:GSF.PQDIF.Tag.ElementType">
+            <summary>
+            Gets the type of the element identified by the tag
+            according to the logical structure of a PQDIF file.
+            </summary>
+        </member>
+        <member name="P:GSF.PQDIF.Tag.PhysicalType">
+            <summary>
+            Gets the physical type of the value of the element identified
+            by the tag according to the logical structure of a PQDIF file.
+            </summary>
+        </member>
+        <member name="P:GSF.PQDIF.Tag.Required">
+            <summary>
+            Gets the flag that determines whether it is
+            required that this tag be specified in a PQDIF file.
+            </summary>
+        </member>
+        <member name="P:GSF.PQDIF.Tag.FormatString">
+            <summary>
+            Format string specified for some tags as a
+            hint for how the value should be displayed.
+            </summary>
+        </member>
+        <member name="P:GSF.PQDIF.Tag.ValidIdentifiers">
+            <summary>
+            Gets the collection of valid identifiers for this tag.
+            </summary>
+        </member>
+        <member name="M:GSF.PQDIF.Tag.GetTag(System.Guid)">
+            <summary>
+            Gets the tag identified by the given globally unique identifier.
+            </summary>
+            <param name="id">The globally unique identifier for the tag to be retrieved.</param>
+            <returns>The tag, if defined, or null if the tag is not found.</returns>
+        </member>
+        <member name="M:GSF.PQDIF.Tag.GenerateTags(System.Xml.Linq.XDocument)">
+            <summary>
+            Generates a list of tags from the given XML document.
+            </summary>
+            <param name="doc">The XML document containing the tag definitions.</param>
+            <returns>The list of tags as defined by the given XML document.</returns>
+        </member>
+        <member name="M:GSF.PQDIF.Tag.RefreshTags(System.Xml.Linq.XDocument)">
+            <summary>
+            Refreshes the cache of tags used to return
+            tags from the <see cref="M:GSF.PQDIF.Tag.GetTag(System.Guid)"/> method.
+            </summary>
+            <param name="doc">The XML document containing the tag definitions.</param>
         </member>
     </members>
 </doc>
