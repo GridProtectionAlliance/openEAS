@@ -20,6 +20,7 @@ GO
 --BEGIN
 --  DROP FUNCTION HasopenEASResult
 --END
+--GO
 --
 --CREATE FUNCTION HasopenEASResult
 --(
