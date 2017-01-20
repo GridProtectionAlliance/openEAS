@@ -10,6 +10,9 @@ BEGIN
         EventID INT NOT NULL REFERENCES Event(ID),
         MyResult FLOAT NOT NULL
     )
+
+    CREATE NONCLUSTERED INDEX IX_openEASResult_EventID
+    ON openEASResult(EventID ASC)
 END
 GO
 
