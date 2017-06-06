@@ -18,6 +18,7 @@ GO
 
 -- For PQ Dashboard integration,
 -- uncomment and modify the following lines
+-- this needs to return the confidence level of the analytic
 
 --IF EXISTS (SELECT * FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_NAME = 'HasopenEASResult')
 --BEGIN
@@ -29,15 +30,9 @@ GO
 --(
 --    @eventID INT
 --)
---RETURNS INT
+--RETURNS varchar(max)
 --AS BEGIN
---    DECLARE @hasResult INT
---
---    SELECT @hasResult = COUNT(*)
---    FROM openEASResult
---    WHERE EventID = @eventID
---
---    RETURN @hasResult
+--    RETURN COALESCE(SELECT ConfidenceLevel From openEASResult Where EventID = @eventID, "High")
 --END
 --GO
 --
