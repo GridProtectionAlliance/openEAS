@@ -32,7 +32,7 @@ GO
 --)
 --RETURNS varchar(max)
 --AS BEGIN
---    RETURN COALESCE(SELECT ConfidenceLevel From openEASResult Where EventID = @eventID, "High")
+--    RETURN COALESCE((SELECT Top 1 ConfidenceLevel From openEASResult Where EventID = @eventID), "High")
 --END
 --GO
 --
