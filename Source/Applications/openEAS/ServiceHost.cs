@@ -50,6 +50,15 @@ using log4net.Appender;
 using log4net.Config;
 using log4net.Layout;
 using openEAS.Logging;
+using GSF.Configuration;
+using GSF.Data;
+using GSF.TimeSeries;
+using openEAS.Model;
+using GSF.Web.Hosting;
+using Microsoft.Owin.Hosting;
+using GSF.Reflection;
+using GSF.Web.Model;
+using System.Reflection;
 
 namespace openEAS
 {
@@ -60,6 +69,21 @@ namespace openEAS
         // Fields
         private ServiceMonitors m_serviceMonitors;
         private SandBoxEngine m_extensibleDisturbanceAnalysisEngine;
+        private IDisposable m_webAppHost;
+        private bool m_disposed;
+
+        /// <summary>
+        /// Raised when there is a new status message reported to service.
+        /// </summary>
+        public event EventHandler<EventArgs<Guid, string, UpdateType>> UpdatedStatus;
+
+
+
+        /// <summary>
+        /// Raised when there is a new exception logged to service.
+        /// </summary>
+        public event EventHandler<EventArgs<Exception>> LoggedException;
+
 
         #endregion
 
@@ -83,7 +107,35 @@ namespace openEAS
 
         #endregion
 
+        #region [ Properties ]
+        /// <summary>
+        /// Gets the configured default web page for the application.
+        /// </summary>
+        public string DefaultWebPage
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the model used for the application.
+        /// </summary>
+        public AppModel Model
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets current performance statistics.
+        /// </summary>
+        public string PerformanceStatistics => m_extensibleDisturbanceAnalysisEngine.Status;
+
+
+        #endregion
+
         #region [ Methods ]
+
 
         private void ServiceHelper_ServiceStarted(object sender, EventArgs e)
         {
@@ -143,6 +195,11 @@ namespace openEAS
 
             if ((object)process != null)
                 process.Start();
+
+            bool webUI = false;
+
+            while(!webUI)
+                webUI = TryStartWebUI();
         }
 
         private void ProcessLatestData(string arg1, object[] arg2)
@@ -159,6 +216,19 @@ namespace openEAS
 
         private void ServiceHelper_ServiceStopping(object sender, EventArgs e)
         {
+            if (!m_disposed)
+            {
+                try
+                {
+                    m_webAppHost?.Dispose();
+                }
+                finally
+                {
+                    m_disposed = true;          // Prevent duplicate dispose.
+                    base.Dispose();    // Call base class Dispose().
+                }
+            }
+
             // Dispose of adapter loader for service monitors
             m_serviceMonitors.AdapterLoaded -= ServiceMonitors_AdapterLoaded;
             m_serviceMonitors.AdapterUnloaded -= ServiceMonitors_AdapterUnloaded;
@@ -265,6 +335,34 @@ namespace openEAS
             }
         }
 
+
+        /// <summary>
+        /// Sends a command request to the service.
+        /// </summary>
+        /// <param name="clientID">Client ID of sender.</param>
+        /// <param name="userInput">Request string.</param>
+        public void SendRequest(Guid clientID, string userInput)
+        {
+            ClientRequest request = ClientRequest.Parse(userInput);
+
+            if ((object)request != null)
+            {
+                ClientRequestHandler requestHandler = m_serviceHelper.FindClientRequestHandler(request.Command);
+
+                if ((object)requestHandler != null)
+                    requestHandler.HandlerMethod(new ClientRequestInfo(new ClientInfo() { ClientID = clientID }, request));
+                else
+                    DisplayStatusMessage($"Command \"{request.Command}\" is not supported\r\n\r\n", UpdateType.Alarm);
+            }
+        }
+
+
+        public void DisconnectClient(Guid clientID)
+        {
+            m_serviceHelper.DisconnectClient(clientID);
+        }
+
+
         #region [ Service Monitor Handlers ]
 
         // Ensure that service monitors save their settings to the configuration file
@@ -357,6 +455,139 @@ namespace openEAS
                 HandleException(new InvalidOperationException(message, ex));
             }
         }
+
+        #endregion
+
+        #region [ Web UI Handling]
+        // Attempts to start the web UI and logs startup errors.
+        private bool TryStartWebUI()
+        {
+            try
+            {
+                ConfigurationFile.Current.Reload();
+                AdoDataConnection.ReloadConfigurationSettings();
+
+                CategorizedSettingsElementCollection systemSettings = ConfigurationFile.Current.Settings["systemSettings"];
+                CategorizedSettingsElementCollection securityProvider = ConfigurationFile.Current.Settings["securityProvider"];
+                systemSettings.Add("ConnectionString", "Data Source=localhost; Initial Catalog=openXDA; Integrated Security=SSPI", "Configuration database ADO.NET data provider assembly type creation string used when ConfigurationType=Database");
+                systemSettings.Add("DataProviderString", "AssemblyName={System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089}; ConnectionType=System.Data.SqlClient.SqlConnection; AdapterType=System.Data.SqlClient.SqlDataAdapter", "Configuration database ADO.NET data provider assembly type creation string used when ConfigurationType=Database");
+                systemSettings.Add("NodeID", "00000000-0000-0000-0000-000000000000", "Unique Node ID");
+                systemSettings.Add("CompanyName", "Grid Protection Alliance", "The name of the company who owns this instance of the openMIC.");
+                systemSettings.Add("CompanyAcronym", "GPA", "The acronym representing the company who owns this instance of the openMIC.");
+                systemSettings.Add("WebHostURL", "https://+:8790", "The web hosting URL for remote system management.");
+                systemSettings.Add("DefaultWebPage", "index.cshtml", "The default web page for the hosted web server.");
+                systemSettings.Add("DateFormat", "MM/dd/yyyy", "The default date format to use when rendering timestamps.");
+                systemSettings.Add("TimeFormat", "HH:mm.ss.fff", "The default time format to use when rendering timestamps.");
+                systemSettings.Add("BootstrapTheme", "Content/bootstrap.min.css", "Path to Bootstrap CSS to use for rendering styles.");
+
+                securityProvider.Add("ConnectionString", "Eval(systemSettings.ConnectionString)", "Connection connection string to be used for connection to the backend security datastore.");
+                securityProvider.Add("DataProviderString", "Eval(systemSettings.DataProviderString)", "Configuration database ADO.NET data provider assembly type creation string to be used for connection to the backend security datastore.");
+
+                //ValidateAccountsAndGroups(new AdoDataConnection("securityProvider"));
+
+                DefaultWebPage = systemSettings["DefaultWebPage"].Value;
+
+                Model = new AppModel();
+                Model.Global.CompanyName = systemSettings["CompanyName"].Value;
+                Model.Global.CompanyAcronym = systemSettings["CompanyAcronym"].Value;
+                Model.Global.ApplicationName = "openEAS";
+                Model.Global.ApplicationDescription = "open eXtensible Disturbance Analytics";
+                Model.Global.ApplicationKeywords = "open source, utility, software, meter, interrogation";
+                Model.Global.DateFormat = systemSettings["DateFormat"].Value;
+                Model.Global.TimeFormat = systemSettings["TimeFormat"].Value;
+                Model.Global.DateTimeFormat = $"{Model.Global.DateFormat} {Model.Global.TimeFormat}";
+                Model.Global.BootstrapTheme = systemSettings["BootstrapTheme"].Value;
+
+                // Attach to default web server events
+                WebServer webServer = WebServer.Default;
+                webServer.StatusMessage += WebServer_StatusMessage;
+                webServer.ExecutionException += LoggedExceptionHandler;
+
+
+                // Define types for Razor pages - self-hosted web service does not use view controllers so
+                // we must define configuration types for all paged view model based Razor views here:
+                //webServer.PagedViewModelTypes.TryAdd("Users.cshtml", new Tuple<Type, Type>(typeof(UserAccount), typeof(SecurityHub)));
+                //webServer.PagedViewModelTypes.TryAdd("Groups.cshtml", new Tuple<Type, Type>(typeof(SecurityGroup), typeof(SecurityHub)));
+
+                // Create new web application hosting environment
+                m_webAppHost = WebApp.Start<Startup>(systemSettings["WebHostURL"].Value);
+
+                // Initiate pre-compile of base templates
+                if (AssemblyInfo.EntryAssembly.Debuggable)
+                {
+                    RazorEngine<CSharpDebug>.Default.PreCompile(HandleException);
+                    RazorEngine<VisualBasicDebug>.Default.PreCompile(HandleException);
+                }
+                else
+                {
+                    RazorEngine<CSharp>.Default.PreCompile(HandleException);
+                    RazorEngine<VisualBasic>.Default.PreCompile(HandleException);
+                }
+
+                return true;
+            }
+            catch (TargetInvocationException ex)
+            {
+                string message;
+
+                // Log the exception
+                message = "Failed to start web UI due to exception: " + ex.InnerException.Message;
+                HandleException(new InvalidOperationException(message, ex));
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                string message;
+
+                // Log the exception
+                message = "Failed to start web UI due to exception: " + ex.Message;
+                HandleException(new InvalidOperationException(message, ex));
+
+                return false;
+            }
+        }
+
+        private void WebServer_StatusMessage(object sender, EventArgs<string> e)
+        {
+            //DisplayStatusMessage(e.Argument, UpdateType.Information);
+        }
+
+        private void LoggedExceptionHandler(object sender, EventArgs<Exception> e)
+        {
+            if ((object)LoggedException != null)
+                LoggedException(sender, new EventArgs<Exception>(e.Argument));
+        }
+
+        /// <summary>
+        /// Logs a status message to connected clients.
+        /// </summary>
+        /// <param name="message">Message to log.</param>
+        /// <param name="type">Type of message to log.</param>
+        public void LogStatusMessage(string message, UpdateType type = UpdateType.Information)
+        {
+            DisplayStatusMessage(message, type);
+        }
+
+        /// <summary>
+        /// Displays a broadcast message to all subscribed clients.
+        /// </summary>
+        /// <param name="status">Status message to send to all clients.</param>
+        /// <param name="type"><see cref="UpdateType"/> of message to send.</param>
+        protected virtual void DisplayStatusMessage(string status, UpdateType type)
+        {
+            try
+            {
+                status = status.Replace("{", "{{").Replace("}", "}}");
+                m_serviceHelper.UpdateStatus(type, string.Format("{0}\r\n\r\n", status));
+            }
+            catch (Exception ex)
+            {
+                HandleException(ex);
+                m_serviceHelper.UpdateStatus(UpdateType.Alarm, "Failed to update client status \"" + status.ToNonNullString() + "\" due to an exception: " + ex.Message + "\r\n\r\n");
+            }
+        }
+
 
         #endregion
 

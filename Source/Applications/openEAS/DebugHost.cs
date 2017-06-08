@@ -51,6 +51,16 @@ namespace openEAS
 
         #endregion
 
+        #region [ Properties ]
+
+        public ServiceHost Host {
+            get {
+                return m_serviceHost;
+            }
+        }
+
+        #endregion
+        
         #region [ Constructors ]
 
         public DebugHost()

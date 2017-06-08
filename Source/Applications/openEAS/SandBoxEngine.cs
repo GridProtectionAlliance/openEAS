@@ -46,6 +46,7 @@ using GSF.IO;
 using GSF.Threading;
 using log4net;
 using openEAS.Configuration;
+using System.Text;
 
 namespace openEAS
 {
@@ -57,6 +58,37 @@ namespace openEAS
         private string m_dbConnectionString;
         private SystemSettings m_systemSettings;
         private LongSynchronizedOperation m_processLatestDataOperation;
+
+        #endregion
+
+        #region [ Properties ]
+        /// <summary>
+        /// Gets the current status of the XDA engine.
+        /// </summary>
+        public string Status
+        {
+            get
+            {
+                SystemSettings systemSettings = m_systemSettings;
+                StringBuilder statusBuilder = new StringBuilder();
+                KeyValuePair<string, string>[] activeFiles;
+
+                statusBuilder.AppendLine("Meter Data Status:");
+                statusBuilder.AppendLine(new string('=', 50));
+                statusBuilder.AppendLine($"          XDA Time Zone: {systemSettings.XDATimeZone}");
+                statusBuilder.AppendLine($"       System frequency: {systemSettings.SystemFrequency} Hz");
+                statusBuilder.AppendLine($"       Database Timeout: {systemSettings.DbTimeout} seconds");
+                statusBuilder.AppendLine($"   Max thread pool size: {systemSettings.ProcessingThreadCount}");
+                statusBuilder.AppendLine($"        Max Time Offset: {systemSettings.MaxTimeOffset} hours");
+                statusBuilder.AppendLine($"        Min Time Offset: {systemSettings.MinTimeOffset} hours");
+                statusBuilder.AppendLine($"      Max File Duration: {systemSettings.MaxFileDuration} seconds");
+                statusBuilder.AppendLine($"   File Creation Offset: {systemSettings.MaxFileCreationTimeOffset} hours");
+                statusBuilder.AppendLine();
+
+
+                return statusBuilder.ToString().TrimEnd();
+            }
+        }
 
         #endregion
 

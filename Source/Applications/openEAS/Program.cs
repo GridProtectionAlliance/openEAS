@@ -51,6 +51,11 @@ namespace openEAS
     static class Program
     {
         /// <summary>
+        /// The service host instance for the application.
+        /// </summary>
+        public static ServiceHost Host { get; set; }
+
+        /// <summary>
         /// The main entry point for the application.
         /// </summary>
         static void Main()
@@ -59,10 +64,13 @@ namespace openEAS
             // Run as Windows Application.
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new DebugHost());
+            DebugHost host = new DebugHost();
+            Host = host.Host;
+            Application.Run(host);
 #else
             // Run as Windows Service.
-            ServiceBase.Run(new ServiceHost());
+            Host = new ServiceHost();
+            ServiceBase.Run(Host);
 #endif
         }
     }
