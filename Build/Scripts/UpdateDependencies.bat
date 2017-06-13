@@ -26,7 +26,7 @@
 SETLOCAL
 
 SET pwd="%CD%"
-SET gwd="%LOCALAPPDATA%\Temp\openEAS"
+SET gwd="%LOCALAPPDATA%\Temp\PQMarkPusher"
 SET git="%PROGRAMFILES(X86)%\Git\cmd\git.exe"
 SET remote="git@github.com:GridProtectionAlliance/openXDA.git"
 SET branch="sdbx"

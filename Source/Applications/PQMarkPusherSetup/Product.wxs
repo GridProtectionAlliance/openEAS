@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
+  <Product Id="*" Name="PQMarkPusher" Language="1033" Version="1.0.0.0" Manufacturer="Grid Protection Alliance">
+    <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" />
+
+    <MediaTemplate EmbedCab="yes" />
+
+    <PropertyRef Id="WIX_IS_NETFRAMEWORK_46_OR_LATER_INSTALLED"/>
+    <Condition Message='This setup requires Microsoft .NET Framework 4.6 or greater - this will need to be installed before installation can continue.'>
+      <![CDATA[Installed OR WIX_IS_NETFRAMEWORK_46_OR_LATER_INSTALLED]]>
+    </Condition>
+
+    <Feature Id="AllProducts" Title="All Products" Level="1" Display="expand" ConfigurableDirectory="INSTALLFOLDER" Description="All components of the PQMarkPusher installation.">
+      <!-- PQMarkPusher Service -->
+      <Feature Id="ServiceFeature" Title="PQMarkPusher" Description="Installs the PQMarkPusher Windows service to process data from openXDA to find incipient cable faults.">
+        <ComponentGroupRef Id="ServiceComponents" />
+      </Feature>
+
+      <!-- PQMarkPusher Console -->
+      <Feature Id="ConsoleFeature" Title="PQMarkPusher Remote Console" Description="Installs the PQMarkPusher remote console used to monitor and interact with the PQMarkPusher service.">
+        <ComponentGroupRef Id="ConsoleComponents" />
+      </Feature>
+    </Feature>
+
+    <UI>
+      <!-- User Interface -->
+      <UIRef Id="WixUI_FeatureTree" />
+      <UIRef Id="WixUI_ErrorProgressText" />
+      <DialogRef Id="DatabaseConnectionDialog" />
+      <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="DatabaseConnectionDialog"><![CDATA[&ServiceFeature=3]]></Publish>
+      <Publish Dialog="CustomizeDlg" Control="Next" Event="NewDialog" Value="VerifyReadyDlg"><![CDATA[NOT(&ServiceFeature=3)]]></Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="DatabaseConnectionDialog">(NOT Installed OR WixUI_InstallMode = "Change") AND <![CDATA[&ServiceFeature=3]]></Publish>
+      <Publish Dialog="VerifyReadyDlg" Control="Back" Event="NewDialog" Value="CustomizeDlg">(NOT Installed OR WixUI_InstallMode = "Change") AND <![CDATA[NOT(&ServiceFeature=3)]]></Publish>
+    </UI>
+
+    <Icon Id="PQMarkPusher.ico.exe" SourceFile="$(var.PQMarkPusher.TargetPath)" />
+    <Icon Id="PQMarkPusherConsole.ico.exe" SourceFile="$(var.PQMarkPusherConsole.TargetPath)" />
+
+    <Property Id="SERVICENAME" Value="$(var.PQMarkPusher.TargetName)" />
+    <Property Id="SERVERNAME" Value="localhost" />
+    <Property Id="DATABASENAME" Value="openXDA" />
+    <Property Id="WINDOWSAUTH" Value="1" />
+    <Property Id="DATAPROVIDERSTRING" Value="AssemblyName={System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089};; ConnectionType=System.Data.SqlClient.SqlConnection;; AdapterType=System.Data.SqlClient.SqlDataAdapter" />
+    <!--<WixVariable Id="WixUIBannerBmp" Value="$(var.ProjectDir)\PQMarkPusherSetupBanner.bmp" />
+    <WixVariable Id="WixUIDialogBmp" Value="$(var.ProjectDir)\PQMarkPusherSetupDialog.bmp" />-->
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\INSTALL_LICENSE.rtf" />
+
+    <!-- Add/Remove Programs Icon -->
+    <Property Id="ARPPRODUCTICON" Value="PQMarkPusher.ico.exe" />
+    <Property Id="ARPNOREPAIR" Value="yes" Secure="yes" />
+    <Property Id="ARPNOMODIFY" Value="yes" Secure="yes" />
+
+    <!-- Custom Actions -->
+    <Binary Id="InstallerActions" SourceFile="$(var.SolutionDir)\Dependencies\GSF\GSF.InstallerActions.CA.dll" />
+    <CustomAction Id="PasswordGenerationAction" BinaryKey="InstallerActions" DllEntry="PasswordGenerationAction" Execute="immediate" />
+    <CustomAction Id="TestDatabaseConnectionAction" BinaryKey="InstallerActions" DllEntry="TestDatabaseConnectionAction" Execute="immediate" />
+    <CustomAction Id="ConfigureServiceAction.SetProperty" Property="ConfigureServiceAction" Value="SERVICENAME=[SERVICENAME]" />
+    <CustomAction Id="ConfigureServiceAction" BinaryKey="InstallerActions" DllEntry="ConfigureServiceAction" Execute="deferred" Impersonate="no" />
+    
+    <CustomAction Id="CreateDBLogin.SetProperty" Property="CreateDBLogin" Value="SERVICENAME=[SERVICENAME];CONNECTIONSTRING=[SERVERCONNECTIONSTRING];DATAPROVIDERSTRING=[DATAPROVIDERSTRING];DBQUERY=[CREATEDBLOGINQUERY]" />
+    <CustomAction Id="CreateDBLogin" BinaryKey="InstallerActions" DllEntry="DatabaseQueryAction" Execute="deferred" Impersonate="yes" />
+    <CustomAction Id="AlterDBLogin.SetProperty" Property="AlterDBLogin" Value="SERVICENAME=[SERVICENAME];CONNECTIONSTRING=[SERVERCONNECTIONSTRING];DATAPROVIDERSTRING=[DATAPROVIDERSTRING];DBQUERY=[ALTERDBLOGINQUERY]" />
+    <CustomAction Id="AlterDBLogin" BinaryKey="InstallerActions" DllEntry="DatabaseQueryAction" Execute="deferred" Impersonate="yes" />
+    <CustomAction Id="CreateDBUser.SetProperty" Property="CreateDBUser" Value="SERVICENAME=[SERVICENAME];CONNECTIONSTRING=[DBCONNECTIONSTRING];DATAPROVIDERSTRING=[DATAPROVIDERSTRING];DBQUERY=[CREATEDBUSERQUERY]" />
+    <CustomAction Id="CreateDBUser" BinaryKey="InstallerActions" DllEntry="DatabaseQueryAction" Execute="deferred" Impersonate="yes" />
+    <CustomAction Id="GrantDBPermissions.SetProperty" Property="GrantDBPermissions" Value="SERVICENAME=[SERVICENAME];CONNECTIONSTRING=[DBCONNECTIONSTRING];DATAPROVIDERSTRING=[DATAPROVIDERSTRING];DBQUERY=[DBPERMISSIONSQUERY]" />
+    <CustomAction Id="GrantDBPermissions" BinaryKey="InstallerActions" DllEntry="DatabaseQueryAction" Execute="deferred" Impersonate="yes" />
+    
+    <CustomAction Id="PQMarkPusher.sql.SetProperty" Property="PQMarkPusher.sql" Value="SERVICENAME=[SERVICENAME];CONNECTIONSTRING=[DBCONNECTIONSTRING];DATAPROVIDERSTRING=[DATAPROVIDERSTRING];SCRIPTPATH=[#PQMarkPusher.sql]" />
+    <CustomAction Id="PQMarkPusher.sql" BinaryKey="InstallerActions" DllEntry="DatabaseScriptAction" Execute="deferred" Impersonate="yes" />
+
+    <InstallExecuteSequence>
+      <Custom Action="ConfigureServiceAction.SetProperty" After="InstallServices">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="ConfigureServiceAction" After="ConfigureServiceAction.SetProperty">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
+      
+      <Custom Action="CreateDBLogin.SetProperty" After="InstallFiles">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="CreateDBLogin" After="CreateDBLogin.SetProperty">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="AlterDBLogin.SetProperty" After="CreateDBLogin">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="AlterDBLogin" After="AlterDBLogin.SetProperty">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="CreateDBUser.SetProperty" After="AlterDBLogin">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="CreateDBUser" After="CreateDBUser.SetProperty">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="GrantDBPermissions.SetProperty" After="CreateDBUser">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="GrantDBPermissions" After="GrantDBPermissions.SetProperty">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
+      
+      <Custom Action="PQMarkPusher.sql.SetProperty" After="GrantDBPermissions">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="PQMarkPusher.sql" After="PQMarkPusher.sql.SetProperty">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
+    </InstallExecuteSequence>
+  </Product>
+
+  <Fragment>
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <?if $(var.Platform) = x64 ?>
+      <Directory Id="ProgramFiles64Folder">
+        <!-- C:\Program Files\PQMarkPusher -->
+        <Directory Id="INSTALLFOLDER" Name="PQMarkPusher" />
+      </Directory>
+      <?else ?>
+      <Directory Id="ProgramFilesFolder">
+        <!-- C:\Program Files (x86)\PQMarkPusher -->
+        <Directory Id="INSTALLFOLDER" Name="PQMarkPusher" />
+      </Directory>
+      <?endif ?>
+
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="PQMarkPusher" />
+      </Directory>
+    </Directory>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ServiceComponents" Directory="INSTALLFOLDER">
+      <!-- Service Applications -->
+      <Component Id="PQMarkPusher">
+        <File Id="PQMarkPusher.exe" Name="$(var.PQMarkPusher.TargetFileName)" Source="$(var.PQMarkPusher.TargetPath)" />
+        <ServiceInstall Id="PQMarkPusherInstall" Name="PQMarkPusher" Type="ownProcess" Start="auto" ErrorControl="normal" Description="Engine for analyzing power quality data to find incipient cable faults." />
+        <ServiceControl Id="PQMarkPusherControl" Name="PQMarkPusher" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
+      </Component>
+      <Component Id="PQMarkPusherConfig">
+        <File Id="PQMarkPusher.exe.config" Name="$(var.PQMarkPusher.TargetFileName).config" Source="$(var.PQMarkPusher.TargetPath).config" />
+        <util:XmlFile Id="SetDBConnectionString" Action="setValue" ElementPath="/configuration/categorizedSettings/systemSettings/add[\[]@name='ConnectionString'[\]]/@value" Value="[EASCONNECTIONSTRING]" File="[#PQMarkPusher.exe.config]" SelectionLanguage="XPath" Sequence="1" />
+      </Component>
+
+      <!-- Database Scripts -->
+      <Component Id="DBScript">
+        <File Id="PQMarkPusher.sql" Name="PQMarkPusher.sql" Source="$(var.SolutionDir)\Data\PQMarkPusher.sql" />
+      </Component>
+
+      <!-- ESA Libraries -->
+      <ComponentRef Id="PQMarkPusherSandBox" />
+
+      <!-- XDA Libraries -->
+      <ComponentRef Id="FaultAlgorithms" />
+      <ComponentRef Id="FaultData" />
+
+      <!-- DotNetZip Dependencies -->
+      <ComponentRef Id="Ionic.Zlib" />
+
+      <!-- log4net Dependencies -->
+      <ComponentRef Id="log4net" />
+
+      <!-- GSF Dependencies -->
+      <ComponentRef Id="Antlr3.Runtime" />
+      <ComponentRef Id="ExpressionEvaluator" />
+      <ComponentRef Id="GSF.COMTRADE" />
+      <ComponentRef Id="GSF.Communication" />
+      <ComponentRef Id="GSF.Core" />
+      <ComponentRef Id="GSF.PhasorProtocols" />
+      <ComponentRef Id="GSF.PQDIF" />
+      <ComponentRef Id="GSF.Security" />
+      <ComponentRef Id="GSF.ServiceProcess" />
+      <ComponentRef Id="GSF.TimeSeries" />
+
+      <!-- openHistorian Dependencies -->
+      <ComponentRef Id="crypto" />
+      <ComponentRef Id="GSF.SortedTreeStore" />
+      <ComponentRef Id="openHistorian.Core" />
+
+      <!-- Cleanup -->
+      <Component Id="Cleanup" Guid="{C8EBB158-C708-4C94-87C1-F5DBC77D7BDE}">
+        <CreateFolder />
+        <RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
+        <RemoveFolder Id="RemoveInstallFolder" Directory="INSTALLFOLDER" On="uninstall" />
+      </Component>
+    </ComponentGroup>
+
+    <ComponentGroup Id="ConsoleComponents" Directory="INSTALLFOLDER">
+      <ComponentRef Id="GSF.Communication" />
+      <ComponentRef Id="GSF.Core" />
+      <ComponentRef Id="GSF.Security" />
+      <ComponentRef Id="GSF.ServiceProcess" />
+
+      <!-- Remote Console Applications -->
+      <Component Id="PQMarkPusherConsole">
+        <File Id="PQMarkPusherConsole.exe" Name="$(var.PQMarkPusherConsole.TargetFileName)" Source="$(var.PQMarkPusherConsole.TargetPath)" />
+        <Shortcut Id="PQMarkPusherConsoleStartMenuShortcut" Name="PQMarkPusher Console" Icon="PQMarkPusherConsole.ico.exe" Description="Console application to monitor the PQMarkPusher service." WorkingDirectory="INSTALLFOLDER" Directory="ApplicationProgramsFolder" Advertise="yes" />
+      </Component>
+      <Component Id="PQMarkPusherConsoleConfig">
+        <File Id="PQMarkPusherConsole.exe.config" Name="$(var.PQMarkPusherConsole.TargetFileName).config" Source="$(var.PQMarkPusherConsole.TargetPath).config" />
+      </Component>
+    </ComponentGroup>
+
+    <ComponentGroup Id="LibraryComponents" Directory="INSTALLFOLDER">
+      <!-- ESA Libraries -->
+      <Component Id="PQMarkPusherSandBox">
+        <File Id="PQMarkPusherSandBox.dll" Name="$(var.PQMarkPusherSandBox.TargetFileName)" Source="$(var.PQMarkPusherSandBox.TargetPath)" />
+      </Component>
+      
+      <!-- XDA Libraries -->
+      <Component Id="FaultAlgorithms">
+        <File Id="FaultAlgorithms.dll" Name="FaultAlgorithms.dll" Source="$(var.SolutionDir)\Dependencies\openXDA\FaultAlgorithms.dll" />
+      </Component>
+      <Component Id="FaultData">
+        <File Id="FaultData.dll" Name="FaultData.dll" Source="$(var.SolutionDir)\Dependencies\openXDA\FaultData.dll" />
+      </Component>
+
+      <!-- DotNetZip Dependencies -->
+      <Component Id="Ionic.Zlib">
+        <File Id="Ionic.Zlib.dll" Name="Ionic.Zlib.dll" Source="$(var.SolutionDir)\Dependencies\DotNetZip\Ionic.Zlib.dll" />
+      </Component>
+
+      <!-- log4net Dependencies -->
+      <Component Id="log4net">
+        <File Id="log4net.dll" Name="log4net.dll" Source="$(var.SolutionDir)\Dependencies\NuGet\log4net.2.0.3\lib\net40-full\log4net.dll" />
+      </Component>
+
+      <!-- GSF Dependencies -->
+      <Component Id="Antlr3.Runtime">
+        <File Id="Antlr3.Runtime.dll" Name="Antlr3.Runtime.dll" Source="$(var.SolutionDir)\Dependencies\GSF\Antlr3.Runtime.dll" />
+      </Component>
+      <Component Id="ExpressionEvaluator">
+        <File Id="ExpressionEvaluator.dll" Name="ExpressionEvaluator.dll" Source="$(var.SolutionDir)\Dependencies\GSF\ExpressionEvaluator.dll" />
+      </Component>
+      <Component Id="GSF.COMTRADE">
+        <File Id="GSF.COMTRADE.dll" Name="GSF.COMTRADE.dll" Source="$(var.SolutionDir)\Dependencies\GSF\GSF.COMTRADE.dll" />
+      </Component>
+      <Component Id="GSF.Communication">
+        <File Id="GSF.Communication.dll" Name="GSF.Communication.dll" Source="$(var.SolutionDir)\Dependencies\GSF\GSF.Communication.dll" />
+      </Component>
+      <Component Id="GSF.Core">
+        <File Id="GSF.Core.dll" Name="GSF.Core.dll" Source="$(var.SolutionDir)\Dependencies\GSF\GSF.Core.dll" />
+      </Component>
+      <Component Id="GSF.PhasorProtocols">
+        <File Id="GSF.PhasorProtocols.dll" Name="GSF.PhasorProtocols.dll" Source="$(var.SolutionDir)\Dependencies\GSF\GSF.PhasorProtocols.dll" />
+      </Component>
+      <Component Id="GSF.PQDIF">
+        <File Id="GSF.PQDIF.dll" Name="GSF.PQDIF.dll" Source="$(var.SolutionDir)\Dependencies\GSF\GSF.PQDIF.dll" />
+      </Component>
+      <Component Id="GSF.Security">
+        <File Id="GSF.Security.dll" Name="GSF.Security.dll" Source="$(var.SolutionDir)\Dependencies\GSF\GSF.Security.dll" />
+      </Component>
+      <Component Id="GSF.ServiceProcess">
+        <File Id="GSF.ServiceProcess.dll" Name="GSF.ServiceProcess.dll" Source="$(var.SolutionDir)\Dependencies\GSF\GSF.ServiceProcess.dll" />
+      </Component>
+      <Component Id="GSF.TimeSeries">
+        <File Id="GSF.TimeSeries.dll" Name="GSF.TimeSeries.dll" Source="$(var.SolutionDir)\Dependencies\GSF\GSF.TimeSeries.dll" />
+      </Component>
+
+      <!-- openHistorian Dependencies -->
+      <Component Id="crypto">
+        <File Id="crypto.dll" Name="crypto.dll" Source="$(var.SolutionDir)\Dependencies\openHistorian\crypto.dll" />
+      </Component>
+      <Component Id="GSF.SortedTreeStore">
+        <File Id="GSF.SortedTreeStore.dll" Name="GSF.SortedTreeStore.dll" Source="$(var.SolutionDir)\Dependencies\openHistorian\GSF.SortedTreeStore.dll" />
+      </Component>
+      <Component Id="openHistorian.Core">
+        <File Id="openHistorian.Core.dll" Name="openHistorian.Core.dll" Source="$(var.SolutionDir)\Dependencies\openHistorian\openHistorian.Core.dll" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <!-- Custom Dialogs -->
+  <Fragment>
+    <UI>
+      <!-- Database Connection Dialog -->
+      <Dialog Id="DatabaseConnectionDialog" Width="370" Height="270" Title="[ProductName] Setup">
+        <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="WixUI_Bmp_Banner" />
+        <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes">
+          <Text>{\WixUI_Font_Title}Database Connection</Text>
+        </Control>
+        <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes">
+          <Text>Configure your database connection.</Text>
+        </Control>
+        <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+        <Control Id="ServerNameLabel" Type="Text" X="95" Y="53" Width="100" Height="13" TabSkip="no" Text="&amp;Server name:" />
+        <Control Id="ServerNameEdit" Type="Edit" X="95" Y="65" Width="170" Height="18" Property="SERVERNAME" Text="{80}" />
+        <Control Id="DatabaseNameLabel" Type="Text" X="95" Y="88" Width="100" Height="13" TabSkip="no" Text="&amp;Database name:" />
+        <Control Id="DatabaseNameEdit" Type="Edit" X="95" Y="100" Width="170" Height="18" Property="DATABASENAME" Text="{80}" />
+        <Control Id="WindowsAuthenticationCheckBox" Type="CheckBox" X="85" Y="125" Width="200" Height="17" Property="WINDOWSAUTH" CheckBoxValue="1" Text="Use Windows Authentication" />
+        <Control Id="UsernameLabel" Type="Text" X="95" Y="143" Width="100" Height="13" TabSkip="no" Text="&amp;Username:">
+          <Condition Action="enable">NOT WINDOWSAUTH</Condition>
+          <Condition Action="disable">WINDOWSAUTH</Condition>
+        </Control>
+        <Control Id="UsernameEdit" Type="Edit" X="95" Y="155" Width="170" Height="18" Property="DBUSERNAME" Text="{80}">
+          <Condition Action="enable">NOT WINDOWSAUTH</Condition>
+          <Condition Action="disable">WINDOWSAUTH</Condition>
+        </Control>
+        <Control Id="PasswordLabel" Type="Text" X="95" Y="178" Width="100" Height="13" TabSkip="no" Text="&amp;Password:">
+          <Condition Action="enable">NOT WINDOWSAUTH</Condition>
+          <Condition Action="disable">WINDOWSAUTH</Condition>
+        </Control>
+        <Control Id="PasswordEdit" Type="Edit" X="95" Y="190" Width="170" Height="18" Property="DBPASSWORD" Text="{80}" Password="yes">
+          <Condition Action="enable">NOT WINDOWSAUTH</Condition>
+          <Condition Action="disable">WINDOWSAUTH</Condition>
+        </Control>
+        <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+        <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="&amp;Back">
+          <Publish Event="NewDialog" Value="CustomizeDlg">1</Publish>
+        </Control>
+        <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="&amp;Next">
+          <!-- Set up the queries to create the database. -->
+          <Publish Property="GENPASSWORDLENGTH" Value="20">1</Publish>
+          <Publish Event="DoAction" Value="PasswordGenerationAction">NOT EASSERVICEPASSWORD</Publish>
+          <Publish Property="EASSERVICELOGIN" Value="PQMarkPusherService">1</Publish>
+          <Publish Property="EASSERVICEPASSWORD" Value="[GENERATEDPASSWORD]">NOT EASSERVICEPASSWORD</Publish>
+          <Publish Property="CREATEDBQUERY" Value="CREATE DATABASE [\[][DATABASENAME][\]]">1</Publish>
+          <Publish Property="ALTERDBQUERY" Value="ALTER DATABASE [\[][DATABASENAME][\]] SET TRUSTWORTHY ON">1</Publish>
+          <Publish Property="CREATEDBLOGINQUERY" Value="IF NOT EXISTS (SELECT * FROM master.dbo.syslogins WHERE loginname = '[EASSERVICELOGIN]') CREATE LOGIN [\[][EASSERVICELOGIN][\]] WITH PASSWORD = '[EASSERVICEPASSWORD]', CHECK_EXPIRATION = OFF, CHECK_POLICY = OFF">1</Publish>
+          <Publish Property="ALTERDBLOGINQUERY" Value="ALTER LOGIN [\[][EASSERVICELOGIN][\]] WITH PASSWORD = '[EASSERVICEPASSWORD]'">1</Publish>
+          <Publish Property="CREATEDBUSERQUERY" Value="IF NOT EXISTS (SELECT * FROM sys.database_principals WHERE name = '[EASSERVICELOGIN]') CREATE USER [\[][EASSERVICELOGIN][\]] FOR LOGIN [\[][EASSERVICELOGIN][\]]">1</Publish>
+          <Publish Property="DBPERMISSIONSQUERY" Value="EXEC sp_addrolemember N'db_owner', N'[EASSERVICELOGIN]'">1</Publish>
+
+          <!-- Set up the authentication part of the connection string based on user input. -->
+          <Publish Property="AUTHSTRING" Value="Integrated Security=SSPI">WINDOWSAUTH</Publish>
+          <Publish Property="AUTHSTRING" Value="User Id=[DBUSERNAME];;Password=[DBPASSWORD]">NOT WINDOWSAUTH</Publish>
+          <Publish Property="EASAUTHSTRING" Value="User Id=[EASSERVICELOGIN];Password=[EASSERVICEPASSWORD]">1</Publish>
+
+          <!-- Set up connection strings for connecting to server and database. -->
+          <Publish Property="SERVERCONNECTIONSTRING" Value="Data Source=[SERVERNAME];;[AUTHSTRING]">1</Publish>
+          <Publish Property="DBCONNECTIONSTRING" Value="Data Source=[SERVERNAME];;Initial Catalog=[DATABASENAME];;[AUTHSTRING]">1</Publish>
+          <Publish Property="EASCONNECTIONSTRING" Value="Data Source=[SERVERNAME];Initial Catalog=[DATABASENAME];[EASAUTHSTRING]">1</Publish>
+
+          <!-- Determine whether we can connect to the database server. -->
+          <Publish Property="CONNECTIONSTRING" Value="[SERVERCONNECTIONSTRING]">1</Publish>
+          <Publish Event="DoAction" Value="TestDatabaseConnectionAction">1</Publish>
+          <Publish Property="DBSERVERCONNECTS">NOT DATABASECONNECTED</Publish>
+          <Publish Property="DBSERVERCONNECTS" Value="1">DATABASECONNECTED</Publish>
+          <Publish Property="ERRORMESSAGE" Value="Unable to connect to the database. Please verify the connection configuration and try again.">NOT DBSERVERCONNECTS</Publish>
+          <Publish Event="SpawnDialog" Value="ModalErrorDialog">NOT DBSERVERCONNECTS</Publish>
+
+          <!-- Determine whether the database already exists on the server. -->
+          <Publish Property="CONNECTIONSTRING" Value="[DBCONNECTIONSTRING]">DBSERVERCONNECTS</Publish>
+          <Publish Event="DoAction" Value="TestDatabaseConnectionAction">DBSERVERCONNECTS</Publish>
+          <Publish Property="DBEXISTS">NOT DATABASECONNECTED</Publish>
+          <Publish Property="DBEXISTS" Value="1">DATABASECONNECTED</Publish>
+          <Publish Property="ERRORMESSAGE" Value="Database [DATABASENAME] does not exist on the server. Enter the name of an existing database, then try again. If you wish to install the database, return to the Custom Setup screen and modify your feature selections.">DBSERVERCONNECTS AND NOT DBEXISTS</Publish>
+          <Publish Event="SpawnDialog" Value="ModalErrorDialog">DBSERVERCONNECTS AND NOT DBEXISTS</Publish>
+
+          <!-- Move to the next dialog if the validation checks out. -->
+          <Publish Event="NewDialog" Value="VerifyReadyDlg">DBSERVERCONNECTS AND DBEXISTS</Publish>
+        </Control>
+        <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="Cancel">
+          <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+        </Control>
+      </Dialog>
+
+      <!-- Modal dialog to display error messages. -->
+      <Dialog Id="ModalErrorDialog" Width="250" Height="100" Title="Database Connection Error">
+        <Control Id="ErrorMessageLabel" Type="Text" X="10" Y="10" Width="230" Height="50" TabSkip="no" Text="[ERRORMESSAGE]" />
+        <Control Id="OKButton" Type="PushButton" X="82" Y="70" Width="56" Height="17" Default="yes" Cancel="yes" Text="&amp;OK">
+          <Publish Event="EndDialog" Value="Return">1</Publish>
+        </Control>
+      </Dialog>
+    </UI>
+  </Fragment>
+</Wix>
