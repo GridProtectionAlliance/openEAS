@@ -1,7 +1,7 @@
 @ECHO OFF
 SET target=%1
 SET source=%2
-IF /I "%source%"=="" SET source=openEAS
+IF /I "%source%"=="" SET source=PQMarkPusher
 IF /I "%target%"=="" SET /p target="Enter project name: "
 IF /I "%target%"=="" (
     ECHO ERROR: Please enter project name.
