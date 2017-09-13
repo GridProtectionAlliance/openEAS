@@ -36,5 +36,5 @@ GO
 --END
 --GO
 --
---INSERT INTO EASExtension VALUES('openEAS', 'HasopenEASResult', 'openEASResult')
+--INSERT INTO EASExtension VALUES('openEAS', 'HasopenEASResult')
 --GO
