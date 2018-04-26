@@ -185,6 +185,8 @@ namespace openEAS
             m_serviceMonitors.AdapterCreated += ServiceMonitors_AdapterCreated;
             m_serviceMonitors.AdapterLoaded += ServiceMonitors_AdapterLoaded;
             m_serviceMonitors.AdapterUnloaded += ServiceMonitors_AdapterUnloaded;
+            m_serviceHelper.UpdatedStatus += UpdatedStatusHandler;
+
             m_serviceMonitors.Initialize();
 
             // Set up the analysis engine
@@ -232,6 +234,8 @@ namespace openEAS
             // Dispose of adapter loader for service monitors
             m_serviceMonitors.AdapterLoaded -= ServiceMonitors_AdapterLoaded;
             m_serviceMonitors.AdapterUnloaded -= ServiceMonitors_AdapterUnloaded;
+            m_serviceHelper.UpdatedStatus -= UpdatedStatusHandler;
+
             m_serviceMonitors.Dispose();
         }
 
@@ -456,6 +460,13 @@ namespace openEAS
             }
         }
 
+        private void UpdatedStatusHandler(object sender, EventArgs<Guid, string, UpdateType> e)
+        {
+            if ((object)UpdatedStatus != null)
+                UpdatedStatus(sender, new EventArgs<Guid, string, UpdateType>(e.Argument1, e.Argument2, e.Argument3));
+        }
+
+
         #endregion
 
         #region [ Web UI Handling]
@@ -482,8 +493,11 @@ namespace openEAS
 
                 securityProvider.Add("ConnectionString", "Eval(systemSettings.ConnectionString)", "Connection connection string to be used for connection to the backend security datastore.");
                 securityProvider.Add("DataProviderString", "Eval(systemSettings.DataProviderString)", "Configuration database ADO.NET data provider assembly type creation string to be used for connection to the backend security datastore.");
+                systemSettings.Add("DefaultCorsOrigins", "", "Comma-separated list of allowed origins (including http:// prefix) that define the default CORS policy. Use '*' to allow all or empty string to disable CORS.");
+                systemSettings.Add("DefaultCorsHeaders", "*", "Comma-separated list of supported headers that define the default CORS policy. Use '*' to allow all or empty string to allow none.");
+                systemSettings.Add("DefaultCorsMethods", "*", "Comma-separated list of supported methods that define the default CORS policy. Use '*' to allow all or empty string to allow none.");
+                systemSettings.Add("DefaultCorsSupportsCredentials", true, "Boolean flag for the default CORS policy indicating whether the resource supports user credentials in the request.");
 
-                //ValidateAccountsAndGroups(new AdoDataConnection("securityProvider"));
 
                 DefaultWebPage = systemSettings["DefaultWebPage"].Value;
 
@@ -497,6 +511,10 @@ namespace openEAS
                 Model.Global.TimeFormat = systemSettings["TimeFormat"].Value;
                 Model.Global.DateTimeFormat = $"{Model.Global.DateFormat} {Model.Global.TimeFormat}";
                 Model.Global.BootstrapTheme = systemSettings["BootstrapTheme"].Value;
+                Model.Global.DefaultCorsOrigins = systemSettings["DefaultCorsOrigins"].Value;
+                Model.Global.DefaultCorsHeaders = systemSettings["DefaultCorsHeaders"].Value;
+                Model.Global.DefaultCorsMethods = systemSettings["DefaultCorsMethods"].Value;
+                Model.Global.DefaultCorsSupportsCredentials = systemSettings["DefaultCorsSupportsCredentials"].ValueAsBoolean(true);
 
                 // Attach to default web server events
                 WebServer webServer = WebServer.Default;
@@ -586,6 +604,15 @@ namespace openEAS
                 HandleException(ex);
                 m_serviceHelper.UpdateStatus(UpdateType.Alarm, "Failed to update client status \"" + status.ToNonNullString() + "\" due to an exception: " + ex.Message + "\r\n\r\n");
             }
+        }
+
+        /// <summary>
+        /// Logs an exception to the service.
+        /// </summary>
+        /// <param name="ex">Exception to log.</param>
+        public void LogException(Exception ex)
+        {
+            HandleException(ex);
         }
 
 

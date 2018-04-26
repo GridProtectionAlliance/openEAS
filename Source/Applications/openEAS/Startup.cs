@@ -37,9 +37,21 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
+using System.Web.Http.ExceptionHandling;
 
 namespace openEAS
 {
+    public class HostedExceptionHandler : System.Web.Http.ExceptionHandling.ExceptionHandler
+    {
+        public override void Handle(ExceptionHandlerContext context)
+        {
+            Program.Host.LogException(context.Exception);
+            base.Handle(context);
+        }
+    }
+
+
     public class Startup
     {
         public void Configuration(IAppBuilder app)
@@ -61,25 +73,37 @@ namespace openEAS
                 throw new SecurityException($"Failed to load Security Hub, validate database connection string in configuration file: {ex.Message}", ex);
             }
 
-            // Configure Windows Authentication for self-hosted web service
-            HttpListener listener = (HttpListener)app.Properties["System.Net.HttpListener"];
-            listener.AuthenticationSchemes = AuthenticationSchemes.Ntlm;
-
             HubConfiguration hubConfig = new HubConfiguration();
             HttpConfiguration httpConfig = new HttpConfiguration();
 
             // Setup resolver for web page controller instances
             httpConfig.DependencyResolver = WebPageController.GetDependencyResolver(WebServer.Default, Program.Host.DefaultWebPage, new AppModel(), typeof(AppModel));
 
+            // Make sure any hosted exceptions get propagated to service error handling
+            httpConfig.Services.Replace(typeof(IExceptionHandler), new HostedExceptionHandler());
+
             // Enabled detailed client errors
             hubConfig.EnableDetailedErrors = true;
 
-#if DEBUG
-            GlobalHost.Configuration.DisconnectTimeout = TimeSpan.FromMinutes(30);
-#endif
+            // Enable GSF session management
+            httpConfig.EnableSessions(AuthenticationOptions);
 
-            // Enable cross-domain scripting
-            app.UseCors(CorsOptions.AllowAll);
+            // Enable GSF role-based security authentication
+            app.UseAuthentication(AuthenticationOptions);
+
+
+            // Enable cross-domain scripting default policy - controllers can manually
+            // apply "EnableCors" attribute to class or an action to override default
+            // policy configured here
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(Program.Host.Model.Global.DefaultCorsOrigins))
+                    httpConfig.EnableCors(new EnableCorsAttribute(Program.Host.Model.Global.DefaultCorsOrigins, Program.Host.Model.Global.DefaultCorsHeaders, Program.Host.Model.Global.DefaultCorsMethods) { SupportsCredentials = Program.Host.Model.Global.DefaultCorsSupportsCredentials });
+            }
+            catch (Exception ex)
+            {
+                Program.Host.LogException(new InvalidOperationException($"Failed to establish default CORS policy: {ex.Message}", ex));
+            }
 
             // Load ServiceHub SignalR class
             app.MapSignalR(hubConfig);
@@ -93,6 +117,15 @@ namespace openEAS
             // Check for configuration issues before first request
             httpConfig.EnsureInitialized();
         }
+
+
+        // Static Properties
+
+        /// <summary>
+        /// Gets the authentication options used for the hosted web server.
+        /// </summary>
+        public static AuthenticationOptions AuthenticationOptions { get; } = new AuthenticationOptions();
+
 
     }
 }

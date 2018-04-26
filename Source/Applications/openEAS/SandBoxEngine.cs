@@ -148,7 +148,7 @@ namespace openEAS
 
                     foreach (int fileGroupID in newFileGroups)
                     {
-                        MeterDataProcessor processor = new MeterDataProcessor(LoadSystemSettings());
+                        MeterDataProcessor processor = new MeterDataProcessor(s_connectionString);
                         processor.ProcessFileGroup(fileGroupID);
                         dictionary["latestFileGroupID"] = fileGroupID;
                     }
@@ -175,10 +175,11 @@ namespace openEAS
             m_dbConnectionString = category["ConnectionString"].Value;
 
             // Load system settings from the database
-            m_systemSettings = new SystemSettings(LoadSystemSettings());
+            s_connectionString = LoadSystemSettings();
+            m_systemSettings = new SystemSettings(s_connectionString);
         }
 
-        private string LoadSystemSettings()
+        private static string LoadSystemSettings()
         {
             using (AdoDataConnection connection = new AdoDataConnection("systemSettings"))
             {
@@ -204,6 +205,11 @@ namespace openEAS
         #endregion
 
         #region [ Static ]
+        private static string s_connectionString;
+
+        static SandBoxEngine() {
+            s_connectionString = LoadSystemSettings();
+        }
 
         // Static Fields
         private static readonly ILog Log = LogManager.GetLogger(typeof(SandBoxEngine));

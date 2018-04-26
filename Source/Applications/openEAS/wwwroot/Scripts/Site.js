@@ -259,6 +259,11 @@ $(function () {
         }, 5000); // Restart connection after 5 seconds
     });
 
+
+    // Raise "beforeHubConnected" event - client pages should use
+    // this event to register any needed SignalR client functions
+    $(window).trigger("beforeHubConnected");
+
     // make sure the hub url is pointed to the secure html
     //$.connection.hub.url = homePath + "signalr/"
      //Start the connection
