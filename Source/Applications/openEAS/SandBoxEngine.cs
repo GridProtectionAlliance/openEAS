@@ -39,7 +39,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using FaultData.Database;
 using GSF.Collections;
 using GSF.Configuration;
 using GSF.IO;
@@ -47,6 +46,9 @@ using GSF.Threading;
 using log4net;
 using openEAS.Configuration;
 using System.Text;
+using GSF.Data;
+using openXDA.Model;
+using GSF.Data.Model;
 
 namespace openEAS
 {
@@ -123,17 +125,14 @@ namespace openEAS
         {
             string latestDataFile = FilePath.GetAbsolutePath(@"LatestData.bin");
             int latestFileGroupID;
-            FileInfoDataContext fileInfo;
             List<int> newFileGroups;
 
             if ((object)m_systemSettings == null)
                 ReloadSystemSettings();
 
             using (FileBackedDictionary<string, int> dictionary = new FileBackedDictionary<string, int>(latestDataFile))
-            using (DbAdapterContainer dbAdapterContainer = new DbAdapterContainer(m_systemSettings.DbConnectionString, m_systemSettings.DbTimeout))
+            using (AdoDataConnection connection = new AdoDataConnection("systemSettings"))
             {
-                fileInfo = dbAdapterContainer.GetAdapter<FileInfoDataContext>();
-
                 do
                 {
                     dictionary.Compact();
@@ -141,9 +140,8 @@ namespace openEAS
                     if (!dictionary.TryGetValue("latestFileGroupID", out latestFileGroupID))
                         latestFileGroupID = 0;
 
-                    newFileGroups = fileInfo.FileGroups
+                    newFileGroups = (new TableOperations<FileGroup>(connection)).QueryRecordsWhere("ID > {0}", latestFileGroupID)
                         .Select(fileGroup => fileGroup.ID)
-                        .Where(id => id > latestFileGroupID)
                         .Take(100)
                         .OrderBy(id => id)
                         .ToList();
@@ -182,25 +180,25 @@ namespace openEAS
 
         private string LoadSystemSettings()
         {
-            using (SystemInfoDataContext systemInfo = new SystemInfoDataContext(m_dbConnectionString))
+            using (AdoDataConnection connection = new AdoDataConnection("systemSettings"))
             {
-                return LoadSystemSettings(systemInfo);
+                TableOperations<Setting> settingTable = new TableOperations<Setting>(connection);
+                List<Setting> settingList = settingTable.QueryRecords().ToList();
+
+                foreach (IGrouping<string, Setting> grouping in settingList.GroupBy(setting => setting.Name))
+                {
+                    if (grouping.Count() > 1)
+                        Log.Warn($"Duplicate record for setting {grouping.Key} detected.");
+                }
+
+                // Convert the Setting table to a dictionary
+                Dictionary<string, string> settings = settingList
+                    .DistinctBy(setting => setting.Name)
+                    .ToDictionary(setting => setting.Name, setting => setting.Value, StringComparer.OrdinalIgnoreCase);
+
+                // Convert dictionary to a connection string and return it
+                return SystemSettings.ToConnectionString(settings);
             }
-        }
-
-        private string LoadSystemSettings(SystemInfoDataContext systemInfo)
-        {
-            // Convert the Setting table to a dictionary
-            Dictionary<string, string> settings = systemInfo.Settings
-                .ToDictionary(setting => setting.Name, setting => setting.Value, StringComparer.OrdinalIgnoreCase);
-
-            // Add the database connection string if there is not
-            // already one explicitly specified in the Setting table
-            if (!settings.ContainsKey("dbConnectionString"))
-                settings.Add("dbConnectionString", m_dbConnectionString);
-
-            // Convert dictionary to a connection string and return it
-            return SystemSettings.ToConnectionString(settings);
         }
 
         #endregion

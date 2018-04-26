@@ -443,6 +443,22 @@
             <param name="parameters">Extra parameters to the algorithm.</param>
             <returns>A set of distance calculations, one for each cycle of data in <paramref name="localFaultDataSet"/>.</returns>
         </member>
+        <member name="M:FaultAlgorithms.FaultLocationAlgorithms.GetFaultVoltage(FaultAlgorithms.CycleData,FaultAlgorithms.FaultType)">
+            <summary>
+            Get the voltage to use in fault calculations for this cycle, based on the fault type.
+            </summary>
+            <param name="cycle">The cycle of data from which to derive the fault voltage.</param>
+            <param name="viFaultType">The fault type used to determine which voltage to use.</param>
+            <returns>The voltage to use in fault calculations.</returns>
+        </member>
+        <member name="M:FaultAlgorithms.FaultLocationAlgorithms.GetFaultCurrent(FaultAlgorithms.CycleData,FaultAlgorithms.FaultType)">
+            <summary>
+            Get the current to use in fault calculations for this cycle, based on the fault type.
+            </summary>
+            <param name="cycle">The cycle of data from which to derive the fault current.</param>
+            <param name="viFaultType">The fault type used to determine which current to use.</param>
+            <returns>The current to use in fault calculations.</returns>
+        </member>
         <member name="T:FaultAlgorithms.FaultType">
             <summary>
             Represents possible types of a fault.
@@ -841,9 +857,23 @@
         </member>
         <member name="M:FaultAlgorithms.MeasurementDataSet.ExportVoltageDataToCSV(System.String)">
             <summary>
+            Writes all voltage measurement data to a CSV file. 
+            </summary>
+            <param name="fileName">Export file name.</param>
+        </member>
+        <member name="M:FaultAlgorithms.MeasurementDataSet.ExportCurrentDataToCSV(System.String)">
+            <summary>
+            Writes all current measurement data to a CSV file. 
+            </summary>
+            <param name="fileName">Export file name.</param>
+        </member>
+        <member name="M:FaultAlgorithms.MeasurementDataSet.ExportToCSV(System.String,FaultAlgorithms.MeasurementDataSet,FaultAlgorithms.MeasurementDataSet)">
+            <summary>
             Writes all measurement data to a CSV file. 
             </summary>
             <param name="fileName">Export file name.</param>
+            <param name="voltageData">The voltage measurement data to be written to the file.</param>
+            <param name="currentData">The current measurement data to be written to the file.</param>
         </member>
         <member name="T:FaultAlgorithms.XmlFaultResultsWriter">
             <summary>

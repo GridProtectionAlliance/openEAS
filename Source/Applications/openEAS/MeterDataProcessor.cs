@@ -43,16 +43,16 @@ using System.Configuration;
 using System.Linq;
 using System.Transactions;
 using FaultData.DataAnalysis;
-using FaultData.Database;
-using FaultData.Database.MeterDataTableAdapters;
 using FaultData.DataOperations;
 using FaultData.DataSets;
-using FaultData.DataWriters;
 using GSF.Annotations;
 using GSF.Configuration;
+using GSF.Data;
+using GSF.Data.Model;
 using log4net;
 using openEAS.Configuration;
 using openEASSandBox;
+using openXDA.Model;
 
 namespace openEAS
 {
@@ -85,7 +85,6 @@ namespace openEAS
         {
             SystemSettings systemSettings;
 
-            FileInfoDataContext fileInfo;
             FileGroup fileGroup;
             DataFile dataFile = null;
 
@@ -95,12 +94,10 @@ namespace openEAS
             {
                 systemSettings = new SystemSettings(m_connectionString);
 
-                using (DbAdapterContainer dbAdapterContainer = new DbAdapterContainer(systemSettings.DbConnectionString, systemSettings.DbTimeout))
+                using (AdoDataConnection connection = new AdoDataConnection("systemSettings"))
                 {
-                    fileInfo = dbAdapterContainer.GetAdapter<FileInfoDataContext>();
-
                     // Create a file group for this file in the database
-                    fileGroup = LoadFileGroup(fileInfo, fileGroupID);
+                    fileGroup = LoadFileGroup(connection, fileGroupID);
 
                     if ((object)fileGroup == null)
                         return true;
@@ -111,7 +108,7 @@ namespace openEAS
                         return true;
 
                     // Parse the file
-                    meterDataSets = LoadMeterDataSets(dbAdapterContainer, fileGroup);
+                    meterDataSets = LoadMeterDataSets(connection, fileGroup);
 
                     // Set properties on each of the meter data sets
                     foreach (MeterDataSet meterDataSet in meterDataSets)
@@ -123,7 +120,7 @@ namespace openEAS
 
                     // Process meter data sets
                     OnStatusMessage("Processing meter data from file \"{0}\"...", dataFile.FilePath);
-                    ProcessMeterDataSets(meterDataSets, systemSettings, dbAdapterContainer);
+                    ProcessMeterDataSets(meterDataSets, systemSettings, connection);
                     OnStatusMessage("Finished processing data from file \"{0}\".", dataFile.FilePath);
                 }
             }
@@ -142,28 +139,23 @@ namespace openEAS
             return true;
         }
 
-        private List<MeterDataSet> LoadMeterDataSets(DbAdapterContainer dbAdapterContainer, FileGroup fileGroup)
+        private List<MeterDataSet> LoadMeterDataSets(AdoDataConnection connection, FileGroup fileGroup)
         {
             List<MeterDataSet> meterDataSets = new List<MeterDataSet>();
-
-            MeterInfoDataContext meterInfo = dbAdapterContainer.GetAdapter<MeterInfoDataContext>();
-            EventTableAdapter eventAdapter = dbAdapterContainer.GetAdapter<EventTableAdapter>();
-            EventDataTableAdapter eventDataAdapter = dbAdapterContainer.GetAdapter<EventDataTableAdapter>();
-
-            MeterData.EventDataTable eventTable = eventAdapter.GetDataByFileGroup(fileGroup.ID);
+            IEnumerable<Event> eventTable = (new TableOperations<Event>(connection)).QueryRecordsWhere("FileGroupID", fileGroup.ID);
 
             MeterDataSet meterDataSet;
             DataGroup dataGroup;
 
-            foreach (IGrouping<int, MeterData.EventRow> eventGroup in eventTable.GroupBy(evt => evt.MeterID))
+            foreach (IGrouping<int, Event> eventGroup in eventTable.GroupBy(evt => evt.MeterID))
             {
                 meterDataSet = new MeterDataSet();
-                meterDataSet.Meter = meterInfo.Meters.SingleOrDefault(meter => meter.ID == eventGroup.Key);
+                meterDataSet.Meter = (new TableOperations<Meter>(connection)).QueryRecordWhere("ID = {0}", eventGroup.Key);
 
-                foreach (MeterData.EventRow evt in eventGroup)
+                foreach (Event evt in eventGroup)
                 {
                     dataGroup = new DataGroup();
-                    dataGroup.FromData(meterDataSet.Meter, eventDataAdapter.GetTimeDomainData(evt.EventDataID));
+                    dataGroup.FromData(meterDataSet.Meter, (new TableOperations<EventData>(connection)).QueryRecordWhere("ID = {0}", evt.EventDataID).TimeDomainData);
 
                     foreach (DataSeries dataSeries in dataGroup.DataSeries)
                         meterDataSet.DataSeries.Add(dataSeries);
@@ -175,23 +167,12 @@ namespace openEAS
             return meterDataSets;
         }
 
-        public void ProcessMeterDataSets(List<MeterDataSet> meterDataSets, SystemSettings systemSettings, DbAdapterContainer dbAdapterContainer)
+        public void ProcessMeterDataSets(List<MeterDataSet> meterDataSets, SystemSettings systemSettings, AdoDataConnection connection)
         {
-            TimeZoneInfo xdaTimeZone;
-            DateTime processingEndTime;
-
             try
             {
                 foreach (MeterDataSet meterDataSet in meterDataSets)
-                    ProcessMeterData(meterDataSet, dbAdapterContainer);
-
-                xdaTimeZone = systemSettings.XDATimeZoneInfo;
-                processingEndTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, xdaTimeZone);
-
-                foreach (MeterDataSet meterDataSet in meterDataSets)
-                    meterDataSet.FileGroup.ProcessingEndTime = processingEndTime;
-
-                dbAdapterContainer.GetAdapter<FileInfoDataContext>().SubmitChanges();
+                    ProcessMeterData(meterDataSet);
             }
             catch (Exception ex)
             {
@@ -199,21 +180,18 @@ namespace openEAS
             }
         }
 
-        private void ProcessMeterData(MeterDataSet meterDataSet, DbAdapterContainer dbAdapterContainer)
+        private void ProcessMeterData(MeterDataSet meterDataSet)
         {
             try
             {
                 meterDataSet.ConnectionString = m_connectionString;
-                ExecuteDataOperation(meterDataSet, dbAdapterContainer);
-                ExecuteDataWriters(meterDataSet, dbAdapterContainer);
+                ExecuteDataOperation(meterDataSet);
             }
             catch (Exception ex)
             {
                 try
                 {
                     OnHandleException(ex);
-                    meterDataSet.FileGroup.Error = 1;
-                    dbAdapterContainer.GetAdapter<FileInfoDataContext>().SubmitChanges();
                 }
                 catch
                 {
@@ -223,7 +201,7 @@ namespace openEAS
             }
         }
 
-        private void ExecuteDataOperation(MeterDataSet meterDataSet, DbAdapterContainer dbAdapterContainer)
+        private void ExecuteDataOperation(MeterDataSet meterDataSet)
         {
             IDataOperation dataOperation = null;
 
@@ -235,18 +213,8 @@ namespace openEAS
                 // Provide system settings to the data operation
                 ConnectionStringParser.ParseConnectionString(meterDataSet.ConnectionString, dataOperation);
 
-                // Prepare for execution of the data operation
-                dataOperation.Prepare(dbAdapterContainer);
-
                 // Execute the data operation
                 dataOperation.Execute(meterDataSet);
-
-                // Load data from all data operations in a single transaction
-                using (TransactionScope transactionScope = new TransactionScope(TransactionScopeOption.Required, GetTransactionOptions()))
-                {
-                    dataOperation.Load(dbAdapterContainer);
-                    transactionScope.Complete();
-                }
             }
             finally
             {
@@ -256,34 +224,11 @@ namespace openEAS
             }
         }
 
-        private void ExecuteDataWriters(MeterDataSet meterDataSet, DbAdapterContainer dbAdapterContainer)
-        {
-            IDataWriter dataWriter = null;
-
-            try
-            {
-                // Create the data writer
-                dataWriter = new openEASSandBoxWriter();
-
-                // Provide system settings to the data operation
-                ConnectionStringParser.ParseConnectionString(meterDataSet.ConnectionString, dataWriter);
-
-                // Prepare for execution of the data operation
-                dataWriter.WriteResults(dbAdapterContainer, meterDataSet);
-            }
-            finally
-            {
-                // ReSharper disable once SuspiciousTypeConversion.Global
-                if ((object)dataWriter != null)
-                    TryDispose(dataWriter as IDisposable);
-            }
-        }
-
         // Loads a file group containing information about the file on the given
         // file path, as well as the files related to it, into the database.
-        private FileGroup LoadFileGroup(FileInfoDataContext dataContext, int fileGroupID)
+        private FileGroup LoadFileGroup(AdoDataConnection connection, int fileGroupID)
         {
-            return dataContext.FileGroups.FirstOrDefault(fileGroup => fileGroup.ID == fileGroupID);
+            return (new TableOperations<FileGroup>(connection)).QueryRecordWhere("ID = {0}", fileGroupID);
         }
 
         private void TryDispose(IDisposable obj)
