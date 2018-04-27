@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
 using frootCapSwitch;
+using GSF.Data.Model;
+
 namespace openEASSandBox
 {
     internal static class MWArrayExtensions
@@ -27,74 +29,6 @@ namespace openEASSandBox
     public class openEASSandBoxOperation : DataOperationBase<MeterDataSet>
     {
         #region [ Members ]
-        private enum IsDataErr : int
-        {
-            Complete = 0,
-            Bad = 1
-        }
-
-        private enum IsCapSwitch : int
-        {
-            No = -1,
-            Undetermined = 0,
-            Yes = 1
-        }
-
-        private enum IsCapSwitchCondL : int
-        {
-            Low = 1,
-            Moderate = 2,
-            High = 3
-        }
-
-        private enum OutQConditionRPBFlag : int
-        {
-            Balanced = -1,
-            Unknown = 0,
-            Unbalanced = 1
-        }
-
-        private enum OutRestrike : int
-        {
-            No = 0,
-            Yes = 1
-        }
-
-        private enum OutVTHD : int
-        {
-            None = 0,
-            Yes = 1
-        }
-
-        private class CSAResult
-        {
-            public int EventID;
-            public IsDataErr IsDataError;
-            public IsCapSwitch IsCapSwitch;
-            public IsCapSwitchCondL IsCapSwitchCondL;
-            public double OutFrequency;
-            public double OutVoltagesMax;
-            public double OutVoltagesMean;
-            public OutQConditionRPBFlag OutQConditionRPBFlag;
-            public double OutQConditionMRPC;
-            public double OutQConditionRPCA;
-            public double OutQConditionRPCB;
-            public double OutQConditionRPCC;
-            public double OutQConditionMPFI;
-            public double OutQConditionPFA;
-            public double OutQConditionPFB;
-            public double OutQConditionPFC;
-            public OutRestrike OutRestrikeFlag;
-            public int OutRestrikeNum;
-            public OutRestrike OutRestrikePHA;
-            public OutRestrike OutRestrikePHB;
-            public OutRestrike OutRestrikePHC;
-            public OutVTHD OutVTHDFlag;
-            public double OutVTHDBefore;
-            public double OutVTHDAfter;
-            public double OutVthDIncrease;
-        }
-
         private double m_systemFrequency;
 
         private List<CSAResult> m_results;
@@ -147,133 +81,30 @@ namespace openEASSandBox
             cycleDataResource = meterDataSet.GetResource<CycleDataResource>();
             // Execute data analysis
 
-            // default data for dll call
-            int numArgsOut = 8;          // Or 15 for specific purposes
-            int isMonLoc_at_CapCSW = 0;  // Or 1 for specific purposes
-            double fundf = 60.0;         // or 50 depending on location - unit is Herz
-            double vTHDLimit = 5.0; // default is 5 percent
-            double unbalLimit = 10.0; // default is 10 percent
-            int capGrounding = 1; // default is 1
-            double refQ3 = 0.0;
-            double normal_upper = 15.0; // default value
-            double normal_lower = -15.0; // default value
-            double premature_upper = normal_lower;
-            double premature_lower = -90.0; // default value
-            double delayed_lower = normal_upper;
-            double delayed_upper = 90.0; // default value
-            double[] syncParsInit = { normal_upper, normal_lower, premature_upper, premature_lower, delayed_lower, delayed_upper };
-            MWArray syncPars = new MWNumericArray(1, 6, syncParsInit); //#rows,#cols,double[]
-
-            switch (meterDataSet.Meter.AssetKey)
-            {
-                case "Trinity AL 161-B1018-Caps":
-                    isMonLoc_at_CapCSW = 1;
-                    fundf = 60.0D;
-                    vTHDLimit = 5.0D;
-                    unbalLimit = 5.0D;
-                    capGrounding = 1;
-                    refQ3 = 84000.0D;
-                    normal_upper = 15.0;
-                    normal_lower = -15.0;
-                    premature_upper = normal_lower;
-                    premature_lower = -90.0;
-                    delayed_lower = normal_upper;
-                    delayed_upper = 90.0;
-                    syncParsInit = new double[] { normal_upper, normal_lower, premature_upper, premature_lower, delayed_lower, delayed_upper };
-                    syncPars = new MWNumericArray(1, 6, syncParsInit);
-                    break;
-
-                case "Belfast TN 161-B1004-Caps":
-                    isMonLoc_at_CapCSW = 1;
-                    fundf = 60.0D;
-                    vTHDLimit = 5.0D;
-                    unbalLimit = 5.0D;
-                    capGrounding = 1;
-                    refQ3 = 18000.0D;
-                    normal_upper = 15.0;
-                    normal_lower = -15.0;
-                    premature_upper = normal_lower;
-                    premature_lower = -90.0;
-                    delayed_lower = normal_upper;
-                    delayed_upper = 90.0;
-                    syncParsInit = new double[] { normal_upper, normal_lower, premature_upper, premature_lower, delayed_lower, delayed_upper };
-                    syncPars = new MWNumericArray(1, 6, syncParsInit);
-                    break;
-
-                case "Tazewell TN 161=B1004-Caps":
-                    isMonLoc_at_CapCSW = 1;
-                    fundf = 60.0D;
-                    vTHDLimit = 5.0D;
-                    unbalLimit = 5.0D;
-                    capGrounding = 1;
-                    refQ3 = 18000.0D;
-                    normal_upper = 15.0;
-                    normal_lower = -15.0;
-                    premature_upper = normal_lower;
-                    premature_lower = -90.0;
-                    delayed_lower = normal_upper;
-                    delayed_upper = 90.0;
-                    syncParsInit = new double[] { normal_upper, normal_lower, premature_upper, premature_lower, delayed_lower, delayed_upper };
-                    syncPars = new MWNumericArray(1, 6, syncParsInit);
-                    break;
-
-                case "Cumberland FP 161-B1014-Caps":
-                    isMonLoc_at_CapCSW = 1;
-                    fundf = 60.0D;
-                    vTHDLimit = 5.0D;
-                    unbalLimit = 5.0D;
-                    capGrounding = 1;
-                    refQ3 = 18000.0D;
-                    normal_upper = 15.0;
-                    normal_lower = -15.0;
-                    premature_upper = normal_lower;
-                    premature_lower = -90.0;
-                    delayed_lower = normal_upper;
-                    delayed_upper = 90.0;
-                    syncParsInit = new double[] { normal_upper, normal_lower, premature_upper, premature_lower, delayed_lower, delayed_upper };
-                    syncPars = new MWNumericArray(1, 6, syncParsInit);
-                    break;
-
-                case "North Nashville TN 161-B1004-Caps":
-                    isMonLoc_at_CapCSW = 1;
-                    fundf = 60.0D;
-                    vTHDLimit = 5.0D;
-                    unbalLimit = 5.0D;
-                    capGrounding = 1;
-                    refQ3 = 84000.0D;
-                    normal_upper = 15.0;
-                    normal_lower = -15.0;
-                    premature_upper = normal_lower;
-                    premature_lower = -90.0;
-                    delayed_lower = normal_upper;
-                    delayed_upper = 90.0;
-                    syncParsInit = new double[] { normal_upper, normal_lower, premature_upper, premature_lower, delayed_lower, delayed_upper };
-                    syncPars = new MWNumericArray(1, 6, syncParsInit);
-                    break;
-
-                case "Memphis Junction KY 161-Caps":
-                    isMonLoc_at_CapCSW = 1;
-                    fundf = 60.0D;
-                    vTHDLimit = 5.0D;
-                    unbalLimit = 5.0D;
-                    capGrounding = 1;
-                    refQ3 = 18000.0D;
-                    normal_upper = 15.0;
-                    normal_lower = -15.0;
-                    premature_upper = normal_lower;
-                    premature_lower = -90.0;
-                    delayed_lower = normal_upper;
-                    delayed_upper = 90.0;
-                    syncParsInit = new double[] { normal_upper, normal_lower, premature_upper, premature_lower, delayed_lower, delayed_upper };
-                    syncPars = new MWNumericArray(1, 6, syncParsInit);
-                    break;
-            }
 
             for (int i = 0; i < cycleDataResource.DataGroups.Count; ++i)
             {
-                int eventID = GetEventID(cycleDataResource.DataGroups[i], connection);
+                Event evt = GetEvent(cycleDataResource.DataGroups[i], connection);
+                if (evt == null) continue;
 
-                if (eventID < 0) continue;
+                CSALineSetting lineSetting = (new TableOperations<CSALineSetting>(connection)).QueryRecordWhere("LineID = {0}", evt.LineID);
+                CSALineSetting defaultSetting = (new TableOperations<CSALineSetting>(connection)).NewRecord();
+
+                int numArgsOut = lineSetting?.NumArgsOut ?? defaultSetting.NumArgsOut;
+                int isMonLoc_at_CapCSW = lineSetting?.IsMonLocAtCapCSW ?? defaultSetting.IsMonLocAtCapCSW;
+                double fundf = SystemFrequency;
+                double vTHDLimit = lineSetting?.VTHDLimit ?? defaultSetting.VTHDLimit;
+                double unbalLimit = lineSetting?.UnbalLimit ?? defaultSetting.UnbalLimit;
+                int capGrounding = lineSetting?.CapGrounding ?? defaultSetting.CapGrounding;
+                double refQ3 = lineSetting?.RefQ3 ?? defaultSetting.RefQ3;
+                double normal_upper = lineSetting?.NormalUpper ?? defaultSetting.NormalUpper;
+                double normal_lower = lineSetting?.NormalLower ?? defaultSetting.NormalLower;
+                double premature_upper = lineSetting?.PrematureUpper ?? defaultSetting.PrematureUpper;
+                double premature_lower = lineSetting?.PrematureLower ?? defaultSetting.PrematureLower;
+                double delayed_lower = lineSetting?.DelayedLower ?? defaultSetting.DelayedLower;
+                double delayed_upper = lineSetting?.DelayedUpper ?? defaultSetting.DelayedUpper;
+                double[] syncParsInit = { normal_upper, normal_lower, premature_upper, premature_lower, delayed_lower, delayed_upper };
+                MWArray syncPars = new MWNumericArray(1, 6, syncParsInit); //#rows,#cols,double[]
 
                 VIDataGroup viDataGroup = cycleDataResource.VIDataGroups[i];
 
@@ -295,33 +126,46 @@ namespace openEASSandBox
                     {
                         CSAResult result = new CSAResult();
 
-                        result.EventID = eventID;
+                        result.EventID = evt.ID;
                         result.IsDataError = (IsDataErr)Convert.ToInt32(arrays[0].ScalarAsObject());
                         result.IsCapSwitch = (IsCapSwitch)Convert.ToInt32(arrays[1].ScalarAsObject());
                         result.IsCapSwitchCondL = (IsCapSwitchCondL)Convert.ToInt32(arrays[2].ScalarAsObject());
                         result.OutFrequency = Convert.ToDouble(arrays[3].ScalarAsObject());
                         result.OutVoltagesMax = Convert.ToDouble(arrays[4][1].ScalarAsObject());
                         result.OutVoltagesMean = Convert.ToDouble(arrays[4][2].ScalarAsObject());
-                        result.OutQConditionRPBFlag = (OutQConditionRPBFlag)Convert.ToInt32(arrays[5][1].ScalarAsObject());
-                        result.OutQConditionMRPC = Convert.ToDouble(arrays[5][2].ScalarAsObject());
-                        result.OutQConditionRPCA = Convert.ToDouble(arrays[5][3].ScalarAsObject());
-                        result.OutQConditionRPCB = Convert.ToDouble(arrays[5][4].ScalarAsObject());
-                        result.OutQConditionRPCC = Convert.ToDouble(arrays[5][5].ScalarAsObject());
-                        result.OutQConditionMPFI = Convert.ToDouble(arrays[5][6].ScalarAsObject());
-                        result.OutQConditionPFA = Convert.ToDouble(arrays[5][7].ScalarAsObject());
-                        result.OutQConditionPFB = Convert.ToDouble(arrays[5][8].ScalarAsObject());
-                        result.OutQConditionPFC = Convert.ToDouble(arrays[5][9].ScalarAsObject());
-                        result.OutRestrikeFlag = (OutRestrike)Convert.ToInt32(arrays[6][1].ScalarAsObject());
-                        result.OutRestrikeNum = Convert.ToInt32(arrays[6][2].ScalarAsObject());
-                        result.OutRestrikePHA = (OutRestrike)Convert.ToInt32(arrays[6][3].ScalarAsObject());
-                        result.OutRestrikePHB = (OutRestrike)Convert.ToInt32(arrays[6][4].ScalarAsObject());
-                        result.OutRestrikePHC = (OutRestrike)Convert.ToInt32(arrays[6][5].ScalarAsObject());
-                        result.OutVTHDFlag = (OutVTHD)Convert.ToInt32(arrays[7][1].ScalarAsObject());
-                        result.OutVTHDBefore = Convert.ToDouble(arrays[7][2].ScalarAsObject());
-                        result.OutVTHDAfter = Convert.ToDouble(arrays[7][3].ScalarAsObject());
-                        result.OutVthDIncrease = Convert.ToDouble(arrays[7][4].ScalarAsObject());
+                        (new TableOperations<CSAResult>(connection)).AddNewRecord(result);
+                        int CSAResultID = connection.ExecuteScalar<int>("SELECT @@IDENTITY");
 
-                        m_results.Add(result);
+                        // If using GP module
+                        if (isMonLoc_at_CapCSW == 0)
+                        {
+                            CSAGPResult gpResult = new CSAGPResult();
+                            gpResult.CSAResultID = CSAResultID;
+                            gpResult.OutQConditionRPBFlag = (OutQConditionRPBFlag)Convert.ToInt32(arrays[5][1].ScalarAsObject());
+                            gpResult.OutQConditionMRPC = Convert.ToDouble(arrays[5][2].ScalarAsObject());
+                            gpResult.OutQConditionRPCA = Convert.ToDouble(arrays[5][3].ScalarAsObject());
+                            gpResult.OutQConditionRPCB = Convert.ToDouble(arrays[5][4].ScalarAsObject());
+                            gpResult.OutQConditionRPCC = Convert.ToDouble(arrays[5][5].ScalarAsObject());
+                            gpResult.OutQConditionMPFI = Convert.ToDouble(arrays[5][6].ScalarAsObject());
+                            gpResult.OutQConditionPFA = Convert.ToDouble(arrays[5][7].ScalarAsObject());
+                            gpResult.OutQConditionPFB = Convert.ToDouble(arrays[5][8].ScalarAsObject());
+                            gpResult.OutQConditionPFC = Convert.ToDouble(arrays[5][9].ScalarAsObject());
+                            gpResult.OutRestrikeFlag = (OutRestrike)Convert.ToInt32(arrays[6][1].ScalarAsObject());
+                            gpResult.OutRestrikeNum = Convert.ToInt32(arrays[6][2].ScalarAsObject());
+                            gpResult.OutRestrikePHA = (OutRestrike)Convert.ToInt32(arrays[6][3].ScalarAsObject());
+                            gpResult.OutRestrikePHB = (OutRestrike)Convert.ToInt32(arrays[6][4].ScalarAsObject());
+                            gpResult.OutRestrikePHC = (OutRestrike)Convert.ToInt32(arrays[6][5].ScalarAsObject());
+                            gpResult.OutVTHDFlag = (OutVTHD)Convert.ToInt32(arrays[7][1].ScalarAsObject());
+                            gpResult.OutVTHDBefore = Convert.ToDouble(arrays[7][2].ScalarAsObject());
+                            gpResult.OutVTHDAfter = Convert.ToDouble(arrays[7][3].ScalarAsObject());
+                            gpResult.OutVthDIncrease = Convert.ToDouble(arrays[7][4].ScalarAsObject());
+                            (new TableOperations<CSAGPResult>(connection)).AddNewRecord(gpResult);
+                        }
+                        else {
+
+                        }
+
+                        Log.InfoFormat("CSA for {0} written to the database.", evt.ID);
                     }
                     finally
                     {
@@ -332,34 +176,9 @@ namespace openEASSandBox
             }
         }
 
-        private void Load(AdoDataConnection connection)
+        private Event GetEvent(DataGroup dataGroup, AdoDataConnection connection)
         {
-            // Write analysis results to the database
-            int resultsCount = m_results.Count;
-            int resultID;
-
-            foreach (CSAResult result in m_results)
-            {
-                connection.ExecuteNonQuery("INSERT INTO CSAResult(EventID, IsDataError, IsCapSwitch, IsCapSwitchCondL, OutFrequency, OutVoltagesMax, OutVoltagesMean," +
-                    "OutQConditionRPBFlag, OutQConditionMRPC, OutQConditionRPCA, OutQConditionRPCB, OutQConditionRPCC, OutQConditionMPFI, OutQConditionPFA, OutQConditionPFB, OutQConditionPFC," +
-                    " OutRestrikeFlag, OutRestrikeNum, OutRestrikePHA, OutRestrikePHB, OutRestrikePHC, OutVTHDFlag, OutVTHDBefore, OutVTHDAfter, OutVTHDIncrease) VALUES({0}, {1}, {2}, {3}, {4}, {5}," +
-                    "{6},{7},{8},{9},{10},{11},{12},{13},{14},{15},{16},{17},{18},{19},{20},{21},{22},{23},{24})", result.EventID, result.IsDataError.ToString(), result.IsCapSwitch.ToString(), result.IsCapSwitchCondL.ToString(), result.OutFrequency, result.OutVoltagesMax,
-                    result.OutVoltagesMean, result.OutQConditionRPBFlag.ToString(), result.OutQConditionMRPC, result.OutQConditionRPCA, result.OutQConditionRPCB, result.OutQConditionRPCB,
-                    result.OutQConditionMPFI, result.OutQConditionPFA, result.OutQConditionPFB, result.OutQConditionPFC, result.OutRestrikeFlag.ToString(), result.OutRestrikeNum, result.OutRestrikePHA.ToString(),
-                    result.OutRestrikePHB.ToString(), result.OutRestrikePHC.ToString(), result.OutVTHDFlag.ToString(), result.OutVTHDBefore, result.OutVTHDAfter, result.OutVthDIncrease);
-                resultID = connection.ExecuteScalar<int>("SELECT @@IDENTITY");
-
-            }
-            
-
-            Log.InfoFormat("{0} results written to the database.", resultsCount);
-
-
-        }
-
-        private int GetEventID(DataGroup dataGroup, AdoDataConnection connection)
-        {
-            return connection.ExecuteScalar<int?>("LineID = {0} AND StartTime = {1} AND EndTime = {2} AND Samples = {3}", dataGroup.Line.ID, dataGroup.StartTime, dataGroup.EndTime, dataGroup.Samples) ?? -1;
+            return (new TableOperations<Event>(connection)).QueryRecordWhere("LineID = {0} AND StartTime = {1} AND EndTime = {2} AND Samples = {3}", dataGroup.Line.ID, dataGroup.StartTime, dataGroup.EndTime, dataGroup.Samples);
         }
 
         private double[] GetValueArray(DataSeries dataSeries)
