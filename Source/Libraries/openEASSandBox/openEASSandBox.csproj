@@ -34,8 +34,18 @@
     <Reference Include="FaultData">
       <HintPath>..\..\Dependencies\openXDA\FaultData.dll</HintPath>
     </Reference>
+    <Reference Include="frootCapSwitch">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\frootCapSwitch\application\frootCapSwitch.dll</HintPath>
+    </Reference>
+    <Reference Include="GSF.Core">
+      <HintPath>..\..\Dependencies\GSF\GSF.Core.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Dependencies\NuGet\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MWArray, Version=2.15.0.0, Culture=neutral, PublicKeyToken=e1d84a0da19db86f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\MATLAB\MATLAB Runtime\v85\toolbox\dotnetbuilder\bin\win32\v2.0\MWArray.dll</HintPath>
     </Reference>
     <Reference Include="openXDA.Model">
       <HintPath>..\..\Dependencies\openXDA\openXDA.Model.dll</HintPath>
