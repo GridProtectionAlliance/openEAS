@@ -59,6 +59,7 @@ using Microsoft.Owin.Hosting;
 using GSF.Reflection;
 using GSF.Web.Model;
 using System.Reflection;
+using openEASSandBox;
 
 namespace openEAS
 {
@@ -320,7 +321,7 @@ namespace openEAS
             string newLines = string.Format("{0}{0}", Environment.NewLine);
 
             m_serviceHelper.ErrorLogger.Log(ex);
-            m_serviceHelper.UpdateStatus(UpdateType.Alarm, ex.Message + newLines);
+            m_serviceHelper.UpdateStatus(UpdateType.Alarm, "{0}", ex.Message + newLines);
 
             foreach (IServiceMonitor serviceMonitor in m_serviceMonitors.Adapters)
             {
@@ -451,7 +452,7 @@ namespace openEAS
         {
             try
             {
-                m_serviceHelper.UpdateStatus(requestInfo.Sender.ClientID, UpdateType.Information, string.Format("{0}\r\n\r\n", status), args);
+                m_serviceHelper.UpdateStatus(requestInfo.Sender.ClientID, UpdateType.Information, "{0}\r\n\r\n", status, args);
             }
             catch (Exception ex)
             {
@@ -524,8 +525,7 @@ namespace openEAS
 
                 // Define types for Razor pages - self-hosted web service does not use view controllers so
                 // we must define configuration types for all paged view model based Razor views here:
-                //webServer.PagedViewModelTypes.TryAdd("Users.cshtml", new Tuple<Type, Type>(typeof(UserAccount), typeof(SecurityHub)));
-                //webServer.PagedViewModelTypes.TryAdd("Groups.cshtml", new Tuple<Type, Type>(typeof(SecurityGroup), typeof(SecurityHub)));
+                webServer.PagedViewModelTypes.TryAdd("Settings.cshtml", new Tuple<Type, Type>(typeof(CSALineSetting), typeof(DataHub)));
 
                 // Create new web application hosting environment
                 m_webAppHost = WebApp.Start<Startup>(systemSettings["WebHostURL"].Value);
@@ -596,8 +596,7 @@ namespace openEAS
         {
             try
             {
-                status = status.Replace("{", "{{").Replace("}", "}}");
-                m_serviceHelper.UpdateStatus(type, string.Format("{0}\r\n\r\n", status));
+                m_serviceHelper.UpdateStatus(type, "{0}\r\n\r\n", status);
             }
             catch (Exception ex)
             {

@@ -14,6 +14,10 @@ namespace openEASSandBox
         public double OutFrequency { get; set; }
         public double OutVoltagesMax { get; set; }
         public double OutVoltagesMean { get; set; }
+        public OutVTHD OutVTHDFlag { get; set; }
+        public double OutVTHDBefore { get; set; }
+        public double OutVTHDAfter { get; set; }
+        public double OutVthDIncrease { get; set; }
     }
 
     public class CSAGPResult {
@@ -36,10 +40,6 @@ namespace openEASSandBox
         public OutRestrike OutRestrikePHA { get; set; }
         public OutRestrike OutRestrikePHB { get; set; }
         public OutRestrike OutRestrikePHC { get; set; }
-        public OutVTHD OutVTHDFlag { get; set; }
-        public double OutVTHDBefore { get; set; }
-        public double OutVTHDAfter { get; set; }
-        public double OutVthDIncrease { get; set; }
     }
 
     public class CSASPResult {
@@ -47,6 +47,28 @@ namespace openEASSandBox
         public int ID { get; set; }
 
         public int CSAResultID { get; set; }
+
+        public OutCapXing OutCapXingANotFailedEnergizing { get; set; }
+        public double OutCapXingAReactivePowerContribution { get; set; }
+        public double OutCapXingAReactivePowerDeviation { get; set; }
+        public OutCapXing OutCapXingBNotFailedEnergizing { get; set; }
+        public double OutCapXingBReactivePowerContribution { get; set; }
+        public double OutCapXingBReactivePowerDeviation { get; set; }
+        public OutCapXing OutCapXingCNotFailedEnergizing { get; set; }
+        public double OutCapXingCReactivePowerContribution { get; set; }
+        public double OutCapXingCReactivePowerDeviation { get; set; }
+        public OutRestrikeEnhancedDeenergizationOperation OutRestrikeEnhancedADeenergizationOperation { get; set; }
+        public OutRestrikeEnhancedDeenergizationLevel OutRestrikeEnhancedADeenergizationLevel { get; set; }
+        public OutRestrikeEnhancedDeenergizationOperation OutRestrikeEnhancedBDeenergizationOperation { get; set; }
+        public OutRestrikeEnhancedDeenergizationLevel OutRestrikeEnhancedBDeenergizationLevel { get; set; }
+        public OutRestrikeEnhancedDeenergizationOperation OutRestrikeEnhancedCDeenergizationOperation { get; set; }
+        public OutRestrikeEnhancedDeenergizationLevel OutRestrikeEnhancedCDeenergizationLevel { get; set; }
+        public double OutSyncAPhaseAngleDeviation { get; set; }
+        public OutSyncStatus OutSyncAStatus { get; set; }
+        public double OutSyncBPhaseAngleDeviation { get; set; }
+        public OutSyncStatus OutSyncBStatus { get; set; }
+        public double OutSyncCPhaseAngleDeviation { get; set; }
+        public OutSyncStatus OutSyncCStatus { get; set; }
     }
 
     public enum IsDataErr : int
@@ -88,5 +110,28 @@ namespace openEASSandBox
         Yes = 1
     }
 
+    public enum OutCapXing : int {
+        Successful = 0,
+        Failed = 1
+    }
+
+    public enum OutRestrikeEnhancedDeenergizationOperation: int
+    {
+        Complete = 1,
+        NotComplete = -1
+    }
+
+    public enum OutRestrikeEnhancedDeenergizationLevel : int
+    {
+        None = 1,
+        Some = 2
+    }
+
+    public enum OutSyncStatus : int {
+        Normal = 0,
+        Premature = -1,
+        Delayed = 1,
+        Failed = 2
+    }
 
 }

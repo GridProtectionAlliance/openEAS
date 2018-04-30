@@ -20,12 +20,14 @@
 //       Generated original version of source code.
 //
 //******************************************************************************************************
+using GSF.Data.Model;
 using System.ComponentModel;
 
 namespace openEASSandBox
 {
     public class CSALineSetting
     {
+        [PrimaryKey(true)]
         public int ID { get; set; }
         public int LineID { get; set; }
 

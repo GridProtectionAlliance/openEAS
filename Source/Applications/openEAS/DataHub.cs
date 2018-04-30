@@ -21,10 +21,12 @@
 //
 //******************************************************************************************************
 
+using GSF.Data.Model;
 using GSF.Identity;
 using GSF.Web.Hubs;
 using GSF.Web.Model;
 using GSF.Web.Security;
+using openEASSandBox;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -81,6 +83,53 @@ namespace openEAS
         }
 
         #endregion
+
+        #region [ Setting Table Operations ]
+
+        [AuthorizeHubRole("Administrator")]
+        [RecordOperation(typeof(CSALineSetting), RecordOperation.QueryRecordCount)]
+        public int QuerySettingCount(string filterString)
+        {
+            return DataContext.Table<CSALineSetting>().QueryRecordCount(filterString);
+        }
+
+        [AuthorizeHubRole("Administrator")]
+        [RecordOperation(typeof(CSALineSetting), RecordOperation.QueryRecords)]
+        public IEnumerable<CSALineSetting> QuerySettings(string sortField, bool ascending, int page, int pageSize, string filterString)
+        {
+            return DataContext.Table<CSALineSetting>().QueryRecords(sortField, ascending, page, pageSize, filterString);
+        }
+
+        [AuthorizeHubRole("Administrator")]
+        [RecordOperation(typeof(CSALineSetting), RecordOperation.DeleteRecord)]
+        public void DeleteSetting(int id)
+        {
+            DataContext.Table<CSALineSetting>().DeleteRecord(id);
+        }
+
+        [AuthorizeHubRole("Administrator")]
+        [RecordOperation(typeof(CSALineSetting), RecordOperation.CreateNewRecord)]
+        public CSALineSetting NewSetting()
+        {
+            return DataContext.Table<CSALineSetting>().NewRecord();
+        }
+
+        [AuthorizeHubRole("Administrator")]
+        [RecordOperation(typeof(CSALineSetting), RecordOperation.AddNewRecord)]
+        public void AddNewSetting(CSALineSetting record)
+        {
+            DataContext.Table<CSALineSetting>().AddNewRecord(record);
+        }
+
+        [AuthorizeHubRole("Administrator, Owner")]
+        [RecordOperation(typeof(CSALineSetting), RecordOperation.UpdateRecord)]
+        public void UpdateSetting(CSALineSetting record)
+        {
+            DataContext.Table<CSALineSetting>().UpdateRecord(record);
+        }
+
+        #endregion
+
 
     }
 }

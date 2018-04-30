@@ -31,8 +31,6 @@ namespace openEASSandBox
         #region [ Members ]
         private double m_systemFrequency;
 
-        private List<CSAResult> m_results;
-
         #endregion
 
         #region [ Properties ]
@@ -53,12 +51,6 @@ namespace openEASSandBox
         #endregion
 
         #region [ Constructors ]
-        public openEASSandBoxOperation()
-        {
-            m_results = new List<CSAResult>();
-        }
-
-
         #endregion
 
         #region [ Methods ]
@@ -69,7 +61,6 @@ namespace openEASSandBox
             using (AdoDataConnection connection = new AdoDataConnection("systemSettings"))
             {
                 Process(meterDataSet, connection);
-                Load(connection);
             }
             // Execute data analysis
         }
@@ -133,12 +124,17 @@ namespace openEASSandBox
                         result.OutFrequency = Convert.ToDouble(arrays[3].ScalarAsObject());
                         result.OutVoltagesMax = Convert.ToDouble(arrays[4][1].ScalarAsObject());
                         result.OutVoltagesMean = Convert.ToDouble(arrays[4][2].ScalarAsObject());
-                        (new TableOperations<CSAResult>(connection)).AddNewRecord(result);
-                        int CSAResultID = connection.ExecuteScalar<int>("SELECT @@IDENTITY");
 
                         // If using GP module
                         if (isMonLoc_at_CapCSW == 0)
                         {
+                            result.OutVTHDFlag = (OutVTHD)Convert.ToInt32(arrays[7][1].ScalarAsObject());
+                            result.OutVTHDBefore = Convert.ToDouble(arrays[7][2].ScalarAsObject());
+                            result.OutVTHDAfter = Convert.ToDouble(arrays[7][3].ScalarAsObject());
+                            result.OutVthDIncrease = Convert.ToDouble(arrays[7][4].ScalarAsObject());
+                            (new TableOperations<CSAResult>(connection)).AddNewRecord(result);
+                            int CSAResultID = connection.ExecuteScalar<int>("SELECT @@IDENTITY");
+
                             CSAGPResult gpResult = new CSAGPResult();
                             gpResult.CSAResultID = CSAResultID;
                             gpResult.OutQConditionRPBFlag = (OutQConditionRPBFlag)Convert.ToInt32(arrays[5][1].ScalarAsObject());
@@ -155,14 +151,40 @@ namespace openEASSandBox
                             gpResult.OutRestrikePHA = (OutRestrike)Convert.ToInt32(arrays[6][3].ScalarAsObject());
                             gpResult.OutRestrikePHB = (OutRestrike)Convert.ToInt32(arrays[6][4].ScalarAsObject());
                             gpResult.OutRestrikePHC = (OutRestrike)Convert.ToInt32(arrays[6][5].ScalarAsObject());
-                            gpResult.OutVTHDFlag = (OutVTHD)Convert.ToInt32(arrays[7][1].ScalarAsObject());
-                            gpResult.OutVTHDBefore = Convert.ToDouble(arrays[7][2].ScalarAsObject());
-                            gpResult.OutVTHDAfter = Convert.ToDouble(arrays[7][3].ScalarAsObject());
-                            gpResult.OutVthDIncrease = Convert.ToDouble(arrays[7][4].ScalarAsObject());
                             (new TableOperations<CSAGPResult>(connection)).AddNewRecord(gpResult);
                         }
                         else {
+                            result.OutVTHDFlag = (OutVTHD)Convert.ToInt32(arrays[5][1].ScalarAsObject());
+                            result.OutVTHDBefore = Convert.ToDouble(arrays[5][2].ScalarAsObject());
+                            result.OutVTHDAfter = Convert.ToDouble(arrays[5][3].ScalarAsObject());
+                            result.OutVthDIncrease = Convert.ToDouble(arrays[5][4].ScalarAsObject());
+                            (new TableOperations<CSAResult>(connection)).AddNewRecord(result);
+                            int CSAResultID = connection.ExecuteScalar<int>("SELECT @@IDENTITY");
 
+                            CSASPResult spResult = new CSASPResult();
+                            spResult.CSAResultID = CSAResultID;
+                            spResult.OutCapXingANotFailedEnergizing = (OutCapXing)Convert.ToInt32(arrays[8][1].ScalarAsObject());
+                            spResult.OutCapXingAReactivePowerContribution = Convert.ToDouble(arrays[8][2].ScalarAsObject());
+                            spResult.OutCapXingAReactivePowerDeviation = Convert.ToDouble(arrays[8][3].ScalarAsObject());
+                            spResult.OutCapXingBNotFailedEnergizing = (OutCapXing)Convert.ToInt32(arrays[9][1].ScalarAsObject());
+                            spResult.OutCapXingBReactivePowerContribution = Convert.ToDouble(arrays[9][2].ScalarAsObject());
+                            spResult.OutCapXingBReactivePowerDeviation = Convert.ToDouble(arrays[9][3].ScalarAsObject());
+                            spResult.OutCapXingCNotFailedEnergizing = (OutCapXing)Convert.ToInt32(arrays[10][1].ScalarAsObject());
+                            spResult.OutCapXingCReactivePowerContribution = Convert.ToDouble(arrays[10][2].ScalarAsObject());
+                            spResult.OutCapXingCReactivePowerDeviation = Convert.ToDouble(arrays[10][3].ScalarAsObject());
+                            spResult.OutRestrikeEnhancedADeenergizationOperation = (OutRestrikeEnhancedDeenergizationOperation)Convert.ToInt32(arrays[11][1].ScalarAsObject());
+                            spResult.OutRestrikeEnhancedADeenergizationLevel = (OutRestrikeEnhancedDeenergizationLevel)Convert.ToInt32(arrays[11][2].ScalarAsObject());
+                            spResult.OutRestrikeEnhancedBDeenergizationOperation = (OutRestrikeEnhancedDeenergizationOperation)Convert.ToInt32(arrays[12][1].ScalarAsObject());
+                            spResult.OutRestrikeEnhancedBDeenergizationLevel = (OutRestrikeEnhancedDeenergizationLevel)Convert.ToInt32(arrays[12][2].ScalarAsObject());
+                            spResult.OutRestrikeEnhancedCDeenergizationOperation = (OutRestrikeEnhancedDeenergizationOperation)Convert.ToInt32(arrays[13][1].ScalarAsObject());
+                            spResult.OutRestrikeEnhancedCDeenergizationLevel = (OutRestrikeEnhancedDeenergizationLevel)Convert.ToInt32(arrays[13][2].ScalarAsObject());
+                            spResult.OutSyncAPhaseAngleDeviation = Convert.ToDouble(arrays[14][1].ScalarAsObject());
+                            spResult.OutSyncAStatus = (OutSyncStatus)Convert.ToInt32(arrays[14][2].ScalarAsObject());
+                            spResult.OutSyncBPhaseAngleDeviation = Convert.ToDouble(arrays[14][3].ScalarAsObject());
+                            spResult.OutSyncBStatus = (OutSyncStatus)Convert.ToInt32(arrays[14][4].ScalarAsObject());
+                            spResult.OutSyncCPhaseAngleDeviation = Convert.ToDouble(arrays[14][5].ScalarAsObject());
+                            spResult.OutSyncCStatus = (OutSyncStatus)Convert.ToInt32(arrays[14][6].ScalarAsObject());
+                            (new TableOperations<CSASPResult>(connection)).AddNewRecord(spResult);
                         }
 
                         Log.InfoFormat("CSA for {0} written to the database.", evt.ID);

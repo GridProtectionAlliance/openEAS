@@ -232,6 +232,7 @@
     <None Include="wwwroot\index.cshtml" />
     <None Include="wwwroot\Layout.cshtml" />
     <None Include="wwwroot\RemoteConsole.cshtml" />
+    <None Include="wwwroot\Settings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="DebugHost.resx">
