@@ -34,6 +34,10 @@
     <Reference Include="FaultData">
       <HintPath>..\..\Dependencies\openXDA\FaultData.dll</HintPath>
     </Reference>
+    <Reference Include="GSF.Core, Version=2.2.237.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\GSF\GSF.Core.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Dependencies\NuGet\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
@@ -49,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OpenEASResult.cs" />
     <Compile Include="openEASSandBoxOperation.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
