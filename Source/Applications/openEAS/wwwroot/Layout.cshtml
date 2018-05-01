@@ -158,6 +158,8 @@ const string min = "";
                     <ul class="nav navbar-nav">
                         <li @Raw(pageTitle == "Home" ? "class=\"active\"" : "")><a href="Index.cshtml">Home</a></li>
                         <li @Raw(pageTitle == "Remote Service Console" ? "class=\"active\"" : "")><a href="RemoteConsole.cshtml">Console</a></li>
+                        <li @Raw(pageTitle == "Settings" ? "class=\"active\"" : "")><a href="Settings.cshtml">Settings</a></li>
+
                     </ul>
                     <p class="nav navbar-text navbar-right">
                         <button type="button" class="btn btn-sm btn-info disabled">Log Out</button>
@@ -203,6 +205,7 @@ const string min = "";
     <script src="@Resources.Root/Shared/Scripts/jquery.signalR.js"></script>
     <script src="@Resources.Root/Shared/Scripts/js.cookie.js"></script>
     <script src="@Resources.Root/Shared/Scripts/gsf.web.client.js"></script>
+    <script src="@Resources.Root/Shared/Scripts/jquery.jspanel.js"></script>
 
     <script src="/Scripts/ie10-viewport-bug-workaround.js"></script>
     <script src="/signalr/hubs"></script>
