@@ -84,6 +84,52 @@ namespace openEAS
 
         #endregion
 
+        #region [ Result Table Operations ]
+
+        [AuthorizeHubRole("Administrator")]
+        [RecordOperation(typeof(OpenEASResult), RecordOperation.QueryRecordCount)]
+        public int QueryOpenEASResultCount(string filterString)
+        {
+            return DataContext.Table<OpenEASResult>().QueryRecordCount(filterString);
+        }
+
+        [AuthorizeHubRole("Administrator")]
+        [RecordOperation(typeof(OpenEASResult), RecordOperation.QueryRecords)]
+        public IEnumerable<OpenEASResult> QueryOpenEASResults(string sortField, bool ascending, int page, int pageSize, string filterString)
+        {
+            return DataContext.Table<OpenEASResult>().QueryRecords(sortField, ascending, page, pageSize, filterString);
+        }
+
+        [AuthorizeHubRole("Administrator")]
+        [RecordOperation(typeof(OpenEASResult), RecordOperation.DeleteRecord)]
+        public void DeleteOpenEASResult(int id)
+        {
+            DataContext.Table<OpenEASResult>().DeleteRecord(id);
+        }
+
+        [AuthorizeHubRole("Administrator")]
+        [RecordOperation(typeof(OpenEASResult), RecordOperation.CreateNewRecord)]
+        public OpenEASResult NewOpenEASResult()
+        {
+            return DataContext.Table<OpenEASResult>().NewRecord();
+        }
+
+        [AuthorizeHubRole("Administrator")]
+        [RecordOperation(typeof(OpenEASResult), RecordOperation.AddNewRecord)]
+        public void AddNewOpenEASResult(OpenEASResult record)
+        {
+            DataContext.Table<OpenEASResult>().AddNewRecord(record);
+        }
+
+        [AuthorizeHubRole("Administrator, Owner")]
+        [RecordOperation(typeof(OpenEASResult), RecordOperation.UpdateRecord)]
+        public void UpdateOpenEASResult(OpenEASResult record)
+        {
+            DataContext.Table<OpenEASResult>().UpdateRecord(record);
+        }
+
+        #endregion
+
         #region [ Setting Table Operations ]
 
         [AuthorizeHubRole("Administrator")]
