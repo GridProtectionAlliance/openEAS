@@ -14,6 +14,8 @@
       <!-- openEAS Service -->
       <Feature Id="ServiceFeature" Title="openEAS" Description="Installs the openEAS Windows service to process data from openXDA to find incipient cable faults.">
         <ComponentGroupRef Id="ServiceComponents" />
+        <!-- Web Files -->
+        <?include WebFeatures.wxi ?>
       </Feature>
 
       <!-- openEAS Console -->
@@ -92,12 +94,16 @@
       <?if $(var.Platform) = x64 ?>
       <Directory Id="ProgramFiles64Folder">
         <!-- C:\Program Files\openEAS -->
-        <Directory Id="INSTALLFOLDER" Name="openEAS" />
+        <Directory Id="INSTALLFOLDER" Name="openEAS">
+          <?include WebFolders.wxi ?>
+        </Directory>
       </Directory>
       <?else ?>
       <Directory Id="ProgramFilesFolder">
         <!-- C:\Program Files (x86)\openEAS -->
-        <Directory Id="INSTALLFOLDER" Name="openEAS" />
+        <Directory Id="INSTALLFOLDER" Name="openEAS">
+          <?include WebFolders.wxi ?>
+        </Directory>
       </Directory>
       <?endif ?>
 
@@ -106,6 +112,12 @@
       </Directory>
     </Directory>
   </Fragment>
+
+  <Fragment>
+    <?include WebFiles.wxi ?>
+
+  </Fragment>
+
 
   <Fragment>
     <ComponentGroup Id="ServiceComponents" Directory="INSTALLFOLDER">

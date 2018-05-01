@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2027
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{B3493118-9437-497D-A716-24232CE0D4F2}"
 EndProject
@@ -72,6 +72,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "openEASSandBox", "Libraries
 EndProject
 Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "openEASSetup", "Applications\openEASSetup\openEASSetup.wixproj", "{DA484374-B61E-4126-B9CC-7DCCF0BC77C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WixFolderGen", "Applications\WixFolderGen\WixFolderGen.csproj", "{674F09A7-4477-4CED-90F6-B7512886BC74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,10 @@ Global
 		{DA484374-B61E-4126-B9CC-7DCCF0BC77C9}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{DA484374-B61E-4126-B9CC-7DCCF0BC77C9}.Release|Any CPU.ActiveCfg = Release|x64
 		{DA484374-B61E-4126-B9CC-7DCCF0BC77C9}.Release|Any CPU.Build.0 = Release|x64
+		{674F09A7-4477-4CED-90F6-B7512886BC74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{674F09A7-4477-4CED-90F6-B7512886BC74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{674F09A7-4477-4CED-90F6-B7512886BC74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{674F09A7-4477-4CED-90F6-B7512886BC74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -106,5 +112,9 @@ Global
 		{FF01205F-16D8-4BA9-AD86-F5ECEC6FF4A5} = {B3493118-9437-497D-A716-24232CE0D4F2}
 		{3AAA4C0B-D3F7-4D1D-ACFF-8BDCD898E292} = {0F4F3F4C-55D3-4D76-99AC-1ABD3F69CFBE}
 		{DA484374-B61E-4126-B9CC-7DCCF0BC77C9} = {B3493118-9437-497D-A716-24232CE0D4F2}
+		{674F09A7-4477-4CED-90F6-B7512886BC74} = {B3493118-9437-497D-A716-24232CE0D4F2}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6F3C4C78-274B-4EF5-AC9C-9564D32E25BC}
 	EndGlobalSection
 EndGlobal
