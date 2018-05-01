@@ -48,7 +48,7 @@
     {   //    { "Field", "Label", "Classes" }
         new[] { "ID", "ID", "text-Left" },
         new[] { "EventID", "EventID", "text-left" },
-        new[] { "MyResult", "MyResult", "text-left" }
+        new[] { "IsCapSwitch", "IsCapSwitch", "text-left" }
     };
     ViewBag.ShowSearchFilter = true;
     ViewBag.HideAddNewButton = true;
@@ -61,7 +61,7 @@
 {
     <td width="30%" class="text-left valign-middle" nowrap><a data-bind="attr: { href: '/EASResult.cshtml?EventID=' + EventID}, text: ID"></a></td>
     <td width="30%" class="text-left valign-middle" data-bind="text: EventID"></td>
-    <td width="30%" class="text-left valign-middle" data-bind="text: MyResult"></td>
+    <td width="30%" class="text-left valign-middle" data-bind="text: IsCapSwitch"></td>
 }
 @helper AddNewEditDialog(DataContext dataContext)
 {
@@ -71,6 +71,6 @@
 @section Scripts 
 {
     <script>
-        @Raw(dataContext.RenderViewModelConfiguration<OpenEASResult, DataHub>(ViewBag))       
+        @Raw(dataContext.RenderViewModelConfiguration<CSAResult, DataHub>(ViewBag))       
     </script>
 }

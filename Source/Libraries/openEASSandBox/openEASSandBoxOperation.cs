@@ -12,6 +12,7 @@ using System.Configuration;
 using System.Linq;
 using frootCapSwitch;
 using GSF.Data.Model;
+using System.Data;
 
 namespace openEASSandBox
 {
@@ -200,7 +201,7 @@ namespace openEASSandBox
 
         private Event GetEvent(DataGroup dataGroup, AdoDataConnection connection)
         {
-            return (new TableOperations<Event>(connection)).QueryRecordWhere("LineID = {0} AND StartTime = {1} AND EndTime = {2} AND Samples = {3}", dataGroup.Line.ID, dataGroup.StartTime, dataGroup.EndTime, dataGroup.Samples);
+            return (new TableOperations<Event>(connection)).QueryRecordWhere("LineID = {0} AND StartTime = {1} AND EndTime = {2} AND Samples = {3}", dataGroup.Line.ID, ToDateTime2(connection, dataGroup.StartTime), ToDateTime2(connection, dataGroup.EndTime), dataGroup.Samples);
         }
 
         private double[] GetValueArray(DataSeries dataSeries)
@@ -224,6 +225,17 @@ namespace openEASSandBox
                 .Select(time => time - startTime)
                 .Select(timeSpan => timeSpan.TotalSeconds)
                 .ToArray();
+        }
+
+        private IDbDataParameter ToDateTime2(AdoDataConnection connection, DateTime dateTime)
+        {
+            using (IDbCommand command = connection.Connection.CreateCommand())
+            {
+                IDbDataParameter parameter = command.CreateParameter();
+                parameter.DbType = DbType.DateTime2;
+                parameter.Value = dateTime;
+                return parameter;
+            }
         }
 
 

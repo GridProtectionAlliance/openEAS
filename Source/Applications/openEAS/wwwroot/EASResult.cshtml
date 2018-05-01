@@ -33,9 +33,16 @@
 @using openEAS.Model
 @using openEAS
 @using openEASSandBox
-@using Newtonsoft
-@inherits TemplateBase<AppModel>
+@using Newtonsoft.Json
+@using GSF.Web.Shared
+@using GSF.Web
+@using GSF.Web.Model
+@using Event = openXDA.Model.Event
+
+@inherits ExtendedTemplateBase<AppModel>
 @{
+
+    DataContext dataContext = ViewBag.DataContext;
 
     HttpRequestMessage request = ViewBag.Request;
     Dictionary<string, string> parameters = request.QueryParameters();
@@ -45,8 +52,27 @@
         ViewBag.EventID = parameters["EventID"];
     }
 
-    string thedata = Json.SerializeObject(ViewBag.DataContext.TableOperations<OpenEASResult>().QueryRecordWhere("EventID = {0}", ViewBag.EventID));
-    string ServiceName = "EASService";
+    Event evt = dataContext.Table<Event>().QueryRecordWhere("ID = {0}", ViewBag.EventID);
+    CSAResult result = dataContext.Table<CSAResult>().QueryRecordWhere("EventID = {0}", evt.ID);
+
+    CSALineSetting setting = dataContext.Table<CSALineSetting>().QueryRecordWhere("LineID = {0}", evt.LineID);
+    if (setting == null)
+    {
+        setting = dataContext.Table<CSALineSetting>().NewRecord();
+    }
+
+
+    if (setting.IsMonLocAtCapCSW == 0)
+    {
+        ViewBag.MoreFields = dataContext.Table<CSAGPResult>().QueryRecordWhere("CSAResultID = {0}", result.ID);
+    }
+    else {
+        ViewBag.MoreFields = dataContext.Table<CSASPResult>().QueryRecordWhere("CSAResultID = {0}", result.ID);
+    }
+
+    string theData = JsonConvert.SerializeObject(result);
+    string moreData = JsonConvert.SerializeObject(ViewBag.MoreFields);
+    string ServiceName = "CSAService";
 
 
 }
@@ -59,9 +85,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link rel="shortcut icon" type="image/ico" href="~/favicon.ico" />
     <link href="@("/@GSF/Web/Shared/Content/bootstrap.css")" rel="stylesheet">
-
-    <link rel="stylesheet" href="~/Content/FaultSpecifics.css" type="text/css" />
-
+    <style>
+        .table{
+            max-width: 400px
+        }
+    </style>
 </head>
 
 <body>
@@ -69,9 +97,7 @@
         <thead>
             <tr><td colspan="2" align="center">@ServiceName</td></tr>
         </thead>
-        <tbody>
-
-        </tbody>
+        <tbody></tbody>
     </table>
 
 </body>
@@ -79,9 +105,16 @@
 <script src="@Resources.Root/Shared/Scripts/jquery.js"></script>
 <script src="@Resources.Root/Shared/Scripts/bootstrap.js"></script>
 <script>
-    var record = JSON.parse('@thedata');
+    var record = JSON.parse('@Raw(theData)');
+    var moreData = JSON.parse('@Raw(moreData)');
 
     $.each(Object.keys(record), function(index, key){
         $('.table tbody').append('<tr><td>'+ key +':</td><td>' + record[key] + '</td></tr>');
     });
+
+    $.each(Object.keys(moreData), function (index, key) {
+        if(key != "ID" && key != "CSAResultID")
+            $('.table tbody').append('<tr><td>' + key + ':</td><td>' + moreData[key] + '</td></tr>');
+    });
+
 </script>

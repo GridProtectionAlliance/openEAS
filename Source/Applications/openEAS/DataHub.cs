@@ -87,45 +87,45 @@ namespace openEAS
         #region [ Result Table Operations ]
 
         [AuthorizeHubRole("Administrator")]
-        [RecordOperation(typeof(OpenEASResult), RecordOperation.QueryRecordCount)]
+        [RecordOperation(typeof(CSAResult), RecordOperation.QueryRecordCount)]
         public int QueryOpenEASResultCount(string filterString)
         {
-            return DataContext.Table<OpenEASResult>().QueryRecordCount(filterString);
+            return DataContext.Table<CSAResult>().QueryRecordCount(filterString);
         }
 
         [AuthorizeHubRole("Administrator")]
-        [RecordOperation(typeof(OpenEASResult), RecordOperation.QueryRecords)]
-        public IEnumerable<OpenEASResult> QueryOpenEASResults(string sortField, bool ascending, int page, int pageSize, string filterString)
+        [RecordOperation(typeof(CSAResult), RecordOperation.QueryRecords)]
+        public IEnumerable<CSAResult> QueryOpenEASResults(string sortField, bool ascending, int page, int pageSize, string filterString)
         {
-            return DataContext.Table<OpenEASResult>().QueryRecords(sortField, ascending, page, pageSize, filterString);
+            return DataContext.Table<CSAResult>().QueryRecords(sortField, ascending, page, pageSize, filterString);
         }
 
         [AuthorizeHubRole("Administrator")]
-        [RecordOperation(typeof(OpenEASResult), RecordOperation.DeleteRecord)]
+        [RecordOperation(typeof(CSAResult), RecordOperation.DeleteRecord)]
         public void DeleteOpenEASResult(int id)
         {
-            DataContext.Table<OpenEASResult>().DeleteRecord(id);
+            DataContext.Table<CSAResult>().DeleteRecord(id);
         }
 
         [AuthorizeHubRole("Administrator")]
-        [RecordOperation(typeof(OpenEASResult), RecordOperation.CreateNewRecord)]
-        public OpenEASResult NewOpenEASResult()
+        [RecordOperation(typeof(CSAResult), RecordOperation.CreateNewRecord)]
+        public CSAResult NewOpenEASResult()
         {
-            return DataContext.Table<OpenEASResult>().NewRecord();
+            return DataContext.Table<CSAResult>().NewRecord();
         }
 
         [AuthorizeHubRole("Administrator")]
-        [RecordOperation(typeof(OpenEASResult), RecordOperation.AddNewRecord)]
-        public void AddNewOpenEASResult(OpenEASResult record)
+        [RecordOperation(typeof(CSAResult), RecordOperation.AddNewRecord)]
+        public void AddNewOpenEASResult(CSAResult record)
         {
-            DataContext.Table<OpenEASResult>().AddNewRecord(record);
+            DataContext.Table<CSAResult>().AddNewRecord(record);
         }
 
         [AuthorizeHubRole("Administrator, Owner")]
-        [RecordOperation(typeof(OpenEASResult), RecordOperation.UpdateRecord)]
-        public void UpdateOpenEASResult(OpenEASResult record)
+        [RecordOperation(typeof(CSAResult), RecordOperation.UpdateRecord)]
+        public void UpdateOpenEASResult(CSAResult record)
         {
-            DataContext.Table<OpenEASResult>().UpdateRecord(record);
+            DataContext.Table<CSAResult>().UpdateRecord(record);
         }
 
         #endregion

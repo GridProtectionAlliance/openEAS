@@ -1,4 +1,6 @@
 ﻿using GSF.Data.Model;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace openEASSandBox
 {
@@ -8,13 +10,27 @@ namespace openEASSandBox
         public int ID { get; set; }
 
         public int EventID { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public IsDataErr IsDataError { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public IsCapSwitch IsCapSwitch { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public IsCapSwitchCondL IsCapSwitchCondL { get; set; }
+
         public double OutFrequency { get; set; }
         public double OutVoltagesMax { get; set; }
         public double OutVoltagesMean { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutVTHD OutVTHDFlag { get; set; }
+
         public double OutVTHDBefore { get; set; }
         public double OutVTHDAfter { get; set; }
         public double OutVthDIncrease { get; set; }
@@ -26,7 +42,10 @@ namespace openEASSandBox
 
         public int CSAResultID { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutQConditionRPBFlag OutQConditionRPBFlag { get; set; }
+
         public double OutQConditionMRPC { get; set; }
         public double OutQConditionRPCA { get; set; }
         public double OutQConditionRPCB { get; set; }
@@ -35,10 +54,23 @@ namespace openEASSandBox
         public double OutQConditionPFA { get; set; }
         public double OutQConditionPFB { get; set; }
         public double OutQConditionPFC { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutRestrike OutRestrikeFlag { get; set; }
+
         public int OutRestrikeNum { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutRestrike OutRestrikePHA { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutRestrike OutRestrikePHB { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutRestrike OutRestrikePHC { get; set; }
     }
 
@@ -48,26 +80,68 @@ namespace openEASSandBox
 
         public int CSAResultID { get; set; }
 
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutCapXing OutCapXingANotFailedEnergizing { get; set; }
+
         public double OutCapXingAReactivePowerContribution { get; set; }
         public double OutCapXingAReactivePowerDeviation { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutCapXing OutCapXingBNotFailedEnergizing { get; set; }
+
         public double OutCapXingBReactivePowerContribution { get; set; }
         public double OutCapXingBReactivePowerDeviation { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutCapXing OutCapXingCNotFailedEnergizing { get; set; }
+
         public double OutCapXingCReactivePowerContribution { get; set; }
         public double OutCapXingCReactivePowerDeviation { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutRestrikeEnhancedDeenergizationOperation OutRestrikeEnhancedADeenergizationOperation { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutRestrikeEnhancedDeenergizationLevel OutRestrikeEnhancedADeenergizationLevel { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutRestrikeEnhancedDeenergizationOperation OutRestrikeEnhancedBDeenergizationOperation { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutRestrikeEnhancedDeenergizationLevel OutRestrikeEnhancedBDeenergizationLevel { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutRestrikeEnhancedDeenergizationOperation OutRestrikeEnhancedCDeenergizationOperation { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutRestrikeEnhancedDeenergizationLevel OutRestrikeEnhancedCDeenergizationLevel { get; set; }
+
+
         public double OutSyncAPhaseAngleDeviation { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutSyncStatus OutSyncAStatus { get; set; }
+
         public double OutSyncBPhaseAngleDeviation { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutSyncStatus OutSyncBStatus { get; set; }
+
         public double OutSyncCPhaseAngleDeviation { get; set; }
+
+        [JsonConverter(typeof(StringEnumConverter))]
+        [FieldDataType(System.Data.DbType.String)]
         public OutSyncStatus OutSyncCStatus { get; set; }
     }
 
