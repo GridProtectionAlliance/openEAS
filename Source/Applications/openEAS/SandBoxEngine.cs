@@ -60,7 +60,7 @@ namespace openEAS
         private string m_dbConnectionString;
         private SystemSettings m_systemSettings;
         private LongSynchronizedOperation m_processLatestDataOperation;
-
+        private int m_latestFileGroupID = 0;
         #endregion
 
         #region [ Properties ]
@@ -77,14 +77,16 @@ namespace openEAS
 
                 statusBuilder.AppendLine("Meter Data Status:");
                 statusBuilder.AppendLine(new string('=', 50));
-                statusBuilder.AppendLine($"          XDA Time Zone: {systemSettings.XDATimeZone}");
-                statusBuilder.AppendLine($"       System frequency: {systemSettings.SystemFrequency} Hz");
-                statusBuilder.AppendLine($"       Database Timeout: {systemSettings.DbTimeout} seconds");
-                statusBuilder.AppendLine($"   Max thread pool size: {systemSettings.ProcessingThreadCount}");
-                statusBuilder.AppendLine($"        Max Time Offset: {systemSettings.MaxTimeOffset} hours");
-                statusBuilder.AppendLine($"        Min Time Offset: {systemSettings.MinTimeOffset} hours");
-                statusBuilder.AppendLine($"      Max File Duration: {systemSettings.MaxFileDuration} seconds");
-                statusBuilder.AppendLine($"   File Creation Offset: {systemSettings.MaxFileCreationTimeOffset} hours");
+                statusBuilder.AppendLine($"               XDA Time Zone: {systemSettings.XDATimeZone}");
+                statusBuilder.AppendLine($"            System frequency: {systemSettings.SystemFrequency} Hz");
+                statusBuilder.AppendLine($"            Database Timeout: {systemSettings.DbTimeout} seconds");
+                statusBuilder.AppendLine($"        Max thread pool size: {systemSettings.ProcessingThreadCount}");
+                statusBuilder.AppendLine($"             Max Time Offset: {systemSettings.MaxTimeOffset} hours");
+                statusBuilder.AppendLine($"             Min Time Offset: {systemSettings.MinTimeOffset} hours");
+                statusBuilder.AppendLine($"           Max File Duration: {systemSettings.MaxFileDuration} seconds");
+                statusBuilder.AppendLine($"        File Creation Offset: {systemSettings.MaxFileCreationTimeOffset} hours");
+                statusBuilder.AppendLine($"Last FileGroup(ID) Processed: {m_latestFileGroupID}");
+
                 statusBuilder.AppendLine();
 
 
@@ -124,7 +126,6 @@ namespace openEAS
         private void ProcessLatestDataOperation()
         {
             string latestDataFile = FilePath.GetAbsolutePath(@"LatestData.bin");
-            int latestFileGroupID;
             List<int> newFileGroups;
 
             if ((object)m_systemSettings == null)
@@ -137,10 +138,10 @@ namespace openEAS
                 {
                     dictionary.Compact();
 
-                    if (!dictionary.TryGetValue("latestFileGroupID", out latestFileGroupID))
-                        latestFileGroupID = 0;
+                    if (!dictionary.TryGetValue("latestFileGroupID", out m_latestFileGroupID))
+                        m_latestFileGroupID = 0;
 
-                    newFileGroups = (new TableOperations<FileGroup>(connection)).QueryRecordsWhere("ID > {0}", latestFileGroupID)
+                    newFileGroups = (new TableOperations<FileGroup>(connection)).QueryRecordsWhere("ID > {0}", m_latestFileGroupID)
                         .Select(fileGroup => fileGroup.ID)
                         .Take(100)
                         .OrderBy(id => id)
