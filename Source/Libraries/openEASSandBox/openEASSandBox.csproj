@@ -45,7 +45,11 @@
     </Reference>
     <Reference Include="MWArray, Version=2.15.0.0, Culture=neutral, PublicKeyToken=e1d84a0da19db86f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\MATLAB\MATLAB Runtime\v85\toolbox\dotnetbuilder\bin\win32\v2.0\MWArray.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Windows\assembly\GAC_MSIL\MWArray\2.15.0.0__e1d84a0da19db86f\MWArray.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Dependencies\GSF\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="openXDA.Model">
       <HintPath>..\..\Dependencies\openXDA\openXDA.Model.dll</HintPath>

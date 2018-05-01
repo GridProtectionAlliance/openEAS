@@ -40,6 +40,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Transactions;
 using FaultData.DataAnalysis;
@@ -102,7 +103,7 @@ namespace openEAS
                     if ((object)fileGroup == null)
                         return true;
 
-                    dataFile = fileGroup.DataFiles.FirstOrDefault();
+                    dataFile = (new TableOperations<DataFile>(connection)).QueryRecordWhere("FileGroupID = {0}", fileGroupID);
 
                     if ((object)dataFile == null)
                         return true;
@@ -142,7 +143,7 @@ namespace openEAS
         private List<MeterDataSet> LoadMeterDataSets(AdoDataConnection connection, FileGroup fileGroup)
         {
             List<MeterDataSet> meterDataSets = new List<MeterDataSet>();
-            IEnumerable<Event> eventTable = (new TableOperations<Event>(connection)).QueryRecordsWhere("FileGroupID", fileGroup.ID);
+            IEnumerable<Event> eventTable = (new TableOperations<Event>(connection)).QueryRecordsWhere("FileGroupID = {0}", fileGroup.ID);
 
             MeterDataSet meterDataSet;
             DataGroup dataGroup;
@@ -151,6 +152,7 @@ namespace openEAS
             {
                 meterDataSet = new MeterDataSet();
                 meterDataSet.Meter = (new TableOperations<Meter>(connection)).QueryRecordWhere("ID = {0}", eventGroup.Key);
+                meterDataSet.Meter.ConnectionFactory = () => new AdoDataConnection(connection.Connection, typeof(SqlDataAdapter), false);
 
                 foreach (Event evt in eventGroup)
                 {
