@@ -15,6 +15,9 @@
   <Component Id="wwwroot_Results_cshtml">
     <File Id="wwwroot_Results.cshtml" Name="Results.cshtml" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\Results.cshtml" />
   </Component>
+  <Component Id="wwwroot_Settings_cshtml">
+    <File Id="wwwroot_Settings.cshtml" Name="Settings.cshtml" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\Settings.cshtml" />
+  </Component>
 </ComponentGroup>
 <ComponentGroup Id="wwwroot_Content_Components" Directory="wwwroot_CONTENTFOLDER">
   <Component Id="wwwroot_Content_Site_css">

@@ -17,6 +17,9 @@
   <ItemGroup>
     <Content Include="INSTALL_LICENSE.rtf" />
     <Content Include="packages.config" />
+    <Content Include="WebFeatures.wxi" />
+    <Content Include="WebFiles.wxi" />
+    <Content Include="WebFolders.wxi" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUtilExtension">
