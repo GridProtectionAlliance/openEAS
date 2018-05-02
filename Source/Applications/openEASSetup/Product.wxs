@@ -152,6 +152,7 @@
       <ComponentRef Id="log4net" />
 
       <!-- GSF Dependencies -->
+      <ComponentRef Id="AjaxMin" />
       <ComponentRef Id="Antlr3.Runtime" />
       <ComponentRef Id="ExpressionEvaluator" />
       <ComponentRef Id="GSF.COMTRADE" />
@@ -246,6 +247,9 @@
       </Component>
 
       <!-- GSF Dependencies -->
+      <Component Id="AjaxMin">
+        <File Id="AjaxMin.dll" Name="AjaxMin.dll" Source="$(var.SolutionDir)\Dependencies\GSF\AjaxMin.dll" />
+      </Component>
       <Component Id="Antlr3.Runtime">
         <File Id="Antlr3.Runtime.dll" Name="Antlr3.Runtime.dll" Source="$(var.SolutionDir)\Dependencies\GSF\Antlr3.Runtime.dll" />
       </Component>
