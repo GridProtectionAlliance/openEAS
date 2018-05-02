@@ -29,7 +29,7 @@ namespace WixFolderGen
             ProjectName = projectName;
             RootFolderName = rootFolderName;
             ApplicationFolder = applicationFolder;
-            SolutionRelativeRootFolder = applicationFolder + "\\" + ProjectName + "\\" + RootFolderName;
+            SolutionRelativeRootFolder = applicationFolder + "\\" + RootFolderName;
             MaxWixIDLength = 72;
             ApplicationPath = "..\\..\\..\\..\\..\\Source\\" + applicationFolder;
             SourceFolder = ApplicationPath + "\\" + RootFolderName;

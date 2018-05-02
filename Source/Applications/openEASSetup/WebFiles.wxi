@@ -1,72 +1,75 @@
 <Include>
 <ComponentGroup Id="wwwroot_Components" Directory="wwwroot_WWWROOTFOLDER">
+  <Component Id="wwwroot_EASResult_cshtml">
+    <File Id="wwwroot_EASResult.cshtml" Name="EASResult.cshtml" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\EASResult.cshtml" />
+  </Component>
   <Component Id="wwwroot_index_cshtml">
-    <File Id="wwwroot_index.cshtml" Name="index.cshtml" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\index.cshtml" />
+    <File Id="wwwroot_index.cshtml" Name="index.cshtml" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\index.cshtml" />
   </Component>
   <Component Id="wwwroot_Layout_cshtml">
-    <File Id="wwwroot_Layout.cshtml" Name="Layout.cshtml" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\Layout.cshtml" />
+    <File Id="wwwroot_Layout.cshtml" Name="Layout.cshtml" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\Layout.cshtml" />
   </Component>
   <Component Id="wwwroot_RemoteConsole_cshtml">
-    <File Id="wwwroot_RemoteConsole.cshtml" Name="RemoteConsole.cshtml" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\RemoteConsole.cshtml" />
+    <File Id="wwwroot_RemoteConsole.cshtml" Name="RemoteConsole.cshtml" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\RemoteConsole.cshtml" />
   </Component>
-  <Component Id="wwwroot_Settings_cshtml">
-    <File Id="wwwroot_Settings.cshtml" Name="Settings.cshtml" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\Settings.cshtml" />
+  <Component Id="wwwroot_Results_cshtml">
+    <File Id="wwwroot_Results.cshtml" Name="Results.cshtml" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\Results.cshtml" />
   </Component>
 </ComponentGroup>
 <ComponentGroup Id="wwwroot_Content_Components" Directory="wwwroot_CONTENTFOLDER">
   <Component Id="wwwroot_Content_Site_css">
-    <File Id="wwwroot_Content_Site.css" Name="Site.css" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\Content\Site.css" />
+    <File Id="wwwroot_Content_Site.css" Name="Site.css" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\Content\Site.css" />
   </Component>
 </ComponentGroup>
 <ComponentGroup Id="wwwroot_fonts_Components" Directory="wwwroot_FONTSFOLDER">
   <Component Id="wwwroot_fonts_fontawesome_webfont_eot">
-    <File Id="wwwroot_fonts_fontawesome_webfont.eot" Name="fontawesome-webfont.eot" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\fonts\fontawesome-webfont.eot" />
+    <File Id="wwwroot_fonts_fontawesome_webfont.eot" Name="fontawesome-webfont.eot" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\fonts\fontawesome-webfont.eot" />
   </Component>
   <Component Id="wwwroot_fonts_fontawesome_webfont_svg">
-    <File Id="wwwroot_fonts_fontawesome_webfont.svg" Name="fontawesome-webfont.svg" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\fonts\fontawesome-webfont.svg" />
+    <File Id="wwwroot_fonts_fontawesome_webfont.svg" Name="fontawesome-webfont.svg" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\fonts\fontawesome-webfont.svg" />
   </Component>
   <Component Id="wwwroot_fonts_fontawesome_webfont_ttf">
-    <File Id="wwwroot_fonts_fontawesome_webfont.ttf" Name="fontawesome-webfont.ttf" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\fonts\fontawesome-webfont.ttf" />
+    <File Id="wwwroot_fonts_fontawesome_webfont.ttf" Name="fontawesome-webfont.ttf" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\fonts\fontawesome-webfont.ttf" />
   </Component>
   <Component Id="wwwroot_fonts_fontawesome_webfont_woff">
-    <File Id="wwwroot_fonts_fontawesome_webfont.woff" Name="fontawesome-webfont.woff" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\fonts\fontawesome-webfont.woff" />
+    <File Id="wwwroot_fonts_fontawesome_webfont.woff" Name="fontawesome-webfont.woff" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\fonts\fontawesome-webfont.woff" />
   </Component>
   <Component Id="wwwroot_fonts_fontawesome_webfont_woff2">
-    <File Id="wwwroot_fonts_fontawesome_webfont.woff2" Name="fontawesome-webfont.woff2" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\fonts\fontawesome-webfont.woff2" />
+    <File Id="wwwroot_fonts_fontawesome_webfont.woff2" Name="fontawesome-webfont.woff2" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\fonts\fontawesome-webfont.woff2" />
   </Component>
   <Component Id="wwwroot_fonts_FontAwesome_otf">
-    <File Id="wwwroot_fonts_FontAwesome.otf" Name="FontAwesome.otf" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\fonts\FontAwesome.otf" />
+    <File Id="wwwroot_fonts_FontAwesome.otf" Name="FontAwesome.otf" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\fonts\FontAwesome.otf" />
   </Component>
   <Component Id="wwwroot_fonts_glyphicons_halflings_regular_eot">
-    <File Id="wwwroot_fonts_glyphicons_halflings_regular.eot" Name="glyphicons-halflings-regular.eot" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\fonts\glyphicons-halflings-regular.eot" />
+    <File Id="wwwroot_fonts_glyphicons_halflings_regular.eot" Name="glyphicons-halflings-regular.eot" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\fonts\glyphicons-halflings-regular.eot" />
   </Component>
   <Component Id="wwwroot_fonts_glyphicons_halflings_regular_svg">
-    <File Id="wwwroot_fonts_glyphicons_halflings_regular.svg" Name="glyphicons-halflings-regular.svg" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\fonts\glyphicons-halflings-regular.svg" />
+    <File Id="wwwroot_fonts_glyphicons_halflings_regular.svg" Name="glyphicons-halflings-regular.svg" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\fonts\glyphicons-halflings-regular.svg" />
   </Component>
   <Component Id="wwwroot_fonts_glyphicons_halflings_regular_ttf">
-    <File Id="wwwroot_fonts_glyphicons_halflings_regular.ttf" Name="glyphicons-halflings-regular.ttf" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\fonts\glyphicons-halflings-regular.ttf" />
+    <File Id="wwwroot_fonts_glyphicons_halflings_regular.ttf" Name="glyphicons-halflings-regular.ttf" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\fonts\glyphicons-halflings-regular.ttf" />
   </Component>
   <Component Id="wwwroot_fonts_glyphicons_halflings_regular_woff">
-    <File Id="wwwroot_fonts_glyphicons_halflings_regular.woff" Name="glyphicons-halflings-regular.woff" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\fonts\glyphicons-halflings-regular.woff" />
+    <File Id="wwwroot_fonts_glyphicons_halflings_regular.woff" Name="glyphicons-halflings-regular.woff" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\fonts\glyphicons-halflings-regular.woff" />
   </Component>
   <Component Id="wwwroot_fonts_glyphicons_halflings_regular_woff2">
-    <File Id="wwwroot_fonts_glyphicons_halflings_regular.woff2" Name="glyphicons-halflings-regular.woff2" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\fonts\glyphicons-halflings-regular.woff2" />
+    <File Id="wwwroot_fonts_glyphicons_halflings_regular.woff2" Name="glyphicons-halflings-regular.woff2" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\fonts\glyphicons-halflings-regular.woff2" />
   </Component>
 </ComponentGroup>
 <ComponentGroup Id="wwwroot_Images_Components" Directory="wwwroot_IMAGESFOLDER">
   <Component Id="wwwroot_Images_gpa_smalllock_png">
-    <File Id="wwwroot_Images_gpa_smalllock.png" Name="gpa-smalllock.png" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\Images\gpa-smalllock.png" />
+    <File Id="wwwroot_Images_gpa_smalllock.png" Name="gpa-smalllock.png" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\Images\gpa-smalllock.png" />
   </Component>
   <Component Id="wwwroot_Images_openEAS_png">
-    <File Id="wwwroot_Images_openEAS.png" Name="openEAS.png" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\Images\openEAS.png" />
+    <File Id="wwwroot_Images_openEAS.png" Name="openEAS.png" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\Images\openEAS.png" />
   </Component>
 </ComponentGroup>
 <ComponentGroup Id="wwwroot_Scripts_Components" Directory="wwwroot_SCRIPTSFOLDER">
   <Component Id="wwwroot_Scripts_ie10_viewport_bug_workaround_js">
-    <File Id="wwwroot_Scripts_ie10_viewport_bug_workaround.js" Name="ie10-viewport-bug-workaround.js" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\Scripts\ie10-viewport-bug-workaround.js" />
+    <File Id="wwwroot_Scripts_ie10_viewport_bug_workaround.js" Name="ie10-viewport-bug-workaround.js" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\Scripts\ie10-viewport-bug-workaround.js" />
   </Component>
   <Component Id="wwwroot_Scripts_Site_js">
-    <File Id="wwwroot_Scripts_Site.js" Name="Site.js" Source="$(var.SolutionDir)Applications\openEAS\openEAS\wwwroot\Scripts\Site.js" />
+    <File Id="wwwroot_Scripts_Site.js" Name="Site.js" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\Scripts\Site.js" />
   </Component>
 </ComponentGroup>
 </Include>

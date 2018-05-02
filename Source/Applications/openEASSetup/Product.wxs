@@ -143,6 +143,7 @@
       <!-- XDA Libraries -->
       <ComponentRef Id="FaultAlgorithms" />
       <ComponentRef Id="FaultData" />
+      <ComponentRef Id="openXDA.Model" />
 
       <!-- DotNetZip Dependencies -->
       <ComponentRef Id="Ionic.Zlib" />
@@ -161,6 +162,7 @@
       <ComponentRef Id="GSF.Security" />
       <ComponentRef Id="GSF.ServiceProcess" />
       <ComponentRef Id="GSF.TimeSeries" />
+      <ComponentRef Id="GSF.Web" />
 
       <!-- openHistorian Dependencies -->
       <ComponentRef Id="crypto" />
@@ -228,6 +230,10 @@
       <Component Id="FaultData">
         <File Id="FaultData.dll" Name="FaultData.dll" Source="$(var.SolutionDir)\Dependencies\openXDA\FaultData.dll" />
       </Component>
+      <Component Id="openXDA.Model">
+        <File Id="openXDA.Model.dll" Name="openXDA.Model.dll" Source="$(var.SolutionDir)\Dependencies\openXDA\openXDA.Model.dll" />
+      </Component>
+
 
       <!-- DotNetZip Dependencies -->
       <Component Id="Ionic.Zlib">
@@ -269,6 +275,9 @@
       </Component>
       <Component Id="GSF.TimeSeries">
         <File Id="GSF.TimeSeries.dll" Name="GSF.TimeSeries.dll" Source="$(var.SolutionDir)\Dependencies\GSF\GSF.TimeSeries.dll" />
+      </Component>
+      <Component Id="GSF.Web">
+        <File Id="GSF.Web.dll" Name="GSF.Web.dll" Source="$(var.SolutionDir)\Dependencies\GSF\GSF.Web.dll" />
       </Component>
 
       <!-- openHistorian Dependencies -->
