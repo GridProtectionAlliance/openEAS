@@ -36,5 +36,5 @@ GO
 --END
 --GO
 --
---INSERT INTO EASExtension VALUES('openEAS', 'HasopenEASResult')
+--INSERT INTO EASExtension VALUES('openEAS', 'HasopenEASResult', 'http://localhost:8790/EASResults.cshtml')
 --GO
