@@ -84,6 +84,8 @@ namespace openEAS.Configuration
         private TimeZoneInfo m_xdaTimeZoneInfo;
         private List<string> m_watchDirectoryList;
 
+        private openEASSettings m_openEASSettings;
+
         #endregion
 
         #region [ Constructors ]
@@ -108,6 +110,15 @@ namespace openEAS.Configuration
         #endregion
 
         #region [ Properties ]
+
+        public openEASSettings openEASSettings
+        {
+            get
+            {
+                return m_openEASSettings;
+            }
+        }
+
 
         /// <summary>
         /// Gets or sets the connection string to the database.

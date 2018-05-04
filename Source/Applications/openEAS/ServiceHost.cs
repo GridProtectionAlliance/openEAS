@@ -192,6 +192,7 @@ namespace openEAS
 
             // Set up the analysis engine
             m_extensibleDisturbanceAnalysisEngine = new SandBoxEngine();
+            AppDomain.CurrentDomain.AssemblyResolve += m_extensibleDisturbanceAnalysisEngine.AssemblyResolveHandler;
 
             // Process latest data at startup
             process = m_serviceHelper.FindProcess("ProcessLatestData");

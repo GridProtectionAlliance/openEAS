@@ -49,6 +49,7 @@ using System.Text;
 using GSF.Data;
 using openXDA.Model;
 using GSF.Data.Model;
+using System.Reflection;
 
 namespace openEAS
 {
@@ -202,6 +203,18 @@ namespace openEAS
                 return SystemSettings.ToConnectionString(settings);
             }
         }
+
+        public Assembly AssemblyResolveHandler(object sender, ResolveEventArgs args)
+        {
+            AssemblyName assemblyName = new AssemblyName(args.Name);
+            string path;
+
+            if (m_systemSettings.openEASSettings.DependentAssemblyLookup.TryGetValue(assemblyName.Name, out path))
+                return Assembly.LoadFile(path);
+
+            return null;
+        }
+
 
         #endregion
 

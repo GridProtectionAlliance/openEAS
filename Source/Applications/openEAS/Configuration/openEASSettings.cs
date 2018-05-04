@@ -1,12 +1,35 @@
-﻿using System;
+﻿using GSF;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
+using System.Configuration;
 
 namespace openEAS.Configuration
 {
     public class openEASSettings
     {
+        private Dictionary<string, string> m_dependentAssemblyLookup;
+
+        [Setting]
+        [DefaultValue("")]
+        public string DependentAssemblies
+        {
+            get
+            {
+                return m_dependentAssemblyLookup.JoinKeyValuePairs();
+            }
+            set
+            {
+                m_dependentAssemblyLookup = value.ParseKeyValuePairs();
+            }
+        }
+
+        public Dictionary<string, string> DependentAssemblyLookup
+        {
+            get
+            {
+                return m_dependentAssemblyLookup;
+            }
+        }
+
     }
 }
