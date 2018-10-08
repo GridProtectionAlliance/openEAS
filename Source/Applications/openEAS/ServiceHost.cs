@@ -60,6 +60,8 @@ using GSF.Reflection;
 using GSF.Web.Model;
 using System.Reflection;
 using openEASSandBox;
+using GSF.Security.Model;
+using GSF.Web.Security;
 
 namespace openEAS
 {
@@ -518,6 +520,7 @@ namespace openEAS
                 Model.Global.DefaultCorsMethods = systemSettings["DefaultCorsMethods"].Value;
                 Model.Global.DefaultCorsSupportsCredentials = systemSettings["DefaultCorsSupportsCredentials"].ValueAsBoolean(true);
 
+
                 // Attach to default web server events
                 WebServer webServer = WebServer.Default;
                 webServer.StatusMessage += WebServer_StatusMessage;
@@ -526,8 +529,9 @@ namespace openEAS
 
                 // Define types for Razor pages - self-hosted web service does not use view controllers so
                 // we must define configuration types for all paged view model based Razor views here:
-                webServer.PagedViewModelTypes.TryAdd("Result.cshtml", new Tuple<Type, Type>(typeof(CSAResult), typeof(DataHub)));
-                webServer.PagedViewModelTypes.TryAdd("Settings.cshtml", new Tuple<Type, Type>(typeof(CSALineSetting), typeof(DataHub)));
+                webServer.PagedViewModelTypes.TryAdd("Result.cshtml", new Tuple<Type, Type>(typeof(OpenEASResult), typeof(DataHub)));
+                webServer.PagedViewModelTypes.TryAdd("Users.cshtml", new Tuple<Type, Type>(typeof(UserAccount), typeof(SecurityHub)));
+                webServer.PagedViewModelTypes.TryAdd("Groups.cshtml", new Tuple<Type, Type>(typeof(SecurityGroup), typeof(SecurityHub)));
 
                 // Create new web application hosting environment
                 m_webAppHost = WebApp.Start<Startup>(systemSettings["WebHostURL"].Value);
