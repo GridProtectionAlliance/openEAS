@@ -207,9 +207,9 @@ namespace openEAS
         public Assembly AssemblyResolveHandler(object sender, ResolveEventArgs args)
         {
             AssemblyName assemblyName = new AssemblyName(args.Name);
-            string path;
+            string path = "";
 
-            if (m_systemSettings.openEASSettings.DependentAssemblyLookup.TryGetValue(assemblyName.Name, out path))
+            if (m_systemSettings.openEASSettings?.DependentAssemblyLookup.TryGetValue(assemblyName.Name, out path) ?? false)
                 return Assembly.LoadFile(path);
 
             return null;

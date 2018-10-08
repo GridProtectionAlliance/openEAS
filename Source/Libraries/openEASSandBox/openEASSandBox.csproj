@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -34,18 +35,16 @@
     <Reference Include="FaultData">
       <HintPath>..\..\Dependencies\openXDA\FaultData.dll</HintPath>
     </Reference>
-    <Reference Include="frootCapSwitch">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\frootCapSwitch\application\frootCapSwitch.dll</HintPath>
-    </Reference>
     <Reference Include="GSF.Core">
       <HintPath>..\..\Dependencies\GSF\GSF.Core.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Dependencies\NuGet\log4net.2.0.3\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MWArray, Version=2.15.0.0, Culture=neutral, PublicKeyToken=e1d84a0da19db86f, processorArchitecture=MSIL">
+    <Reference Include="MWArray, Version=2.18.1.0, Culture=neutral, PublicKeyToken=e1d84a0da19db86f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\..\..\Windows\assembly\GAC_MSIL\MWArray\2.15.0.0__e1d84a0da19db86f\MWArray.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\MATLAB\MATLAB Runtime\v95\toolbox\dotnetbuilder\bin\win64\v4.0\MWArray.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -53,6 +52,9 @@
     </Reference>
     <Reference Include="openXDA.Model">
       <HintPath>..\..\Dependencies\openXDA\openXDA.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="SPCapSwitchPI">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files\EPRI\SPCapSwitchPI\application\SPCapSwitchPI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

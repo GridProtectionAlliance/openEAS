@@ -25,46 +25,36 @@ using System.ComponentModel;
 
 namespace openEASSandBox
 {
+    [TableName("CSA_2_LineSetting")]
     public class CSALineSetting
     {
         [PrimaryKey(true)]
         public int ID { get; set; }
         public int LineID { get; set; }
 
-        [DefaultValue(8)]
+        [DefaultValue(28)]
         public int NumArgsOut { get; set; }
 
-        [DefaultValue(0)]
-        public int IsMonLocAtCapCSW { get; set; }
+        [DefaultValue(5.0D)]
+        public double ITHDLimit { get; set; }
+
+        [DefaultValue(500.0D)]
+        public double NominalVoltage { get; set; }
 
         [DefaultValue(5.0D)]
-        public double VTHDLimit { get; set; }
+        public double UnloadedCurrent { get; set; }
+        
+        [DefaultValue(161.0D)]
+        public double NominalBuskVLL { get; set; }
 
-        [DefaultValue(10.0D)]
-        public double UnbalLimit { get; set; }
-
-        [DefaultValue(1)]
-        public int CapGrounding { get; set; }
+        [DefaultValue(4.0D)]
+        public double T2ndClosing { get; set; }
 
         [DefaultValue(0.0D)]
-        public double RefQ3 { get; set; }
+        public double CapSwitcherType { get; set; }
 
-        [DefaultValue(15.0D)]
-        public double NormalUpper { get; set; }
+        [DefaultValue(18000.0D)]
+        public double StepSizeQ3 { get; set; }
 
-        [DefaultValue(-15.0D)]
-        public double NormalLower { get; set; }
-
-        [DefaultValue(-15.0D)]
-        public double PrematureUpper { get; set; }
-
-        [DefaultValue(-90.0D)]
-        public double PrematureLower { get; set; }
-
-        [DefaultValue(15.0D)]
-        public double DelayedUpper { get; set; }
-
-        [DefaultValue(90.0D)]
-        public double DelayedLower { get; set; }
     }
 }

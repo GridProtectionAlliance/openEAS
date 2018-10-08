@@ -4,6 +4,7 @@ using Newtonsoft.Json.Converters;
 
 namespace openEASSandBox
 {
+    [TableName("CSA_2_Result")]
     public class CSAResult
     {
         [PrimaryKey(true)]
@@ -17,132 +18,143 @@ namespace openEASSandBox
 
         [JsonConverter(typeof(StringEnumConverter))]
         [FieldDataType(System.Data.DbType.String)]
-        public IsCapSwitch IsCapSwitch { get; set; }
+        public OperationType OutOpTypeA { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         [FieldDataType(System.Data.DbType.String)]
-        public IsCapSwitchCondL IsCapSwitchCondL { get; set; }
-
-        public double OutFrequency { get; set; }
-        public double OutVoltagesMax { get; set; }
-        public double OutVoltagesMean { get; set; }
+        public OperationType OutOpTypeB { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         [FieldDataType(System.Data.DbType.String)]
-        public OutVTHD OutVTHDFlag { get; set; }
-
-        public double OutVTHDBefore { get; set; }
-        public double OutVTHDAfter { get; set; }
-        public double OutVthDIncrease { get; set; }
-    }
-
-    public class CSAGPResult {
-        [PrimaryKey(true)]
-        public int ID { get; set; }
-
-        public int CSAResultID { get; set; }
+        public OperationType OutOpTypeC { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         [FieldDataType(System.Data.DbType.String)]
-        public OutQConditionRPBFlag OutQConditionRPBFlag { get; set; }
-
-        public double OutQConditionMRPC { get; set; }
-        public double OutQConditionRPCA { get; set; }
-        public double OutQConditionRPCB { get; set; }
-        public double OutQConditionRPCC { get; set; }
-        public double OutQConditionMPFI { get; set; }
-        public double OutQConditionPFA { get; set; }
-        public double OutQConditionPFB { get; set; }
-        public double OutQConditionPFC { get; set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        [FieldDataType(System.Data.DbType.String)]
-        public OutRestrike OutRestrikeFlag { get; set; }
-
-        public int OutRestrikeNum { get; set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        [FieldDataType(System.Data.DbType.String)]
-        public OutRestrike OutRestrikePHA { get; set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        [FieldDataType(System.Data.DbType.String)]
-        public OutRestrike OutRestrikePHB { get; set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        [FieldDataType(System.Data.DbType.String)]
-        public OutRestrike OutRestrikePHC { get; set; }
-    }
-
-    public class CSASPResult {
-        [PrimaryKey(true)]
-        public int ID { get; set; }
-
-        public int CSAResultID { get; set; }
+        public IsResonance IsResonanceA { get; set; }
+        public double ResFrequencyA { get; set; }
+        public double PeakPUVA { get; set; }
+        public double VrmsA_bf { get; set; }
+        public double VrmsA_af { get; set; }
+        public double DVrmsA { get; set; }
+        public double PeakIA { get; set; }
+        public double IrmsA_bf { get; set; }
+        public double IrmsA_af { get; set; }
+        public double DIrmsA { get; set; }
+        public double SwitchXientFreqIAHz { get; set; }
+        public double DQA { get; set; }
+        public double PFAInit { get; set; }
+        public double PFAEnd { get; set; }
+        public double THDIA_bf { get; set; }
+        public double THDIA_af { get; set; }
+        public double DTHDIA { get; set; }
+        public double THDVA_bf { get; set; }
+        public double THDVA_af { get; set; }
+        public double DTHDVA { get; set; }
+        public int StepA_bf { get; set; }
+        public int StepA_af { get; set; }
+        public double XCapA_bf { get; set; }
+        public double XCapA_af { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         [FieldDataType(System.Data.DbType.String)]
-        public OutCapXing OutCapXingANotFailedEnergizing { get; set; }
-
-        public double OutCapXingAReactivePowerContribution { get; set; }
-        public double OutCapXingAReactivePowerDeviation { get; set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        [FieldDataType(System.Data.DbType.String)]
-        public OutCapXing OutCapXingBNotFailedEnergizing { get; set; }
-
-        public double OutCapXingBReactivePowerContribution { get; set; }
-        public double OutCapXingBReactivePowerDeviation { get; set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        [FieldDataType(System.Data.DbType.String)]
-        public OutCapXing OutCapXingCNotFailedEnergizing { get; set; }
-
-        public double OutCapXingCReactivePowerContribution { get; set; }
-        public double OutCapXingCReactivePowerDeviation { get; set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        [FieldDataType(System.Data.DbType.String)]
-        public OutRestrikeEnhancedDeenergizationOperation OutRestrikeEnhancedADeenergizationOperation { get; set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        [FieldDataType(System.Data.DbType.String)]
-        public OutRestrikeEnhancedDeenergizationLevel OutRestrikeEnhancedADeenergizationLevel { get; set; }
+        public IsResonance IsResonanceB { get; set; }
+        public double ResFrequencyB { get; set; }
+        public double PeakPUVB { get; set; }
+        public double VrmsB_bf { get; set; }
+        public double VrmsB_af { get; set; }
+        public double DVrmsB { get; set; }
+        public double PeakIB { get; set; }
+        public double IrmsB_bf { get; set; }
+        public double IrmsB_af { get; set; }
+        public double DIrmsB { get; set; }
+        public double SwitchXientFreqIBHz { get; set; }
+        public double DQB { get; set; }
+        public double PFBInit { get; set; }
+        public double PFBEnd { get; set; }
+        public double THDIB_bf { get; set; }
+        public double THDIB_af { get; set; }
+        public double DTHDIB { get; set; }
+        public double THDVB_bf { get; set; }
+        public double THDVB_af { get; set; }
+        public double DTHDVB { get; set; }
+        public double StepB_bf { get; set; }
+        public double StepB_af { get; set; }
+        public double XCapB_bf { get; set; }
+        public double XCapB_af { get; set; }
 
         [JsonConverter(typeof(StringEnumConverter))]
         [FieldDataType(System.Data.DbType.String)]
-        public OutRestrikeEnhancedDeenergizationOperation OutRestrikeEnhancedBDeenergizationOperation { get; set; }
+        public IsResonance IsResonanceC { get; set; }
+        public double ResFrequencyC { get; set; }
+        public double PeakPUVC { get; set; }
+        public double VrmsC_bf { get; set; }
+        public double VrmsC_af { get; set; }
+        public double DVrmsC { get; set; }
+        public double PeakIC { get; set; }
+        public double IrmsC_bf { get; set; }
+        public double IrmsC_af { get; set; }
+        public double DIrmsC { get; set; }
+        public double SwitchXientFreqICHz { get; set; }
+        public double DQC { get; set; }
+        public double PFCInit { get; set; }
+        public double PFCEnd { get; set; }
+        public double THDIC_bf { get; set; }
+        public double THDIC_af { get; set; }
+        public double DTHDIC { get; set; }
+        public double THDVC_bf { get; set; }
+        public double THDVC_af { get; set; }
+        public double DTHDVC { get; set; }
+        public double StepC_bf { get; set; }
+        public double StepC_af { get; set; }
+        public double XCapC_bf { get; set; }
+        public double XCapC_af { get; set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
-        [FieldDataType(System.Data.DbType.String)]
-        public OutRestrikeEnhancedDeenergizationLevel OutRestrikeEnhancedBDeenergizationLevel { get; set; }
+        public double SwitchedOutDurA { get; set; }
+        public double SwitchedOutDurB { get; set; }
+        public double SwitchedOutDurC { get; set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
-        [FieldDataType(System.Data.DbType.String)]
-        public OutRestrikeEnhancedDeenergizationOperation OutRestrikeEnhancedCDeenergizationOperation { get; set; }
+        public double StepChangeRpA { get; set; }
+        public double StepChangeRpB { get; set; }
+        public double StepChangeRpC { get; set; }
 
-        [JsonConverter(typeof(StringEnumConverter))]
-        [FieldDataType(System.Data.DbType.String)]
-        public OutRestrikeEnhancedDeenergizationLevel OutRestrikeEnhancedCDeenergizationLevel { get; set; }
+        public double RpBeforeSwitchedOutA { get; set; }
+        public double RpBeforeSwitchedOutB { get; set; }
+        public double RpBeforeSwitchedOutC { get; set; }
+
+        public double RpAfterSwitchedOutA { get; set; }
+        public double RpAfterSwitchedOutB { get; set; }
+        public double RpAfterSwitchedOutC { get; set; }
+
+        public double StepChangeXpA { get; set; }
+        public double StepChangeXpB { get; set; }
+        public double StepChangeXpC { get; set; }
+
+        public double XpBeforeSwitchedOutA { get; set; }
+        public double XpBeforeSwitchedOutB { get; set; }
+        public double XpBeforeSwitchedOutC { get; set; }
+
+        public double XpAfterSwitchedOutA { get; set; }
+        public double XpAfterSwitchedOutB { get; set; }
+        public double XpAfterSwitchedOutC { get; set; }
+
+        public double TimeOfEvent { get; set; }
+        public double Time1stClosingOp { get; set; }
+        public double Time2ndClosingOp { get; set; }
+        public double PhaseDiff1stClosing { get; set; }
+        public double FirstCloseEnergy { get; set; }
+
+        public double FirstCloseA { get; set; }
+        public double SecondCloseA { get; set; }
+        public double FirstCloseB { get; set; }
+        public double SecondCloseB { get; set; }
+        public double FirstCloseC { get; set; }
+        public double SecondCloseC { get; set; }
+
+        public double AbsOpenTimeA { get; set; }
+        public double AbsOpenTimeB { get; set; }
+        public double AbsOpenTimeC { get; set; }
 
 
-        public double OutSyncAPhaseAngleDeviation { get; set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        [FieldDataType(System.Data.DbType.String)]
-        public OutSyncStatus OutSyncAStatus { get; set; }
-
-        public double OutSyncBPhaseAngleDeviation { get; set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        [FieldDataType(System.Data.DbType.String)]
-        public OutSyncStatus OutSyncBStatus { get; set; }
-
-        public double OutSyncCPhaseAngleDeviation { get; set; }
-
-        [JsonConverter(typeof(StringEnumConverter))]
-        [FieldDataType(System.Data.DbType.String)]
-        public OutSyncStatus OutSyncCStatus { get; set; }
     }
 
     public enum IsDataErr : int
@@ -151,61 +163,19 @@ namespace openEASSandBox
         Bad = 1
     }
 
-    public enum IsCapSwitch : int
+    public enum OperationType: int
     {
-        No = -1,
-        Undetermined = 0,
-        Yes = 1
+        UnidentifiedOrFailed = 0,
+        MissingPoleCondition = 11,
+        SympatheticRinging = 12,
+        CapBankDeEnergize = 2,
+        ClosingWithoutControl = 30,
+        ClosingWithControl = 31
     }
 
-    public enum IsCapSwitchCondL : int
-    {
-        Low = 1,
-        Moderate = 2,
-        High = 3
-    }
-
-    public enum OutQConditionRPBFlag : int
-    {
-        Balanced = -1,
-        Unknown = 0,
-        Unbalanced = 1
-    }
-
-    public enum OutRestrike : int
-    {
+    public enum IsResonance : int {
         No = 0,
         Yes = 1
-    }
-
-    public enum OutVTHD : int
-    {
-        None = 0,
-        Yes = 1
-    }
-
-    public enum OutCapXing : int {
-        Successful = 0,
-        Failed = 1
-    }
-
-    public enum OutRestrikeEnhancedDeenergizationOperation: int
-    {
-        Complete = 1,
-        NotComplete = -1
-    }
-
-    public enum OutRestrikeEnhancedDeenergizationLevel : int
-    {
-        None = 1,
-        Some = 2
-    }
-
-    public enum OutSyncStatus : int {
-        Normal = 0,
-        Premature = -1,
-        Delayed = 1,
-        Failed = 2
     }
 
 }

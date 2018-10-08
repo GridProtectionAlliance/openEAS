@@ -13,16 +13,6 @@ CREATE TABLE CSA_2_Result
 	OutOpTypeA VARCHAR(50) NOT NULL,
     OutOpTypeB VARCHAR(50) NOT NULL,
     OutOpTypeC VARCHAR(50) NOT NULL,
-
-	IsCapSwitch VARCHAR(20) NOT NULL,
-	IsCapSwitchCondL VARCHAR(20) NOT NULL,
-	OutFrequency FLOAT NOT NULL,
-	OutVoltagesMax FLOAT NOT NULL,
-	OutVoltagesMean FLOAT NOT NULL,
-	OutVTHDFlag VARCHAR(20) NOT NULL,
-	OutVTHDBefore FLOAT NOT NULL,
-	OutVTHDAfter FLOAT NOT NULL,
-	OutVTHDIncrease FLOAT NOT NULL,
 	IsResonanceA VARCHAR(20) NOT NULL,
 	ResFrequencyA FLOAT NOT NULL,
 	PeakPUVA FLOAT NOT NULL,
@@ -158,7 +148,7 @@ CREATE TABLE CSA_2_LineSetting(
 )
 
 CREATE NONCLUSTERED INDEX IX_CSALineSetting_LineID
-ON CSALineSetting(LineID ASC)
+ON CSA_2_LineSetting(LineID ASC)
 
 END
 GO
@@ -178,20 +168,19 @@ AS BEGIN
 	DECLARE @hasCSAResult INT
 
 	SELECT @hasCSAResult = COUNT(*)
-	FROM CSAResult
+	FROM CSA_2_Result
 	WHERE
-		EventID = @eventID AND
-		IsCapSwitch = 'Yes'
+		EventID = @eventID
 
 	RETURN @hasCSAResult
 END
 GO
 
 MERGE EASExtension AS Target
-USING (VALUES('CSA_2_Service', 'HasCSA_2_Result')) AS Source(ServiceName, HasResultFunction)
+USING (VALUES('CSA_2_Service', 'HasCSA_2_Result', 'http://localhost:8794')) AS Source(ServiceName, HasResultFunction, WebPage)
 ON Source.ServiceName = Target.ServiceName
 WHEN MATCHED THEN
-    UPDATE SET HasResultFunction = Source.HasResultFunction
+    UPDATE SET HasResultFunction = Source.HasResultFunction, WebPage = Source.WebPage
 WHEN NOT MATCHED THEN
-    INSERT VALUES(Source.ServiceName, Source.HasResultFunction);
+    INSERT VALUES(Source.ServiceName, Source.HasResultFunction, Source.WebPage);
 GO
