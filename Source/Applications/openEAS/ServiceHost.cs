@@ -529,7 +529,8 @@ namespace openEAS
 
                 // Define types for Razor pages - self-hosted web service does not use view controllers so
                 // we must define configuration types for all paged view model based Razor views here:
-                webServer.PagedViewModelTypes.TryAdd("Result.cshtml", new Tuple<Type, Type>(typeof(OpenEASResult), typeof(DataHub)));
+                webServer.PagedViewModelTypes.TryAdd("Result.cshtml", new Tuple<Type, Type>(typeof(CSAResult), typeof(DataHub)));
+                webServer.PagedViewModelTypes.TryAdd("Setting.cshtml", new Tuple<Type, Type>(typeof(CSALineSetting), typeof(DataHub)));
                 webServer.PagedViewModelTypes.TryAdd("Users.cshtml", new Tuple<Type, Type>(typeof(UserAccount), typeof(SecurityHub)));
                 webServer.PagedViewModelTypes.TryAdd("Groups.cshtml", new Tuple<Type, Type>(typeof(SecurityGroup), typeof(SecurityHub)));
 
