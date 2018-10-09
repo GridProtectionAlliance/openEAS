@@ -7,7 +7,7 @@ namespace openEAS.Configuration
 {
     public class openEASSettings
     {
-        private Dictionary<string, string> m_dependentAssemblyLookup;
+        private Dictionary<string, string> m_dependentAssemblyLookup = new Dictionary<string, string>();
 
         [Setting]
         [DefaultValue("")]

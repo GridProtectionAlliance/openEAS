@@ -55,24 +55,8 @@
     Event evt = dataContext.Table<Event>().QueryRecordWhere("ID = {0}", ViewBag.EventID);
     CSAResult result = dataContext.Table<CSAResult>().QueryRecordWhere("EventID = {0}", evt.ID);
 
-    CSALineSetting setting = dataContext.Table<CSALineSetting>().QueryRecordWhere("LineID = {0}", evt.LineID);
-    if (setting == null)
-    {
-        setting = dataContext.Table<CSALineSetting>().NewRecord();
-    }
-
-
-    if (setting.IsMonLocAtCapCSW == 0)
-    {
-        ViewBag.MoreFields = dataContext.Table<CSAGPResult>().QueryRecordWhere("CSAResultID = {0}", result.ID);
-    }
-    else {
-        ViewBag.MoreFields = dataContext.Table<CSASPResult>().QueryRecordWhere("CSAResultID = {0}", result.ID);
-    }
-
     string theData = JsonConvert.SerializeObject(result);
-    string moreData = JsonConvert.SerializeObject(ViewBag.MoreFields);
-    string ServiceName = "CSAService";
+    string ServiceName = "CSAService2.0";
 
 
 }

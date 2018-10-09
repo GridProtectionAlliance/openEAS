@@ -95,6 +95,7 @@ namespace openEAS.Configuration
         /// </summary>
         public SystemSettings()
         {
+            m_openEASSettings = new openEASSettings();
         }
 
         /// <summary>
@@ -105,6 +106,7 @@ namespace openEAS.Configuration
         {
             ConnectionStringParser<SettingAttribute> parser = new ConnectionStringParser<SettingAttribute>();
             parser.ParseConnectionString(connectionString, this);
+            m_openEASSettings = new openEASSettings();
         }
 
         #endregion

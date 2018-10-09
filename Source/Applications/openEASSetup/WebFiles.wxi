@@ -3,6 +3,9 @@
   <Component Id="wwwroot_EASResult_cshtml">
     <File Id="wwwroot_EASResult.cshtml" Name="EASResult.cshtml" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\EASResult.cshtml" />
   </Component>
+  <Component Id="wwwroot_Groups_cshtml">
+    <File Id="wwwroot_Groups.cshtml" Name="Groups.cshtml" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\Groups.cshtml" />
+  </Component>
   <Component Id="wwwroot_index_cshtml">
     <File Id="wwwroot_index.cshtml" Name="index.cshtml" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\index.cshtml" />
   </Component>
@@ -17,6 +20,9 @@
   </Component>
   <Component Id="wwwroot_Settings_cshtml">
     <File Id="wwwroot_Settings.cshtml" Name="Settings.cshtml" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\Settings.cshtml" />
+  </Component>
+  <Component Id="wwwroot_Users_cshtml">
+    <File Id="wwwroot_Users.cshtml" Name="Users.cshtml" Source="$(var.SolutionDir)Applications\openEAS\wwwroot\Users.cshtml" />
   </Component>
 </ComponentGroup>
 <ComponentGroup Id="wwwroot_Content_Components" Directory="wwwroot_CONTENTFOLDER">

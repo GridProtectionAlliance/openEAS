@@ -95,7 +95,7 @@ namespace openEASSandBox
                 using (MWNumericArray t2ndClosing = new MWNumericArray(new double[,] { { lineSetting?.T2ndClosing ?? defaultSetting.T2ndClosing } }))
                 using (MWNumericArray capSwitcherType = new MWNumericArray(new double[,] { { lineSetting?.CapSwitcherType ?? defaultSetting.CapSwitcherType } }))
                 using (MWNumericArray stepSizeQ3 = new MWNumericArray(new double[,] { { lineSetting?.StepSizeQ3 ?? defaultSetting.StepSizeQ3 } }))
-                using (MWCharArray date = new MWCharArray( evt.StartTime.Date.ToString("MM/dd/yyyy").ToCharArray()))
+                using (MWNumericArray date = new MWNumericArray(new double[] { -99999}))
                 using (MWNumericArray second = new MWNumericArray(new double[,] { { evt.StartTime.Second + evt.StartTime.Millisecond/1000.0D } }))
                 using (MWNumericArray minute = new MWNumericArray(new double[,] { { evt.StartTime.Minute } }))
                 using (MWNumericArray hour = new MWNumericArray(new double[,] { { evt.StartTime.Hour } }))

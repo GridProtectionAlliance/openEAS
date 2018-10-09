@@ -20,6 +20,7 @@
 //       Generated original version of source code.
 //
 //******************************************************************************************************
+using GSF.ComponentModel.DataAnnotations;
 using GSF.Data.Model;
 using System.ComponentModel;
 
@@ -36,24 +37,31 @@ namespace openEASSandBox
         public int NumArgsOut { get; set; }
 
         [DefaultValue(5.0D)]
+        [Label("Threshold limit (in %) of a resonance condition")]
         public double ITHDLimit { get; set; }
 
         [DefaultValue(500.0D)]
+        [Label("Minimum voltage threshold")]
         public double NominalVoltage { get; set; }
 
         [DefaultValue(5.0D)]
+        [Label("Minimum current threshold")]
         public double UnloadedCurrent { get; set; }
         
         [DefaultValue(161.0D)]
+        [Label("Nominal bus voltage (in kV L-L) where the capacitor is installed")]
         public double NominalBuskVLL { get; set; }
 
         [DefaultValue(4.0D)]
+        [Label("Specified time difference (in cycles) between the first and the second closing")]
         public double T2ndClosing { get; set; }
 
         [DefaultValue(0.0D)]
+        [Label("Cap switcher type")]
         public double CapSwitcherType { get; set; }
 
         [DefaultValue(18000.0D)]
+        [Label("Size of each capacitor step in kvar")]
         public double StepSizeQ3 { get; set; }
 
     }
