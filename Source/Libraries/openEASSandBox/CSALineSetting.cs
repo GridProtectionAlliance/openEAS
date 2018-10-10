@@ -65,4 +65,13 @@ namespace openEASSandBox
         public double StepSizeQ3 { get; set; }
 
     }
+
+    public enum CapSwitcherType : int
+    {
+        NoClosingControl = 0,
+        PreInsertionHRPI = 11,
+        PreInsertionLRPI = 12,
+        SyncClosing = 2
+    }
+
 }

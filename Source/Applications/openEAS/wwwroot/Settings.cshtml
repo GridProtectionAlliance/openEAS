@@ -22,6 +22,7 @@
     //*****************************************************************************************************@
 @using System
 @using System.Threading
+@using GSF.Data.Model
 @using GSF.Web
 @using GSF.Web.Model
 @using openEAS.Model
@@ -64,7 +65,7 @@
 @helper AddNewEditDialog(DataContext dataContext)
 {
     <div class="col-xs-6">
-        @Raw(dataContext.AddSelectField<CSALineSetting, Line>("LineID", "ID", "AssetKey"))
+        @Raw(dataContext.AddSelectField<CSALineSetting, Line>("LineID", "ID", "AssetKey", restriction: new RecordRestriction("ID NOT IN (SELECT LineID FROM CSA_2_LineSetting)")))
         @Raw(dataContext.AddInputField<CSALineSetting>("ITHDLimit"))
         @Raw(dataContext.AddInputField<CSALineSetting>("NominalVoltage"))
         @Raw(dataContext.AddInputField<CSALineSetting>("UnloadedCurrent"))
@@ -72,7 +73,9 @@
     <div class="col-xs-6">
         @Raw(dataContext.AddInputField<CSALineSetting>("NominalBuskVLL"))
         @Raw(dataContext.AddInputField<CSALineSetting>("T2ndClosing"))
-        <div class="form-group">
+        @Raw(dataContext.AddSelectFieldFromEnum<CSALineSetting, CapSwitcherType>("CapSwitcherType"))
+
+        @*<div class="form-group">
             <label for="inputCapSwitcherType">Cap switcher type:</label>
             <select id="capSwitcherType" class="form-control" data-bind="value: CapSwitcherType, valueAllowUnset: false, attr: {'disabled': ($root.recordMode()===RecordMode.View ? true : undefined)}">
                 <option value="0">0 - No closing control</option>
@@ -80,7 +83,7 @@
                 <option value="12">12 - Pre-insertion LRPI</option>
                 <option value="2">2 - Sync closing</option>
             </select>
-        </div>
+        </div>*@
         @Raw(dataContext.AddInputField<CSALineSetting>("StepSizeQ3"))
     </div>
 

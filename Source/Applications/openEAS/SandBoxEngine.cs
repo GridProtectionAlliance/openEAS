@@ -209,6 +209,10 @@ namespace openEAS
             AssemblyName assemblyName = new AssemblyName(args.Name);
             string path = "";
 
+
+            if ((object)m_systemSettings == null)
+                ReloadSystemSettings();
+
             if (m_systemSettings.openEASSettings?.DependentAssemblyLookup.TryGetValue(assemblyName.Name, out path) ?? false)
                 return Assembly.LoadFile(path);
 
