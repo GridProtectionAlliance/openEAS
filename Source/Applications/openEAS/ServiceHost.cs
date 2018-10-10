@@ -176,6 +176,8 @@ namespace openEAS
 
             fileAppender.ActivateOptions();
             BasicConfigurator.Configure(serviceHelperAppender, fileAppender);
+            // Set up the analysis engine
+            m_extensibleDisturbanceAnalysisEngine = new SandBoxEngine();
 
             // Set up heartbeat and client request handlers
             m_serviceHelper.AddScheduledProcess(ProcessLatestData, "ProcessLatestData", "* * * * *");
@@ -192,8 +194,6 @@ namespace openEAS
 
             m_serviceMonitors.Initialize();
 
-            // Set up the analysis engine
-            m_extensibleDisturbanceAnalysisEngine = new SandBoxEngine();
 
             // Process latest data at startup
             process = m_serviceHelper.FindProcess("ProcessLatestData");
