@@ -2,6 +2,7 @@
 using FaultData.DataOperations;
 using FaultData.DataResources;
 using FaultData.DataSets;
+using GSF;
 using GSF.Data;
 using log4net;
 using MathWorks.MATLAB.NET.Arrays;
@@ -109,22 +110,22 @@ namespace openEASSandBox
                 using (MWArray ic = new MWNumericArray(viDataGroup.IC.DataPoints.Count, 1, GetValueArray(viDataGroup.IC)))
                 using (MWArray ovNSPC = new MWNumericArray(Math.Round(viDataGroup.VA.SampleRate / fundf)))
                 using (MWArray oiNSPC = new MWNumericArray(Math.Round(viDataGroup.IA.SampleRate / fundf)))
-                using (SPCapSwitchPI.SPCapSwitchPI sPCapSwitchPI = new SPCapSwitchPI.SPCapSwitchPI())
+                using (SPCapSwitchPI.capsw capsw = new SPCapSwitchPI.capsw())
                 {
                     MWArray[] arrays = new MWArray[] { };
                     try 
                     {
-                        arrays = sPCapSwitchPI.frootTVACapSwitchV12(numArgsOut, fundf, tv, va, vb, vc, ti, ia, ib, ic, ovNSPC, oiNSPC, nominalBuskVLL, nominalVoltage, unloadedCurrent, iTHDLimit, stepSizeQ3, t2ndClosing, capSwitcherType, date, second, minute, hour);
+                        arrays = capsw.frootSPCapSwitchPIV2(numArgsOut, fundf, tv, va, vb, vc, ti, ia, ib, ic, ovNSPC, oiNSPC, nominalBuskVLL, nominalVoltage, unloadedCurrent, iTHDLimit, stepSizeQ3, t2ndClosing, capSwitcherType, date, second, minute, hour);
 
                         CSAResult result = new CSAResult();
 
                         result.EventID = evt.ID;
-                        result.IsDataError = (IsDataErr)Convert.ToInt32(arrays[0].ScalarAsObject());
-                        result.OutOpTypeA = (OperationType)Convert.ToInt32(arrays[1].ScalarAsObject());
-                        result.OutOpTypeB = (OperationType)Convert.ToInt32(arrays[2].ScalarAsObject());
-                        result.OutOpTypeC = (OperationType)Convert.ToInt32(arrays[3].ScalarAsObject());
+                        result.IsDataError = ((IsDataErr)Convert.ToInt32(arrays[0].ScalarAsObject())).GetDescription();
+                        result.OutOpTypeA = ((OperationType)Convert.ToInt32(arrays[1].ScalarAsObject())).GetDescription();
+                        result.OutOpTypeB = ((OperationType)Convert.ToInt32(arrays[2].ScalarAsObject())).GetDescription();
+                        result.OutOpTypeC = ((OperationType)Convert.ToInt32(arrays[3].ScalarAsObject())).GetDescription();
 
-                        result.IsResonanceA = (IsResonance)Convert.ToInt32(arrays[4][1].ScalarAsObject());
+                        result.IsResonanceA = ((IsResonance)Convert.ToInt32(arrays[4][1].ScalarAsObject())).GetDescription();
                         result.ResFrequencyA = Convert.ToDouble(arrays[4][2].ScalarAsObject());
                         result.PeakPUVA = Convert.ToDouble(arrays[4][3].ScalarAsObject());
                         result.VrmsA_bf = Convert.ToDouble(arrays[4][4].ScalarAsObject());
@@ -149,7 +150,7 @@ namespace openEASSandBox
                         result.XCapA_bf = Convert.ToDouble(arrays[4][23].ScalarAsObject());
                         result.XCapA_af = Convert.ToDouble(arrays[4][24].ScalarAsObject());
 
-                        result.IsResonanceB = (IsResonance)Convert.ToInt32(arrays[5][1].ScalarAsObject());
+                        result.IsResonanceB = ((IsResonance)Convert.ToInt32(arrays[5][1].ScalarAsObject())).GetDescription();
                         result.ResFrequencyB = Convert.ToDouble(arrays[5][2].ScalarAsObject());
                         result.PeakPUVB = Convert.ToDouble(arrays[5][3].ScalarAsObject());
                         result.VrmsB_bf = Convert.ToDouble(arrays[5][5].ScalarAsObject());
@@ -172,9 +173,9 @@ namespace openEASSandBox
                         result.StepB_bf = Convert.ToInt32(arrays[5][21].ScalarAsObject());
                         result.StepB_af = Convert.ToInt32(arrays[5][22].ScalarAsObject());
                         result.XCapB_bf = Convert.ToDouble(arrays[5][23].ScalarAsObject());
-                        result.XCapB_af = Convert.ToDouble(arrays[5][25].ScalarAsObject());
+                        result.XCapB_af = Convert.ToDouble(arrays[5][24].ScalarAsObject());
 
-                        result.IsResonanceC = (IsResonance)Convert.ToInt32(arrays[6][1].ScalarAsObject());
+                        result.IsResonanceC = ((IsResonance)Convert.ToInt32(arrays[6][1].ScalarAsObject())).GetDescription();
                         result.ResFrequencyC = Convert.ToDouble(arrays[6][2].ScalarAsObject());
                         result.PeakPUVC = Convert.ToDouble(arrays[6][3].ScalarAsObject());
                         result.VrmsC_bf = Convert.ToDouble(arrays[6][6].ScalarAsObject());
@@ -197,7 +198,7 @@ namespace openEASSandBox
                         result.StepC_bf = Convert.ToInt32(arrays[6][21].ScalarAsObject());
                         result.StepC_af = Convert.ToInt32(arrays[6][22].ScalarAsObject());
                         result.XCapC_bf = Convert.ToDouble(arrays[6][23].ScalarAsObject());
-                        result.XCapC_af = Convert.ToDouble(arrays[6][26].ScalarAsObject());
+                        result.XCapC_af = Convert.ToDouble(arrays[6][24].ScalarAsObject());
 
                         result.SwitchedOutDurA = Convert.ToDouble(arrays[7][1].ScalarAsObject());
                         result.SwitchedOutDurB = Convert.ToDouble(arrays[7][2].ScalarAsObject());
@@ -228,10 +229,22 @@ namespace openEASSandBox
                         result.XpAfterSwitchedOutC = Convert.ToDouble(arrays[13][3].ScalarAsObject());
 
                         result.TimeOfEvent = Convert.ToDouble(arrays[14].ScalarAsObject());
-                        result.Time1stClosingOp = Convert.ToDouble(arrays[15].ScalarAsObject());
-                        result.Time2ndClosingOp = Convert.ToDouble(arrays[16].ScalarAsObject());
-                        result.PhaseDiff1stClosing = Convert.ToDouble(arrays[17].ScalarAsObject());
-                        result.FirstCloseEnergy = Convert.ToDouble(arrays[18].ScalarAsObject());
+
+                        result.Time1stClosingOpA = Convert.ToDouble(arrays[15][1].ScalarAsObject());
+                        result.Time1stClosingOpB = Convert.ToDouble(arrays[15][2].ScalarAsObject());
+                        result.Time1stClosingOpC = Convert.ToDouble(arrays[15][3].ScalarAsObject());
+
+                        result.Time2ndClosingOpA = Convert.ToDouble(arrays[16][1].ScalarAsObject());
+                        result.Time2ndClosingOpB = Convert.ToDouble(arrays[16][2].ScalarAsObject());
+                        result.Time2ndClosingOpC = Convert.ToDouble(arrays[16][3].ScalarAsObject());
+
+                        result.PhaseDiff1stClosingA = Convert.ToDouble(arrays[17][1].ScalarAsObject());
+                        result.PhaseDiff1stClosingB = Convert.ToDouble(arrays[17][2].ScalarAsObject());
+                        result.PhaseDiff1stClosingC = Convert.ToDouble(arrays[17][3].ScalarAsObject());
+
+                        result.FirstCloseEnergyA = Convert.ToDouble(arrays[18][1].ScalarAsObject());
+                        result.FirstCloseEnergyB = Convert.ToDouble(arrays[18][2].ScalarAsObject());
+                        result.FirstCloseEnergyC = Convert.ToDouble(arrays[18][3].ScalarAsObject());
 
                         result.FirstCloseA = Convert.ToDouble(arrays[19].ScalarAsObject());
                         result.SecondCloseA = Convert.ToDouble(arrays[20].ScalarAsObject());

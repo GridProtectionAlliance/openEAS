@@ -21,6 +21,7 @@
 //
 //******************************************************************************************************
 
+using GSF.ComponentModel.DataAnnotations;
 using GSF.Data.Model;
 using GSF.Identity;
 using GSF.Web.Hubs;

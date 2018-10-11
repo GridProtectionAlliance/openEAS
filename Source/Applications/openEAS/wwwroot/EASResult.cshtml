@@ -37,7 +37,10 @@
 @using GSF.Web.Shared
 @using GSF.Web
 @using GSF.Web.Model
+@using System.Reflection
 @using Event = openXDA.Model.Event
+@using GSF.ComponentModel.DataAnnotations
+@using GSF.Data.Model
 
 @inherits ExtendedTemplateBase<AppModel>
 @{
@@ -54,8 +57,21 @@
 
     Event evt = dataContext.Table<Event>().QueryRecordWhere("ID = {0}", ViewBag.EventID);
     CSAResult result = dataContext.Table<CSAResult>().QueryRecordWhere("EventID = {0}", evt.ID);
+    Dictionary<string,string> resultDict = new Dictionary<string,string>();
 
-    string theData = JsonConvert.SerializeObject(result);
+    foreach(PropertyInfo pi in result.GetType().GetProperties())
+    {
+        LabelAttribute labelAttribute;
+        string label = pi.Name;
+        if ( dataContext.Table<CSAResult>().TryGetFieldAttribute(pi.Name, out labelAttribute))
+        {
+            label = labelAttribute.Label;
+        }
+
+        resultDict.Add(label, pi.GetValue(result, null).ToString());
+    }
+
+    string theData = JsonConvert.SerializeObject(resultDict);
     string ServiceName = "CSAService2.0";
 
 
@@ -71,7 +87,6 @@
     <link href="@("/@GSF/Web/Shared/Content/bootstrap.css")" rel="stylesheet">
     <style>
         .table{
-            max-width: 400px
         }
     </style>
 </head>
@@ -90,15 +105,10 @@
 <script src="@Resources.Root/Shared/Scripts/bootstrap.js"></script>
 <script>
     var record = JSON.parse('@Raw(theData)');
-    var moreData = JSON.parse('@Raw(moreData)');
 
     $.each(Object.keys(record), function(index, key){
         $('.table tbody').append('<tr><td>'+ key +':</td><td>' + record[key] + '</td></tr>');
     });
 
-    $.each(Object.keys(moreData), function (index, key) {
-        if(key != "ID" && key != "CSAResultID")
-            $('.table tbody').append('<tr><td>' + key + ':</td><td>' + moreData[key] + '</td></tr>');
-    });
 
 </script>

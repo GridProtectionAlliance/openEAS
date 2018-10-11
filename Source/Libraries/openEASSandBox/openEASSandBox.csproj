@@ -53,7 +53,8 @@
     <Reference Include="openXDA.Model">
       <HintPath>..\..\Dependencies\openXDA\openXDA.Model.dll</HintPath>
     </Reference>
-    <Reference Include="SPCapSwitchPI">
+    <Reference Include="SPCapSwitchPI, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\..\..\Program Files\EPRI\SPCapSwitchPI\application\SPCapSwitchPI.dll</HintPath>
     </Reference>
     <Reference Include="System" />
