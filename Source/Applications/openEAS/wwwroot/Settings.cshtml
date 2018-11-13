@@ -74,16 +74,6 @@
         @Raw(dataContext.AddInputField<CSALineSetting>("NominalBuskVLL"))
         @Raw(dataContext.AddInputField<CSALineSetting>("T2ndClosing"))
         @Raw(dataContext.AddSelectFieldFromEnum<CSALineSetting, CapSwitcherType>("CapSwitcherType"))
-
-        @*<div class="form-group">
-            <label for="inputCapSwitcherType">Cap switcher type:</label>
-            <select id="capSwitcherType" class="form-control" data-bind="value: CapSwitcherType, valueAllowUnset: false, attr: {'disabled': ($root.recordMode()===RecordMode.View ? true : undefined)}">
-                <option value="0">0 - No closing control</option>
-                <option value="11">11 - Pre-insertion HRPI</option>
-                <option value="12">12 - Pre-insertion LRPI</option>
-                <option value="2">2 - Sync closing</option>
-            </select>
-        </div>*@
         @Raw(dataContext.AddInputField<CSALineSetting>("StepSizeQ3"))
     </div>
 

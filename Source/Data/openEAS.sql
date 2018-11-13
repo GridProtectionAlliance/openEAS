@@ -9,6 +9,7 @@ CREATE TABLE CSA_2_Result
 (
 	ID INT IDENTITY(1, 1) NOT NULL PRIMARY KEY,
     EventID INT NOT NULL UNIQUE REFERENCES Event(ID),
+	Valid bit NOT NULL,
     IsDataError VARCHAR(100) NOT NULL,
 	OutOpTypeA VARCHAR(100) NOT NULL,
     OutOpTypeB VARCHAR(100) NOT NULL,
@@ -178,7 +179,7 @@ AS BEGIN
 	SELECT @hasCSAResult = COUNT(*)
 	FROM CSA_2_Result
 	WHERE
-		EventID = @eventID
+		EventID = @eventID AND Valid = 1
 
 	RETURN @hasCSAResult
 END

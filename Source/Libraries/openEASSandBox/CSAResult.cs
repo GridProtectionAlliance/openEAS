@@ -12,6 +12,7 @@ namespace openEASSandBox
         [PrimaryKey(true)]
         public int ID { get; set; }
         public int EventID { get; set; }
+        public bool Valid { get; set; }
 
         [Label("A flag for data error")]
         public string IsDataError { get; set; }
