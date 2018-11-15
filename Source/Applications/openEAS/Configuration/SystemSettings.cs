@@ -101,10 +101,10 @@ namespace openEAS.Configuration
         /// <param name="connectionString">A string containing the system settings as key-value pairs.</param>
         public SystemSettings(string connectionString)
         {
-            ConnectionStringParser<SettingAttribute> parser = new ConnectionStringParser<SettingAttribute>();
-            parser.ParseConnectionString(connectionString, this);
+            ConnectionStringParser<SettingAttribute, CategoryAttribute> parser = new ConnectionStringParser<SettingAttribute, CategoryAttribute>();
             m_openEASSettings = new OpenEASSettings();
-            parser.ParseConnectionString(connectionString, m_openEASSettings);
+
+            parser.ParseConnectionString(connectionString, this);
 
         }
 
@@ -531,7 +531,8 @@ namespace openEAS.Configuration
         }
 
 
-
+        [Category]
+        [SettingName("OpenEAS")]
         public OpenEASSettings OpenEASSettings
         {
             get
