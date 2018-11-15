@@ -384,7 +384,7 @@
           <Text>Enter the path to the SPCapSwitchPI library.</Text>
         </Control>
         <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
-        <Control Id="CSAInstruction" Type="Text" X="75" Y="83" Width="200" Height="20" TabSkip="yes" Text="Browse to the location where you installed the frootCSAmodule.dll file." />
+        <Control Id="CSAInstruction" Type="Text" X="75" Y="83" Width="200" Height="20" TabSkip="yes" Text="Browse to the location where you installed the SPCapSwitchPI.dll file." />
         <Control Id="CSALabel" Type="Text" X="75" Y="118" Width="100" Height="10" TabSkip="no" Text="&amp;SPCapSwitchPI:" />
         <Control Id="CSAEdit" Type="Edit" X="75" Y="128" Width="170" Height="18" Property="CSAPATH" Text="{80}" />
         <Control Id="CSABrowse" Type="PushButton" X="255" Y="128" Width="56" Height="17" Text="Browse...">
@@ -400,10 +400,10 @@
           <Publish Property="FILEPATH" Value="[CSAPATH]">1</Publish>
           <Publish Event="DoAction" Value="CheckFileExistenceAction">1</Publish>
           <Publish Property="CSAEXISTS" Value="[FILEEXISTS]">1</Publish>
-          <Publish Property="INSERTCSASETTINGQUERY1" Value="MERGE Setting AS Target USING (VALUES('openEAS.DependentAssemblies.frootCapSwitch', '[CSAPATH]')) AS Source(Name, Value)">1</Publish>
+          <Publish Property="INSERTCSASETTINGQUERY1" Value="MERGE Setting AS Target USING (VALUES('OpenEAS.DependentAssemblies.SPCapSwitchPI', '[CSAPATH]')) AS Source(Name, Value)">1</Publish>
           <Publish Property="INSERTCSASETTINGQUERY2" Value="ON Source.Name = Target.Name WHEN MATCHED THEN UPDATE SET Value = Source.Value WHEN NOT MATCHED THEN INSERT(Name, Value) VALUES(Source.Name, Source.Value);;">1</Publish>
 
-          <Publish Property="ERRORMESSAGE" Value="Unable to locate the SPCapSwitchPI.dll file you entered. Please browse to the location of frootCapSwitch.dll.">NOT CSAEXISTS</Publish>
+          <Publish Property="ERRORMESSAGE" Value="Unable to locate the SPCapSwitchPI.dll file you entered. Please browse to the location of SPCapSwitchPI.dll.">NOT CSAEXISTS</Publish>
           <Publish Event="SpawnDialog" Value="ModalErrorDialog">NOT CSAEXISTS</Publish>
           <Publish Event="NewDialog" Value="DatabaseConnectionDialog">CSAEXISTS</Publish>
         </Control>
@@ -463,7 +463,8 @@
           <!-- Set up the authentication part of the connection string based on user input. -->
           <Publish Property="AUTHSTRING" Value="Integrated Security=SSPI">WINDOWSAUTH</Publish>
           <Publish Property="AUTHSTRING" Value="User Id=[DBUSERNAME];;Password=[DBPASSWORD]">NOT WINDOWSAUTH</Publish>
-          <Publish Property="EASAUTHSTRING" Value="User Id=[EASSERVICELOGIN];Password=[EASSERVICEPASSWORD]">1</Publish>
+          <Publish Property="EASAUTHSTRING" Value="User Id=[EASSERVICELOGIN];Password=[EASSERVICEPASSWORD]">WINDOWSAUTH</Publish>
+          <Publish Property="EASAUTHSTRING" Value="User Id=[DBUSERNAME];;Password=[DBPASSWORD]">NOT WINDOWSAUTH</Publish>
 
           <!-- Set up connection strings for connecting to server and database. -->
           <Publish Property="SERVERCONNECTIONSTRING" Value="Data Source=[SERVERNAME];;[AUTHSTRING]">1</Publish>
