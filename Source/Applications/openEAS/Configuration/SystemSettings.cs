@@ -83,7 +83,7 @@ namespace openEAS.Configuration
         private TimeZoneInfo m_defaultMeterTimeZoneInfo;
         private TimeZoneInfo m_xdaTimeZoneInfo;
         private List<string> m_watchDirectoryList;
-
+        private OpenEASSettings m_openEASSettings;
         #endregion
 
         #region [ Constructors ]
@@ -103,6 +103,9 @@ namespace openEAS.Configuration
         {
             ConnectionStringParser<SettingAttribute> parser = new ConnectionStringParser<SettingAttribute>();
             parser.ParseConnectionString(connectionString, this);
+            m_openEASSettings = new OpenEASSettings();
+            parser.ParseConnectionString(connectionString, m_openEASSettings);
+
         }
 
         #endregion
@@ -524,6 +527,16 @@ namespace openEAS.Configuration
             get
             {
                 return m_watchDirectoryList.AsReadOnly();
+            }
+        }
+
+
+
+        public OpenEASSettings OpenEASSettings
+        {
+            get
+            {
+                return m_openEASSettings;
             }
         }
 

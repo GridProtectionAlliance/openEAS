@@ -178,6 +178,7 @@ namespace openEAS
             BasicConfigurator.Configure(serviceHelperAppender, fileAppender);
             // Set up the analysis engine
             m_extensibleDisturbanceAnalysisEngine = new SandBoxEngine();
+            AppDomain.CurrentDomain.AssemblyResolve += m_extensibleDisturbanceAnalysisEngine.AssemblyResolveHandler;
 
             // Set up heartbeat and client request handlers
             m_serviceHelper.AddScheduledProcess(ProcessLatestData, "ProcessLatestData", "* * * * *");
