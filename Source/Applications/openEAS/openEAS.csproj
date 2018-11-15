@@ -202,7 +202,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\CategorizedSetting.cs" />
-    <Compile Include="Configuration\openEASSettings.cs" />
+    <Compile Include="Configuration\OpenEASSettings.cs" />
     <Compile Include="Configuration\SystemSettings.cs" />
     <Compile Include="DataHub.cs" />
     <Compile Include="DebugHost.cs">

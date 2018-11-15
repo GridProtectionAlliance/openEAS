@@ -213,7 +213,7 @@ namespace openEAS
             if ((object)m_systemSettings == null)
                 ReloadSystemSettings();
 
-            if (m_systemSettings.openEASSettings?.DependentAssemblyLookup.TryGetValue(assemblyName.Name, out path) ?? false)
+            if (m_systemSettings.OpenEASSettings?.DependentAssemblyLookup.TryGetValue(assemblyName.Name, out path) ?? false)
                 return Assembly.LoadFile(path);
 
             return null;
