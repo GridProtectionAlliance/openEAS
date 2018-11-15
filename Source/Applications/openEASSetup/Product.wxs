@@ -80,14 +80,14 @@
       <Custom Action="ConfigureServiceAction.SetProperty" After="InstallServices">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
       <Custom Action="ConfigureServiceAction" After="ConfigureServiceAction.SetProperty">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
       
-      <Custom Action="CreateDBLogin.SetProperty" After="InstallFiles">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
-      <Custom Action="CreateDBLogin" After="CreateDBLogin.SetProperty">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
-      <Custom Action="AlterDBLogin.SetProperty" After="CreateDBLogin">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
-      <Custom Action="AlterDBLogin" After="AlterDBLogin.SetProperty">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
-      <Custom Action="CreateDBUser.SetProperty" After="AlterDBLogin">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
-      <Custom Action="CreateDBUser" After="CreateDBUser.SetProperty">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
-      <Custom Action="GrantDBPermissions.SetProperty" After="CreateDBUser">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
-      <Custom Action="GrantDBPermissions" After="GrantDBPermissions.SetProperty">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="CreateDBLogin.SetProperty" After="InstallFiles">NOT REMOVE AND WINDOWSAUTH AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="CreateDBLogin" After="CreateDBLogin.SetProperty">NOT REMOVE AND WINDOWSAUTH AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="AlterDBLogin.SetProperty" After="CreateDBLogin">NOT REMOVE AND WINDOWSAUTH AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="AlterDBLogin" After="AlterDBLogin.SetProperty">NOT REMOVE AND WINDOWSAUTH AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="CreateDBUser.SetProperty" After="AlterDBLogin">NOT REMOVE AND WINDOWSAUTH AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="CreateDBUser" After="CreateDBUser.SetProperty">NOT REMOVE AND WINDOWSAUTH AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="GrantDBPermissions.SetProperty" After="CreateDBUser">NOT REMOVE AND WINDOWSAUTH AND <![CDATA[&ServiceFeature=3]]></Custom>
+      <Custom Action="GrantDBPermissions" After="GrantDBPermissions.SetProperty">NOT REMOVE AND WINDOWSAUTH AND <![CDATA[&ServiceFeature=3]]></Custom>
 
       <Custom Action="InsertCSASetting.SetProperty" After="InstallFiles">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
       <Custom Action="InsertCSASetting" After="InsertCSASetting.SetProperty">NOT REMOVE AND <![CDATA[&ServiceFeature=3]]></Custom>
