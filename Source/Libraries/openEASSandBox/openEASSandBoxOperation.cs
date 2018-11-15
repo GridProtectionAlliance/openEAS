@@ -130,9 +130,9 @@ namespace openEASSandBox
                             ((OperationType)Convert.ToInt32(arrays[1].ScalarAsObject()) == OperationType.UnidentifiedOrFailed &&
                             (OperationType)Convert.ToInt32(arrays[2].ScalarAsObject()) == OperationType.UnidentifiedOrFailed &&
                             (OperationType)Convert.ToInt32(arrays[3].ScalarAsObject()) == OperationType.UnidentifiedOrFailed))
-                            result.Valid = true;
-                        else
                             result.Valid = false;
+                        else
+                            result.Valid = true;
 
                         result.IsResonanceA = ((IsResonance)Convert.ToInt32(arrays[4][1].ScalarAsObject())).GetDescription();
                         result.ResFrequencyA = Convert.ToDouble(arrays[4][2].ScalarAsObject());
