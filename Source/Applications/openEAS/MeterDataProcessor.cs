@@ -152,7 +152,7 @@ namespace openEAS
             {
                 meterDataSet = new MeterDataSet();
                 meterDataSet.Meter = (new TableOperations<Meter>(connection)).QueryRecordWhere("ID = {0}", eventGroup.Key);
-                meterDataSet.Meter.ConnectionFactory = () => new AdoDataConnection(connection.Connection, typeof(SqlDataAdapter), false);
+                meterDataSet.Meter.ConnectionFactory = () => new AdoDataConnection("systemSettings");
 
                 foreach (Event evt in eventGroup)
                 {

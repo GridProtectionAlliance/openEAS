@@ -68,7 +68,14 @@
             label = labelAttribute.Label;
         }
 
-        resultDict.Add(label, pi.GetValue(result, null).ToString());
+        if (!resultDict.ContainsKey(label))
+        {
+            resultDict.Add(label, pi.GetValue(result, null).ToString());
+        }
+        else
+        {
+            resultDict[label] = pi.GetValue(result, null).ToString();
+        }
     }
 
     string theData = JsonConvert.SerializeObject(resultDict);
