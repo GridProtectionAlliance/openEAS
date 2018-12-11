@@ -61,8 +61,10 @@
 
     foreach(PropertyInfo pi in result.GetType().GetProperties())
     {
+
         LabelAttribute labelAttribute;
         string label = pi.Name;
+
         if ( dataContext.Table<CSAResult>().TryGetFieldAttribute(pi.Name, out labelAttribute))
         {
             label = labelAttribute.Label;
@@ -70,12 +72,16 @@
 
         if (!resultDict.ContainsKey(label))
         {
-            resultDict.Add(label, pi.GetValue(result, null).ToString());
+            object obj = pi.GetValue(result, null);
+            resultDict.Add(label,(obj != null ? obj.ToString() : string.Empty));
         }
         else
         {
-            resultDict[label] = pi.GetValue(result, null).ToString();
+
+            object obj = pi.GetValue(result, null);
+            resultDict[label] = (obj != null ? obj.ToString() : string.Empty);
         }
+
     }
 
     string theData = JsonConvert.SerializeObject(resultDict);

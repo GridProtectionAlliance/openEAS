@@ -13,6 +13,7 @@ using System.Configuration;
 using System.Linq;
  using GSF.Data.Model;
 using System.Data;
+using System.IO;
 
 namespace openEASSandBox
 {
@@ -89,6 +90,16 @@ namespace openEASSandBox
 
                 if (!viDataGroup.AllVIChannelsDefined) return;
 
+                double[] tvArray = GetTimeArray(viDataGroup.VA);
+                double[] vaArray = GetValueArray(viDataGroup.VA);
+                double[] vbArray = GetValueArray(viDataGroup.VB);
+                double[] vcArray = GetValueArray(viDataGroup.VC);
+                double[] tiArray = GetTimeArray(viDataGroup.IA);
+                double[] iaArray = GetValueArray(viDataGroup.IA);
+                double[] ibArray = GetValueArray(viDataGroup.IB);
+                double[] icArray = GetValueArray(viDataGroup.IC);
+                int length = new int[] { tvArray.Length, vaArray.Length, vbArray.Length, vcArray.Length, tiArray.Length, iaArray.Length, ibArray.Length, icArray.Length}.Max();
+
                 using (MWNumericArray iTHDLimit = new MWNumericArray(lineSetting?.ITHDLimit ?? defaultSetting.ITHDLimit))
                 using (MWNumericArray nominalVoltage = new MWNumericArray(new double[,] { { lineSetting?.NominalVoltage ?? defaultSetting.NominalVoltage } }))
                 using (MWNumericArray unloadedCurrent = new MWNumericArray(new double[] { lineSetting?.UnloadedCurrent ?? defaultSetting.UnloadedCurrent }))
@@ -100,14 +111,14 @@ namespace openEASSandBox
                 using (MWNumericArray second = new MWNumericArray(new double[,] { { evt.StartTime.Second + evt.StartTime.Millisecond/1000.0D } }))
                 using (MWNumericArray minute = new MWNumericArray(new double[,] { { evt.StartTime.Minute } }))
                 using (MWNumericArray hour = new MWNumericArray(new double[,] { { evt.StartTime.Hour } }))
-                using (MWArray tv = new MWNumericArray(viDataGroup.VA.DataPoints.Count, 1, GetTimeArray(viDataGroup.VA)))
-                using (MWArray va = new MWNumericArray(viDataGroup.VA.DataPoints.Count, 1, GetValueArray(viDataGroup.VA)))
-                using (MWArray vb = new MWNumericArray(viDataGroup.VB.DataPoints.Count, 1, GetValueArray(viDataGroup.VB)))
-                using (MWArray vc = new MWNumericArray(viDataGroup.VC.DataPoints.Count, 1, GetValueArray(viDataGroup.VC)))
-                using (MWArray ti = new MWNumericArray(viDataGroup.IA.DataPoints.Count, 1, GetTimeArray(viDataGroup.IA)))
-                using (MWArray ia = new MWNumericArray(viDataGroup.IA.DataPoints.Count, 1, GetValueArray(viDataGroup.IA)))
-                using (MWArray ib = new MWNumericArray(viDataGroup.IB.DataPoints.Count, 1, GetValueArray(viDataGroup.IB)))
-                using (MWArray ic = new MWNumericArray(viDataGroup.IC.DataPoints.Count, 1, GetValueArray(viDataGroup.IC)))
+                using (MWArray tv = new MWNumericArray(viDataGroup.VA.DataPoints.Count, 1, tvArray))
+                using (MWArray va = new MWNumericArray(viDataGroup.VA.DataPoints.Count, 1, vaArray))
+                using (MWArray vb = new MWNumericArray(viDataGroup.VB.DataPoints.Count, 1, vbArray))
+                using (MWArray vc = new MWNumericArray(viDataGroup.VC.DataPoints.Count, 1, vcArray))
+                using (MWArray ti = new MWNumericArray(viDataGroup.IA.DataPoints.Count, 1, tiArray))
+                using (MWArray ia = new MWNumericArray(viDataGroup.IA.DataPoints.Count, 1, iaArray))
+                using (MWArray ib = new MWNumericArray(viDataGroup.IB.DataPoints.Count, 1, ibArray))
+                using (MWArray ic = new MWNumericArray(viDataGroup.IC.DataPoints.Count, 1, icArray))
                 using (MWArray ovNSPC = new MWNumericArray(Math.Round(viDataGroup.VA.SampleRate / fundf)))
                 using (MWArray oiNSPC = new MWNumericArray(Math.Round(viDataGroup.IA.SampleRate / fundf)))
                 using (SPCapSwitchPI.capsw capsw = new SPCapSwitchPI.capsw())
@@ -115,6 +126,17 @@ namespace openEASSandBox
                     MWArray[] arrays = new MWArray[] { };
                     try 
                     {
+                        //using (StreamWriter sw = new StreamWriter(evt.StartTime.ToString($"yyyy_MM_dd_HH_mm_sss_ffffff")+$"_{evt.MeterID}.csv", true)) {
+                        //    sw.WriteLine("iTHDLimit, nominalVoltage, unloadedCurrent, nominalBuskVLL, t2ndClosing, capSwitchertype, stepSizeQ3, date, second, minute, hour, ovNSPC, oiNSPC");
+                        //    sw.WriteLine($"{lineSetting?.ITHDLimit ?? defaultSetting.ITHDLimit}, {lineSetting?.NominalVoltage ?? defaultSetting.NominalVoltage}, {lineSetting?.UnloadedCurrent ?? defaultSetting.UnloadedCurrent}, {lineSetting?.NominalBuskVLL ?? defaultSetting.NominalBuskVLL}, {lineSetting?.T2ndClosing ?? defaultSetting.T2ndClosing}, {lineSetting?.CapSwitcherType ?? defaultSetting.CapSwitcherType}, {lineSetting?.StepSizeQ3 ?? defaultSetting.StepSizeQ3}, {-99999}, {evt.StartTime.Second + evt.StartTime.Millisecond / 1000.0D}, {evt.StartTime.Minute}, { evt.StartTime.Hour}, {Math.Round(viDataGroup.VA.SampleRate / fundf)}, {Math.Round(viDataGroup.IA.SampleRate / fundf)}");
+                        //    sw.WriteLine("");
+                        //    sw.WriteLine("tv, va, vb, vc, ti, ia, ib, ic");
+                        //    for (int j = 0; j < length; ++j)
+                        //    {
+                        //        sw.WriteLine($"{tvArray[j]}, {vaArray[j]}, {vbArray[j]}, {vcArray[j]}, {tiArray[j]}, {iaArray[j]}, {ibArray[j]}, {icArray[j]}");
+                        //    }
+                        //}
+
                         arrays = capsw.frootSPCapSwitchPIV2(numArgsOut, fundf, tv, va, vb, vc, ti, ia, ib, ic, ovNSPC, oiNSPC, nominalBuskVLL, nominalVoltage, unloadedCurrent, iTHDLimit, stepSizeQ3, t2ndClosing, capSwitcherType, date, second, minute, hour);
 
                         CSAResult result = new CSAResult();
@@ -255,16 +277,31 @@ namespace openEASSandBox
                         result.FirstCloseEnergyB = Convert.ToDouble(arrays[18][2].ScalarAsObject());
                         result.FirstCloseEnergyC = Convert.ToDouble(arrays[18][3].ScalarAsObject());
 
-                        result.FirstCloseA = Convert.ToDouble(arrays[19].ScalarAsObject());
-                        result.SecondCloseA = Convert.ToDouble(arrays[20].ScalarAsObject());
-                        result.FirstCloseB = Convert.ToDouble(arrays[21].ScalarAsObject());
-                        result.SecondCloseB = Convert.ToDouble(arrays[22].ScalarAsObject());
-                        result.FirstCloseC = Convert.ToDouble(arrays[23].ScalarAsObject());
-                        result.SecondCloseC = Convert.ToDouble(arrays[24].ScalarAsObject());
+                        DateTime outTime;
+                        if (DateTime.TryParse(arrays[19].ToString(), out outTime))
+                            result.FirstCloseA = outTime;
 
-                        result.AbsOpenTimeA = Convert.ToDouble(arrays[25].ScalarAsObject());
-                        result.AbsOpenTimeB = Convert.ToDouble(arrays[26].ScalarAsObject());
-                        result.AbsOpenTimeC = Convert.ToDouble(arrays[27].ScalarAsObject());
+                        if (DateTime.TryParse(arrays[20].ToString(), out outTime))
+                            result.SecondCloseA = outTime;
+
+                        if (DateTime.TryParse(arrays[21].ToString(), out outTime))
+                            result.FirstCloseB = outTime;
+
+                        if (DateTime.TryParse(arrays[22].ToString(), out outTime))
+                            result.SecondCloseB = outTime;
+
+                        if (DateTime.TryParse(arrays[23].ToString(), out outTime))
+                            result.FirstCloseC = outTime;
+
+                        if (DateTime.TryParse(arrays[24].ToString(), out outTime))
+                            result.SecondCloseC = outTime;
+
+                        if (DateTime.TryParse(arrays[25].ToString(), out outTime))
+                            result.AbsOpenTimeA = outTime;
+                        if (DateTime.TryParse(arrays[26].ToString(), out outTime))
+                            result.AbsOpenTimeB = outTime;
+                        if (DateTime.TryParse(arrays[27].ToString(), out outTime))
+                            result.AbsOpenTimeC = outTime;
 
                         (new TableOperations<CSAResult>(connection)).AddNewRecord(result);
 
@@ -297,17 +334,11 @@ namespace openEASSandBox
 
         private double[] GetTimeArray(DataSeries dataSeries)
         {
-            DateTime startTime;
-
             if (dataSeries.DataPoints.Count == 0)
                 return new double[0];
 
-            startTime = dataSeries[0].Time;
-
             return dataSeries.DataPoints
-                .Select(dataPoint => dataPoint.Time)
-                .Select(time => time - startTime)
-                .Select(timeSpan => timeSpan.TotalSeconds)
+                .Select((dataPoint, i) => i / dataSeries.SampleRate)
                 .ToArray();
         }
 

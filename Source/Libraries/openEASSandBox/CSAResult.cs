@@ -2,6 +2,7 @@
 using GSF.Data.Model;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System;
 using System.ComponentModel;
 
 namespace openEASSandBox
@@ -252,24 +253,24 @@ namespace openEASSandBox
         public double FirstCloseEnergyC { get; set; }
 
         [Label("Time instant of the first closing for phase A")]
-        public double FirstCloseA { get; set; }
+        public DateTime? FirstCloseA { get; set; }
         [Label("Time instant of the second closing for phase A")]
-        public double SecondCloseA { get; set; }
+        public DateTime? SecondCloseA { get; set; }
         [Label("Time instant of the first closing for phase B")]
-        public double FirstCloseB { get; set; }
+        public DateTime? FirstCloseB { get; set; }
         [Label("Time instant of the second closing for phase B")]
-        public double SecondCloseB { get; set; }
+        public DateTime? SecondCloseB { get; set; }
         [Label("Time instant of the first closing for phase C")]
-        public double FirstCloseC { get; set; }
+        public DateTime? FirstCloseC { get; set; }
         [Label("Time instant of the second closing for phase C")]
-        public double SecondCloseC { get; set; }
+        public DateTime? SecondCloseC { get; set; }
 
         [Label("Time instant of the opening for phase A")]
-        public double AbsOpenTimeA { get; set; }
+        public DateTime? AbsOpenTimeA { get; set; }
         [Label("Time instant of the opening for phase B")]
-        public double AbsOpenTimeB { get; set; }
+        public DateTime? AbsOpenTimeB { get; set; }
         [Label("Time instant of the opening for phase C")]
-        public double AbsOpenTimeC { get; set; }
+        public DateTime? AbsOpenTimeC { get; set; }
 
 
     }
