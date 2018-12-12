@@ -531,7 +531,7 @@ namespace openEAS.Configuration
 
 
         [Category]
-        [SettingName("OpenEAS")]
+        [SettingName("CSAService2")]
         public OpenEASSettings OpenEASSettings
         {
             get

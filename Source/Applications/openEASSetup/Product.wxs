@@ -400,7 +400,7 @@
           <Publish Property="FILEPATH" Value="[CSAPATH]">1</Publish>
           <Publish Event="DoAction" Value="CheckFileExistenceAction">1</Publish>
           <Publish Property="CSAEXISTS" Value="[FILEEXISTS]">1</Publish>
-          <Publish Property="INSERTCSASETTINGQUERY1" Value="MERGE Setting AS Target USING (VALUES('OpenEAS.DependentAssemblies.SPCapSwitchPI', '[CSAPATH]')) AS Source(Name, Value)">1</Publish>
+          <Publish Property="INSERTCSASETTINGQUERY1" Value="MERGE Setting AS Target USING (VALUES('CSAService2.DependentAssemblies.SPCapSwitchPI', '[CSAPATH]')) AS Source(Name, Value)">1</Publish>
           <Publish Property="INSERTCSASETTINGQUERY2" Value="ON Source.Name = Target.Name WHEN MATCHED THEN UPDATE SET Value = Source.Value WHEN NOT MATCHED THEN INSERT(Name, Value) VALUES(Source.Name, Source.Value);;">1</Publish>
 
           <Publish Property="ERRORMESSAGE" Value="Unable to locate the SPCapSwitchPI.dll file you entered. Please browse to the location of SPCapSwitchPI.dll.">NOT CSAEXISTS</Publish>
